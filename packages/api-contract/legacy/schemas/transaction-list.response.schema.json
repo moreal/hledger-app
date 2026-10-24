@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hledger-app.local/schemas/transaction-list.response.schema.json",
+  "title": "GET /v1/transactions response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "data",
+    "page"
+  ],
+  "properties": {
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "./transaction.schema.json"
+      }
+    },
+    "page": {
+      "$ref": "./common.schema.json#/$defs/CursorPage"
+    }
+  }
+}

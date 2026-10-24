@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Hledger Design Gallery",
+    "slug": "hledger-design-gallery",
+    "version": "0.1.0",
+    "orientation": "default",
+    "userInterfaceStyle": "light",
+    "platforms": ["ios", "android", "web"],
+    "web": { "bundler": "metro", "output": "single" }
+  }
+}

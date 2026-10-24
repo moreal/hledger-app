@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hledger-app.local/schemas/transaction-create.response.schema.json",
+  "title": "POST /v1/transactions response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "transaction",
+    "idempotency"
+  ],
+  "properties": {
+    "transaction": {
+      "$ref": "./transaction.schema.json"
+    },
+    "idempotency": {
+      "$ref": "./common.schema.json#/$defs/IdempotencyInfo"
+    }
+  }
+}

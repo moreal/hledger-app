@@ -1,0 +1,23 @@
+{
+  "name": "@hledger/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5173 --strictPort",
+    "build": "vite build",
+    "storybook": "storybook dev --host 127.0.0.1 --port 6006 --no-open --disable-telemetry",
+    "build:storybook": "storybook build --disable-telemetry --output-dir dist/storybook"
+  },
+  "dependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@storybook/react-vite": "10.6.3",
+    "@vitejs/plugin-react": "5.2.0",
+    "storybook": "10.6.3",
+    "typescript": "5.9.3",
+    "vite": "8.3.4"
+  }
+}

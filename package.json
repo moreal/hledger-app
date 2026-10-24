@@ -1,0 +1,54 @@
+{
+  "name": "hledger-app",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "yarn@4.12.0",
+  "description": "hledger GraphQL API and React/Expo ledger clients",
+  "type": "module",
+  "workspaces": [
+    "apps/*"
+  ],
+  "engines": {
+    "node": "^22.13.0 || ^24.3.0 || >=26.0.0"
+  },
+  "scripts": {
+    "api:validate": "node packages/api-contract/validate.mjs",
+    "api:codegen": "graphql-codegen --config packages/api-contract/codegen.ts",
+    "typecheck": "tsc --project tsconfig.json && tsc --project apps/web/tsconfig.json && tsc --project apps/mobile/tsconfig.json",
+    "test": "node --import tsx --test 'packages/**/*.test.ts' 'services/**/*.test.ts'",
+    "api:start": "node --import tsx services/api/server.ts",
+    "assets:sync": "node --import tsx scripts/sync-asset-catalog.ts",
+    "app:web": "yarn workspace @hledger/web dev",
+    "app:mobile": "yarn workspace @hledger/mobile start",
+    "app:mobile:web": "yarn workspace @hledger/mobile web",
+    "gallery:web": "yarn workspace @hledger/web dev",
+    "gallery:mobile": "yarn workspace @hledger/mobile start",
+    "gallery:mobile:web": "yarn workspace @hledger/mobile web",
+    "build:web": "yarn workspace @hledger/web build",
+    "storybook": "yarn workspace @hledger/web storybook",
+    "build:storybook": "yarn workspace @hledger/web build:storybook",
+    "logos:sync": "node --import tsx scripts/sync-company-logos.ts",
+    "logos:homepages": "node --import tsx scripts/sync-homepage-logos.ts",
+    "app:mobile:metro": "yarn workspace @hledger/mobile start:metro",
+    "build:mobile:ios": "node scripts/mobile-release.mjs --platform ios",
+    "build:mobile:android": "node scripts/mobile-release.mjs --platform android",
+    "test:mobile:release": "node --test scripts/mobile-release.test.mjs"
+  },
+  "dependencies": {
+    "@graphql-typed-document-node/core": "3.2.0",
+    "fast-xml-parser": "5.11.2",
+    "graphql": "16.14.2",
+    "sharp": "0.35.5"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "7.4.6",
+    "@graphql-codegen/client-preset": "6.2.3",
+    "@graphql-codegen/typescript": "6.1.2",
+    "@graphql-codegen/typescript-resolvers": "6.1.1",
+    "@types/node": "22.20.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  }
+}

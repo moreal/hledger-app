@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hledger-app.local/schemas/transaction-create.request.schema.json",
+  "title": "POST /v1/transactions request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "date",
+    "description",
+    "postings"
+  ],
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "code": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 64
+    },
+    "postings": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "$ref": "#/$defs/PostingInput"
+      }
+    },
+    "tags": {
+      "$ref": "./common.schema.json#/$defs/TagMap"
+    },
+    "client_reference": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 128
+    }
+  },
+  "$defs": {
+    "PostingInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "account_name",
+        "amount"
+      ],
+      "properties": {
+        "account_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "amount": {
+          "$ref": "./common.schema.json#/$defs/MoneyAmount"
+        },
+        "memo": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1000
+        }
+      }
+    }
+  }
+}

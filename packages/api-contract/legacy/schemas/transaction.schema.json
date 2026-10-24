@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hledger-app.local/schemas/transaction.schema.json",
+  "title": "Transaction",
+  "$ref": "#/$defs/Transaction",
+  "$defs": {
+    "Posting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "account_name",
+        "amount"
+      ],
+      "properties": {
+        "account_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "account_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "amount": {
+          "$ref": "./common.schema.json#/$defs/MoneyAmount"
+        },
+        "memo": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1000
+        }
+      }
+    },
+    "Transaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "date",
+        "description",
+        "status",
+        "postings",
+        "tags",
+        "created_at",
+        "source"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 64
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "unmarked",
+            "pending",
+            "cleared"
+          ]
+        },
+        "postings": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/Posting"
+          }
+        },
+        "tags": {
+          "$ref": "./common.schema.json#/$defs/TagMap"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "hledger",
+            "app"
+          ]
+        }
+      }
+    }
+  }
+}

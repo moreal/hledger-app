@@ -1,0 +1,24 @@
+node_modules/
+.DS_Store
+.expo/
+.rollipop/
+dist/
+tmp/
+.env
+.env.local
+.hledger-app/
+*.tsbuildinfo
+packages/api-contract/generated/
+**/.openapi-generator/
+**/.openapi-generator-ignore
+.yarn/*
+!.yarn/releases
+!.yarn/patches
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
+# Locally generated public-logo Storybook preview
+apps/web/.storybook/public/automatic-logos.json
+apps/web/.storybook/public/homepage-logos.json

@@ -1,0 +1,52 @@
+/** Shared light-theme values. Consumers provide platform-specific rendering. */
+export const tokens = {
+  colors: {
+    background: '#F7F8FA',
+    surface: '#FFFFFF',
+    surfaceSubtle: '#F2F4F7',
+    surfaceHover: '#EDF1F5',
+    surfacePressed: '#E7ECF2',
+    text: '#18212B',
+    muted: '#5B6775',
+    // Decorative dividers and identifiable control boundaries have separate roles.
+    border: '#DCE1E7',
+    borderStrong: '#758294',
+    accent: '#2458A6',
+    accentSubtle: '#EAF1FB',
+    accentHover: '#1E4D93',
+    accentPressed: '#193F79',
+    onAccent: '#FFFFFF',
+    success: '#23704A',
+    successSubtle: '#EAF5EF',
+    warning: '#915E0B',
+    warningSubtle: '#FFF4DE',
+    danger: '#B42318',
+    dangerSubtle: '#FFF0EE',
+    focus: '#2458A6',
+    disabledSurface: '#EDF0F3',
+    disabledText: '#5B6775',
+    featureBackground: '#1F3151',
+    featureText: '#FFFFFF',
+    featureMuted: '#D5DFF0',
+  },
+  space: { xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 32, xxxl: 48 },
+  radius: { control: 10, panel: 16, feature: 24, pill: 999 },
+  fontSize: { caption: 13, small: 14, body: 16, title: 24, display: 32 },
+  typography: {
+    hero: { fontSize: 32, lineHeight: 40, fontWeight: '600' },
+    title: { fontSize: 24, lineHeight: 32, fontWeight: '600' },
+    heading: { fontSize: 20, lineHeight: 28, fontWeight: '600' },
+    body: { fontSize: 16, lineHeight: 24, fontWeight: '400' },
+    label: { fontSize: 14, lineHeight: 20, fontWeight: '600' },
+    supporting: { fontSize: 14, lineHeight: 22, fontWeight: '400' },
+    caption: { fontSize: 13, lineHeight: 20, fontWeight: '400' },
+    amount: { fontSize: 16, lineHeight: 24, fontWeight: '600' },
+  },
+  size: { controlMin: 44 },
+  fontFamily: {
+    web: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    native: 'System',
+  },
+} as const;
+
+export type DesignTokens = typeof tokens;

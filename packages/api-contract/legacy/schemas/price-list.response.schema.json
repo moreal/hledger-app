@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hledger-app.local/schemas/price-list.response.schema.json",
+  "title": "GET /v1/prices response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "data",
+    "page"
+  ],
+  "properties": {
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/PriceQuote"
+      }
+    },
+    "page": {
+      "$ref": "./common.schema.json#/$defs/CursorPage"
+    }
+  },
+  "$defs": {
+    "PriceQuote": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commodity",
+        "quote_commodity",
+        "date",
+        "rate"
+      ],
+      "properties": {
+        "commodity": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32
+        },
+        "quote_commodity": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "rate": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]+)?$"
+        },
+        "source": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 64
+        }
+      }
+    }
+  }
+}

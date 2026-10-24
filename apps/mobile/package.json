@@ -1,0 +1,34 @@
+{
+  "name": "@hledger/mobile",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "start": "node run-rollipop.mjs start --host 127.0.0.1 --port 8082",
+    "web": "expo start --web --port 8081",
+    "rollipop": "node run-rollipop.mjs start --host 127.0.0.1 --port 8082",
+    "rollipop:bundle:ios": "node run-rollipop.mjs bundle --platform ios --dev true --bundle-output .rollipop/ios.bundle",
+    "rollipop:bundle:android": "node run-rollipop.mjs bundle --platform android --dev true --bundle-output .rollipop/android.bundle",
+    "test:rollipop": "node --test rollipop-expo.test.mjs",
+    "start:metro": "expo start --port 8081",
+    "release:ios": "node ../../scripts/mobile-release.mjs --platform ios",
+    "release:android": "node ../../scripts/mobile-release.mjs --platform android"
+  },
+  "dependencies": {
+    "@expo/metro-runtime": "~58.0.14",
+    "expo": "58.0.16",
+    "expo-crypto": "~58.0.7",
+    "expo-file-system": "~58.0.10",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-native": "0.88.0",
+    "react-native-safe-area-context": "~5.10.1",
+    "react-native-web": "~0.21.4"
+  },
+  "devDependencies": {
+    "@babel/core": "8.0.6",
+    "@babel/plugin-transform-modules-commonjs": "8.0.0",
+    "rollipop": "1.0.0-beta.1",
+    "structured-headers": "0.4.1"
+  }
+}

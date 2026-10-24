@@ -1,0 +1,352 @@
+"""
+App contract at /graphql. Runtime execution lives in services/api; this package defines
+the shared contract, validation helpers and generated types.
+Health may be public. Each ledger field requires its own read/write authorization,
+even when selected together with health. Execution/authentication failures use GraphQL
+errors with extensions.code, extensions.requestId, extensions.timestamp and optional
+extensions.details (JSONObject). Nullable query roots preserve unrelated partial data.
+"""
+schema { query: Query mutation: Mutation }
+
+"""Exact string matching ^-?[0-9]+(\\.[0-9]+)?$. Never coerce to a JSON number."""
+scalar Decimal
+"""Valid Gregorian YYYY-MM-DD, years 0001–9999, without timezone or time."""
+scalar Date
+"""RFC 3339 date-time string with explicit timezone; invalid dates and leap seconds rejected."""
+scalar DateTime
+"""Plain JSON object containing only JSON values; arrays and null are not top-level objects."""
+scalar JSONObject
+
+type Query {
+  bookMetadata(isbn: String!): BookMetadataLookup
+  books: [BookCopy!]
+  health: Health
+  """Authenticated catalog search. Query length 0–200; first 1–50. Empty query lists builtin currencies."""
+  assets(query: String!, first: Int = 20): AssetSearchResult
+  """Metadata for exact commodity strings; omitted filter lists all bindings, maximum 200 filter entries."""
+  assetBindings(commodities: [String!]): [AssetBinding!]
+  """Stable fullName ascending order. first defaults to 50 and must be 1–200."""
+  accounts(filter: AccountFilter, first: Int = 50, after: String): AccountConnection
+  """Opaque account ID; null if absent. Account names are not URL identifiers."""
+  account(id: ID!): Account
+  """Date descending, then stable opaque ID ascending. Inclusive date filters. first 1–200."""
+  transactions(filter: TransactionFilter, first: Int = 50, after: String): TransactionConnection
+  """Date descending, commodity then quoteCommodity ascending. first 1–200."""
+  prices(filter: PriceFilter, first: Int = 50, after: String): PriceConnection
+}
+
+type Mutation {
+  purchaseBook(input: PurchaseBookInput!): BookPayload
+  disposeBook(input: DisposeBookInput!): BookPayload
+  """
+  Validate before writing. Same key + identical coerced input returns the original
+  transaction with replayed=true; same key + different input returns an IDEMPOTENCY_CONFLICT
+  field error without writing. The services/api runtime implements authorization, durable
+  storage, concurrency and interrupted-append recovery. Contract validation alone never
+  confirms a save; require the runtime mutation result.
+  """
+  createTransaction(input: CreateTransactionInput!): CreateTransactionPayload
+  """Bind an exact 1–32 character commodity to a catalog asset. Null assetId clears metadata; never edits the journal."""
+  setAssetBinding(commodity: String!, assetId: ID): AssetBindingPayload
+}
+
+enum HealthStatus { OK DEGRADED }
+enum ConnectionStatus { CONNECTED DISCONNECTED UNKNOWN }
+enum TransactionStatus { UNMARKED PENDING CLEARED }
+enum TransactionSource { HLEDGER APP }
+
+type Health {
+  status: HealthStatus!
+  timestamp: DateTime!
+  """Nonempty server version."""
+  version: String!
+  """Nonnegative Int; null if indexer is absent or its lag is unknown, never fabricated as zero."""
+  indexerLagSeconds: Int
+  connectionStatus: ConnectionStatus!
+  """Last successful upstream read applied locally; null before any success. Not the request time."""
+  lastSuccessfulSyncAt: DateTime
+  details: JSONObject
+}
+
+type MoneyAmount {
+  """1–32 characters. Amounts of different commodities must never be silently combined."""
+  commodity: String!
+  value: Decimal!
+}
+
+"""Unique key per list; legacy TagMap becomes a lossless key/value list. Empty keys/values remain valid."""
+type Tag { key: String! value: String! }
+input TagInput { key: String! value: String! }
+
+type Account {
+  id: ID!
+  """Nonempty leaf name."""
+  name: String!
+  """Nonempty full account path."""
+  fullName: String!
+  parentId: ID
+  """Output account depth must be 1–20."""
+  depth: Int!
+  """
+  At least one amount. Cumulative own postings through asOf, inclusive; omitted asOf
+  means the complete current ledger. includeSubaccounts defaults to false.
+  Zero balances preserve commodity identity instead of returning an empty list.
+  """
+  balances(asOf: Date, includeSubaccounts: Boolean = false): [MoneyAmount!]!
+  """Period change only, both bounds inclusive; reject from > to. Distinct from ending balance."""
+  movements(from: Date, to: Date, includeSubaccounts: Boolean = false): [MoneyAmount!]!
+  """Nonnegative Int, reject overflow above 2147483647 rather than truncating."""
+  transactionCount: Int!
+  lastPostedDate: Date
+  tags: [Tag!]!
+  """
+  Same transaction ordering and bounds as Query.transactions. Scoped to this account;
+  filter.accountId, if supplied, must match this account or be rejected.
+  """
+  transactions(filter: TransactionFilter, first: Int = 50, after: String): TransactionConnection
+}
+
+enum PostingCostType { UNIT TOTAL }
+type PostingCost { type: PostingCostType! amount: MoneyAmount! }
+input PostingCostInput { type: PostingCostType! amount: MoneyAmountInput! }
+
+type Posting {
+  accountId: ID
+  """Nonempty account path."""
+  accountName: String!
+  amount: MoneyAmount!
+  cost: PostingCost
+  """At most 1000 characters."""
+  memo: String
+}
+
+type Transaction {
+  """Opaque ID, 1–128 characters, derived with ledger revision and original location in mind."""
+  id: ID!
+  date: Date!
+  """1–512 characters."""
+  description: String!
+  """At most 64 characters."""
+  code: String
+  status: TransactionStatus!
+  """At least two postings. Existing multiple-commodity transactions remain readable."""
+  postings: [Posting!]!
+  tags: [Tag!]!
+  """Null when the original ledger has no real creation timestamp; never derived from date."""
+  createdAt: DateTime
+  source: TransactionSource!
+}
+
+type PriceQuote {
+  """1–32 characters."""
+  commodity: String!
+  """1–32 characters."""
+  quoteCommodity: String!
+  date: Date!
+  rate: Decimal!
+  """At most 64 characters."""
+  source: String
+}
+
+input AccountFilter {
+  includeEmpty: Boolean = false
+  """Requested hierarchy depth 1–10, not the output depth bound of 20."""
+  depth: Int
+  asOf: Date
+  """Search length 1–200 characters."""
+  query: String
+}
+
+input TransactionFilter {
+  """1–200 characters; searches description, account and tags."""
+  query: String
+  """Inclusive lower date bound; reject from > to."""
+  from: Date
+  """Inclusive upper date bound."""
+  to: Date
+  accountId: ID
+  includeSubaccounts: Boolean = false
+  """1–32 characters."""
+  commodity: String
+  """All supplied key/value pairs must match; duplicate keys are rejected."""
+  tags: [TagInput!]
+}
+
+input PriceFilter {
+  """1–32 characters."""
+  commodity: String
+  """1–32 characters."""
+  quoteCommodity: String
+  """Inclusive lower date bound; reject from > to."""
+  from: Date
+  """Inclusive upper date bound."""
+  to: Date
+}
+
+input MoneyAmountInput {
+  """1–32 characters."""
+  commodity: String!
+  value: Decimal!
+}
+input PostingInput {
+  """Nonempty account path."""
+  accountName: String!
+  amount: MoneyAmountInput!
+  cost: PostingCostInput
+  """At most 1000 characters."""
+  memo: String
+}
+input CreateTransactionInput {
+  """Required 1–128 character key. Persist/reuse this key for retries."""
+  idempotencyKey: String!
+  date: Date!
+  """1–512 characters."""
+  description: String!
+  """At most 64 characters."""
+  code: String
+  """
+  At least two postings. Cost annotations convert signed quantities to their settlement
+  commodity; converted amounts must sum to exactly zero. Cost amounts must be positive.
+  """
+  postings: [PostingInput!]!
+  """Unique keys; absent/null means no tags."""
+  tags: [TagInput!]
+  """At most 128 characters."""
+  clientReference: String
+}
+
+type IdempotencyInfo { key: String! replayed: Boolean! }
+type FieldError {
+  """Input path, e.g. postings[0].amount.value; input for an operation-wide conflict."""
+  path: String!
+  """Nonempty machine code, at most 64 characters."""
+  code: String!
+  """Nonempty human message, at most 1000 characters."""
+  message: String!
+  details: JSONObject
+  """Nonempty correlation ID, at most 128 characters."""
+  requestId: String!
+  timestamp: DateTime!
+}
+"""
+Success: transaction + idempotency non-null, errors empty. Expected input/conflict failure:
+transaction + idempotency null and errors nonempty. GraphQL execution errors may coexist
+with partial data and are separate from these expected field errors.
+"""
+type CreateTransactionPayload {
+  transaction: Transaction
+  idempotency: IdempotencyInfo
+  errors: [FieldError!]!
+}
+
+"""
+Cursors are nonempty opaque strings binding ordering, effective filters, scope and ledger
+revision. after must come from that same connection. Invalid/mismatched/stale cursors
+raise an explicit INVALID_CURSOR error, never silently restart. hasNextPage=false means
+no next page; endCursor is null on an empty page and otherwise the last edge cursor.
+"""
+type PageInfo { hasNextPage: Boolean! endCursor: String }
+type AccountEdge { cursor: String! node: Account! }
+type TransactionEdge { cursor: String! node: Transaction! }
+type PriceEdge { cursor: String! node: PriceQuote! }
+type AccountConnection {
+  edges: [AccountEdge!]!
+  pageInfo: PageInfo!
+  """Effective requested page limit, 1–200, default 50."""
+  limit: Int!
+  """Nonnegative Int estimate or null when unavailable; overflow is an explicit error."""
+  totalEstimate: Int
+}
+type TransactionConnection {
+  edges: [TransactionEdge!]!
+  pageInfo: PageInfo!
+  """Effective requested page limit, 1–200, default 50."""
+  limit: Int!
+  """Nonnegative Int estimate or null when unavailable; overflow is an explicit error."""
+  totalEstimate: Int
+}
+type PriceConnection {
+  edges: [PriceEdge!]!
+  pageInfo: PageInfo!
+  """Effective requested page limit, 1–200, default 50."""
+  limit: Int!
+  """Nonnegative Int estimate or null when unavailable; overflow is an explicit error."""
+  totalEstimate: Int
+}
+
+enum AssetKind { CURRENCY STOCK CRYPTO }
+enum AssetProviderState { READY STALE UNCONFIGURED UNAVAILABLE }
+
+"""Stable external asset identity. Display metadata never changes a ledger commodity."""
+type Asset {
+  id: ID!
+  symbol: String!
+  name: String!
+  exchange: String
+  kind: AssetKind!
+  isin: String
+  source: String!
+  sourceUrl: String!
+  """Source reference date, without an invented time or timezone."""
+  asOf: Date
+  iconText: String!
+  iconUrl: String
+}
+type AssetProviderStatus {
+  provider: String!
+  status: AssetProviderState!
+  updatedAt: DateTime
+  message: String
+}
+type AssetSearchResult { items: [Asset!]! providers: [AssetProviderStatus!]! }
+"""Persisted snapshot survives catalog refresh or temporary provider failure."""
+type AssetBinding { commodity: String! asset: Asset! updatedAt: DateTime! }
+type AssetBindingPayload { commodity: String! binding: AssetBinding }
+
+
+enum BookMetadataLookupStatus { FOUND NOT_FOUND UNAVAILABLE }
+type BookMetadata { isbn: String! title: String! authors: [String!]! coverUrl: String coverSource: String coverSourceUrl: String sourceUrl: String! attribution: String! }
+type BookMetadataLookup { status: BookMetadataLookupStatus! book: BookMetadata message: String }
+
+enum BookStatus { HELD SOLD DISCARDED }
+enum BookDisposalKind { SELL DISCARD }
+type BookCopy {
+  id: ID!
+  commodity: String!
+  isbn: String!
+  title: String!
+  authors: [String!]!
+  coverUrl: String
+  purchasePrice: MoneyAmount!
+  purchaseDate: Date!
+  status: BookStatus!
+  disposalDate: Date
+  saleProceeds: MoneyAmount
+  realizedGain: MoneyAmount
+  assetAccount: String!
+}
+input PurchaseBookInput {
+  idempotencyKey: String!
+  date: Date!
+  isbn: String!
+  title: String!
+  authors: [String!]
+  coverUrl: String
+  purchasePrice: MoneyAmountInput!
+  assetAccount: String!
+  cashAccount: String!
+}
+input DisposeBookInput {
+  idempotencyKey: String!
+  date: Date!
+  copyId: ID!
+  kind: BookDisposalKind!
+  cashAccount: String
+  """Gross sale proceeds before the separate fee; currency must match purchase."""
+  saleProceeds: MoneyAmountInput
+  fee: Decimal
+  gainAccount: String
+  lossAccount: String
+  feeAccount: String
+}
+type BookPayload { book: BookCopy idempotency: IdempotencyInfo errors: [FieldError!]! }

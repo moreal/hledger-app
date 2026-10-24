@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hledger-app.local/schemas/health.response.schema.json",
+  "title": "GET /v1/health response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "timestamp",
+    "version",
+    "indexer_lag_seconds"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "degraded"
+      ]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "indexer_lag_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "details": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}
