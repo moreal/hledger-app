@@ -9,7 +9,7 @@
     "apps/*"
   ],
   "engines": {
-    "node": "^22.13.0 || ^24.3.0 || >=26.0.0"
+    "node": "^22.19.0 || ^24.3.0 || >=26.0.0"
   },
   "scripts": {
     "api:validate": "node packages/api-contract/validate.mjs",
@@ -32,12 +32,19 @@
     "app:mobile:metro": "yarn workspace @hledger/mobile start:metro",
     "build:mobile:ios": "node scripts/mobile-release.mjs --platform ios",
     "build:mobile:android": "node scripts/mobile-release.mjs --platform android",
-    "test:mobile:release": "node --test scripts/mobile-release.test.mjs"
+    "test:mobile:release": "node --test scripts/mobile-release.test.mjs",
+    "i18n:extract": "lingui extract",
+    "i18n:compile": "lingui compile --typescript --strict",
+    "i18n:check": "node scripts/i18n-check.mjs",
+    "test:i18n": "node --import tsx --test packages/i18n/src/index.test.ts apps/web/src/locale.test.ts apps/mobile/locale.test.ts && node --test scripts/i18n-check.test.mjs"
   },
   "dependencies": {
     "@graphql-typed-document-node/core": "3.2.0",
+    "@lingui/core": "6.10.1",
+    "@lingui/react": "6.10.1",
     "fast-xml-parser": "5.11.2",
     "graphql": "16.14.2",
+    "react": "19.3.0",
     "sharp": "0.35.5"
   },
   "devDependencies": {
@@ -45,6 +52,9 @@
     "@graphql-codegen/client-preset": "6.2.3",
     "@graphql-codegen/typescript": "6.1.2",
     "@graphql-codegen/typescript-resolvers": "6.1.1",
+    "@lingui/cli": "6.10.1",
+    "@lingui/conf": "6.10.1",
+    "@lingui/format-po": "6.10.1",
     "@types/node": "22.20.5",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",

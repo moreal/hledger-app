@@ -1,0 +1,693 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-10-25 19:39+0900\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: en\n"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.36"
+msgstr " · Ledger connection "
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.37"
+msgstr " · Indexer lag "
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.remote.3"
+msgstr " The results loaded so far are still shown below."
+
+#. js-lingui-explicit-id
+#: apps/web/src/I18n.stories.tsx
+msgid "story.transactionCount"
+msgstr "{count, plural, one {# transaction} other {# transactions}}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "settings.lagSeconds"
+msgstr "{seconds}s"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.37"
+msgstr "1 request · Check with the same request on the New transaction screen"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.02"
+msgstr "GraphQL URL"
+
+#. js-lingui-explicit-id
+#: apps/web/src/main.tsx
+msgid "document.ledger"
+msgstr "hledger — Personal ledger"
+
+#. js-lingui-explicit-id
+#: apps/web/src/main.tsx
+msgid "document.gallery"
+msgstr "hledger — Design gallery"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.1"
+msgstr "hledger personal ledger"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.connection.error.1"
+msgstr "Enter a server URL starting with http or https."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "description.books"
+msgstr "Track the purchase price and ownership status of each copy, even when books share an ISBN."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.7"
+msgstr "Personal ledger"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.23"
+msgstr "Personal ledger"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "nav.gallery"
+msgstr "Gallery"
+
+#. js-lingui-explicit-id
+#: apps/mobile/App.tsx
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+#: apps/web/src/I18n.stories.tsx
+msgid "nav.transactions"
+msgstr "Transactions"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "title.transactions"
+msgstr "Transaction history"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.title.transactions"
+msgstr "Transaction history"
+
+#. js-lingui-explicit-id
+#: apps/web/src/I18n.stories.tsx
+msgid "story.description"
+msgstr "Description"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "common.storageNotice"
+msgstr "Device storage notice"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "common.storageUnavailable"
+msgstr "Device storage is unavailable"
+
+#. js-lingui-explicit-id
+#: apps/mobile/App.tsx
+msgid "gallery.components"
+msgstr "Basic components"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.connection.error.6"
+msgstr "This ledger differs from the one used for the original request. Reconnect to the original ledger to check whether it was saved."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.28"
+msgstr "Connect to your ledger"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.24"
+msgstr "Connect to your ledger"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+msgid "title.books"
+msgstr "My books"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+msgid "title.accounts"
+msgstr "My accounts"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "error.network"
+msgstr "The network request could not be completed. The save outcome may be unknown. Check the result using the same request."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.remote.5"
+msgstr "Try again"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.22"
+msgstr "Reload "
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.2"
+msgstr "Tools"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "description.entry"
+msgstr "Record a transaction by entering the accounts involved and the amounts transferred."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.nav.back"
+msgstr "Back"
+
+#. js-lingui-explicit-id
+#: apps/mobile/App.tsx
+#: apps/mobile/LedgerApp.tsx
+msgid "nav.sync"
+msgstr "Sync"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "title.sync"
+msgstr "Sync"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "nav.back"
+msgstr "Back"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.nav.gallery"
+msgstr "Design gallery"
+
+#. js-lingui-explicit-id
+#: apps/mobile/App.tsx
+msgid "gallery.mode"
+msgstr "Design gallery · Sample data"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "settings.localLedger"
+msgstr "Local ledger"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.18"
+msgstr "Last successful sync"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.34"
+msgstr "Last successful sync "
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.6"
+msgstr "Skip to content"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "common.loading"
+msgstr "Loading"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.10"
+msgstr "Refresh status"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.11"
+msgstr "A successful status check and permission to read or write the ledger are verified separately."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "nav.newTransaction"
+msgstr "New transaction"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+msgid "title.entry"
+msgstr "New transaction"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.24"
+msgstr "Authentication must be verified again"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.35"
+msgstr "Server version "
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.20"
+msgstr "Server version / status"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.33"
+msgstr "Server status "
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "error.protocol"
+msgstr "The server response could not be verified. The save outcome may be unknown. Check the result using the same request."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.3"
+msgstr "Server URL"
+
+#. js-lingui-explicit-id
+#: apps/web/src/I18n.stories.tsx
+msgid "story.connectionHelp"
+msgstr "Enter the server URL and access token."
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "error.http"
+msgstr "The server returned HTTP {status}. The save outcome may be unknown. Check the result using the same request."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.connection.error.2"
+msgstr "Enter the access token configured on the server."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+msgid "nav.settings"
+msgstr "Settings"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "title.settings"
+msgstr "Settings"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "connection.openSettings"
+msgstr "Open settings"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "connection.verify"
+msgstr "Apply the URL and authentication token in Settings to verify your ledger."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.25"
+msgstr "Enter the server URL and access token in Settings to view accounts and transactions."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "connection.required"
+msgstr "Connect to your ledger in Settings"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.26"
+msgstr "Go to settings "
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.26"
+msgstr "No successful sync recorded · Unverified"
+
+#. js-lingui-explicit-id
+#: apps/mobile/App.tsx
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+#: apps/web/src/I18n.stories.tsx
+msgid "nav.prices"
+msgstr "Prices"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+msgid "title.prices"
+msgstr "Prices"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.03"
+msgstr "On a physical device, use your computer’s LAN address. localhost refers to the device itself."
+
+#. js-lingui-explicit-id
+#: apps/mobile/App.tsx
+msgid "gallery.return"
+msgstr "Back to your ledger"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.13"
+msgstr "Enter the URL and access token for your running ledger server."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.34"
+msgstr "No successful ledger query yet"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "error.unknown"
+msgstr "An unknown error occurred."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.35"
+msgstr "Unknown"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.36"
+msgstr "Unknown"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.28"
+msgstr "Unknown"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "common.notice"
+msgstr "Notice"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+msgid "settings.language"
+msgstr "Language"
+
+#. js-lingui-explicit-id
+#: apps/web/src/I18n.stories.tsx
+msgid "story.language"
+msgstr "Language"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "settings.languageSaveFailed"
+msgstr "The language preference could not be saved. Select it again."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.38"
+msgstr "None"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.17"
+msgstr "Connection target"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.09"
+msgstr "Connection status"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.5"
+msgstr "Could not load connection status"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.connection.error.8"
+msgstr "Could not load connection status."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.05"
+msgstr "Could not check connection status"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.16"
+msgstr "Connection status and permission to query ledger data are checked separately."
+
+#. js-lingui-explicit-id
+#: apps/web/src/I18n.stories.tsx
+msgid "story.connection"
+msgstr "Connection settings"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.06"
+msgstr "Connection settings"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "connection.applied"
+msgstr "Connection settings applied. The authentication token is kept only for this app session."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.connection.error.7"
+msgstr "The connected ledger changed, so the new transaction form was cleared."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.07"
+msgstr "Apply connection · Remember URL"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.22"
+msgstr "Connection not yet verified"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.29"
+msgstr "Checking connection…"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.33"
+msgstr "Connection needs verification"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "common.requestFailed"
+msgstr "Could not complete the request"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.19"
+msgstr "Ledger update lag"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.32"
+msgstr "Ledger ID "
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.30"
+msgstr "Ledger connection"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.27"
+msgstr "Ledger connection settings"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.11"
+msgstr "View your ledger connection details and current status."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.32"
+msgstr "Ledger connected"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.connection.error.5"
+msgstr "Ledger access could not be verified. Check the server URL and access token."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "description.transactions"
+msgstr "View transactions recorded in the ledger and their account details."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "description.prices"
+msgstr "Reference prices for assets recorded in the ledger."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "common.requesting"
+msgstr "Sending a request to the ledger."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.remote.loading"
+msgstr "Loading your ledger…"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.15"
+msgstr "Current ledger connection status"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.remote.1"
+msgstr "The ledger has changed. Reload the list."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.23"
+msgstr "Authentication verified for this session"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.30"
+msgstr "The authentication token for this session was cleared."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "connection.previousRetained"
+msgstr "The previously authenticated connection is still in use. Check the active URL below."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.04"
+msgstr "Authentication token"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.08"
+msgstr "Clear authentication token"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.01"
+msgstr "The authentication token is cleared when you close the app."
+
+#. js-lingui-explicit-id
+#: apps/mobile/App.tsx
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/I18n.stories.tsx
+msgid "nav.entry"
+msgstr "Entry"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "connection.notApplied"
+msgstr "The settings you entered were not applied."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.remote.2"
+msgstr "Could not load all data"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.connection.error.4"
+msgstr "Keep the existing server URL while checking whether the request was saved."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.21"
+msgstr "Awaiting save confirmation"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.4"
+msgstr "Access token"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "connection.guidance"
+msgstr "Apply the URL and authentication token to verify the ledger and start querying and sending data. If you have a previous connection, you can save drafts offline."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.connection.error.3"
+msgstr "Wait for the current save request to finish before reconnecting."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+#: apps/web/src/I18n.stories.tsx
+msgid "nav.books"
+msgstr "Books"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.remote.4"
+msgstr "Reload from the beginning"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.38"
+msgstr "s"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.14"
+msgstr "The token is cleared when you close or refresh this window."
+
+#. js-lingui-explicit-id
+#: apps/mobile/App.tsx
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+#: apps/web/src/I18n.stories.tsx
+msgid "nav.accounts"
+msgstr "Accounts"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "description.accounts"
+msgstr "Explore account activity and balances by asset."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.31"
+msgstr "Active URL: "
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "settings.languageSaveHint"
+msgstr "The current language will remain active. Select your language again before reopening the app."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "connection.none"
+msgstr "There is no authenticated connection."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.25"
+msgstr "Not yet verified"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.27"
+msgstr "Not yet verified"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.31"
+msgstr "Checking"

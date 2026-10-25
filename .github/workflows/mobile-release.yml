@@ -8,6 +8,8 @@ on:
       - 'packages/**'
       - 'services/**'
       - 'scripts/mobile-release*'
+      - 'scripts/i18n-check*'
+      - 'lingui.config.ts'
       - 'package.json'
       - 'yarn.lock'
       - '.yarnrc.yml'
@@ -45,8 +47,14 @@ jobs:
           test "$(yarn --version)" = '4.12.0'
       - name: Install dependencies
         run: yarn install --immutable
+      - name: Verify and compile translation catalogs
+        run: |
+          yarn i18n:check
+          yarn i18n:compile
       - name: Generate API types
         run: yarn api:codegen
+      - name: Test locale behavior and catalog verification
+        run: yarn test:i18n
       - name: Test zero balance account filtering
         run: node --import tsx --test services/api/account-zero-balance.test.ts packages/client/account-filter.test.ts
 

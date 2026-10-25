@@ -1,0 +1,693 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-10-25 19:39+0900\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: ko\n"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.36"
+msgstr " · 원장 연결 "
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.37"
+msgstr " · 인덱서 지연 "
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.remote.3"
+msgstr " 현재까지 읽은 결과는 아래에 남아 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/I18n.stories.tsx
+msgid "story.transactionCount"
+msgstr "{count, plural, one {거래 #개} other {거래 #개}}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "settings.lagSeconds"
+msgstr "{seconds}초"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.37"
+msgstr "1건 · 새 거래 화면에서 같은 요청으로 확인"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.02"
+msgstr "GraphQL 주소"
+
+#. js-lingui-explicit-id
+#: apps/web/src/main.tsx
+msgid "document.ledger"
+msgstr "hledger — 개인 원장"
+
+#. js-lingui-explicit-id
+#: apps/web/src/main.tsx
+msgid "document.gallery"
+msgstr "hledger — 디자인 갤러리"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.1"
+msgstr "hledger 개인 원장"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.connection.error.1"
+msgstr "http 또는 https로 시작하는 서버 주소를 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "description.books"
+msgstr "같은 ISBN의 책도 한 권씩 구입 금액과 보유 상태를 관리합니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.7"
+msgstr "개인 원장"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.23"
+msgstr "개인 원장"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "nav.gallery"
+msgstr "갤러리"
+
+#. js-lingui-explicit-id
+#: apps/mobile/App.tsx
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+#: apps/web/src/I18n.stories.tsx
+msgid "nav.transactions"
+msgstr "거래"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "title.transactions"
+msgstr "거래 기록"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.title.transactions"
+msgstr "거래 내역"
+
+#. js-lingui-explicit-id
+#: apps/web/src/I18n.stories.tsx
+msgid "story.description"
+msgstr "거래 내용"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "common.storageNotice"
+msgstr "기기 저장소 알림"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "common.storageUnavailable"
+msgstr "기기 저장소를 사용할 수 없어요"
+
+#. js-lingui-explicit-id
+#: apps/mobile/App.tsx
+msgid "gallery.components"
+msgstr "기본 요소"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.connection.error.6"
+msgstr "기존 요청의 원장과 다릅니다. 원래 원장에 다시 연결해야 저장 결과를 확인할 수 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.28"
+msgstr "내 원장과 연결하세요"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.24"
+msgstr "내 원장과 연결하세요"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+msgid "title.books"
+msgstr "내 책"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+msgid "title.accounts"
+msgstr "내 항목"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "error.network"
+msgstr "네트워크 요청을 완료하지 못했습니다. 저장 결과가 불명확할 수 있습니다. 같은 요청으로 결과를 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.remote.5"
+msgstr "다시 시도"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.22"
+msgstr "다시 읽기 "
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.2"
+msgstr "도구"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "description.entry"
+msgstr "돈이 오간 항목과 금액을 적어 거래를 기록합니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.nav.back"
+msgstr "돌아가기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/App.tsx
+#: apps/mobile/LedgerApp.tsx
+msgid "nav.sync"
+msgstr "동기화"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "title.sync"
+msgstr "동기화"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "nav.back"
+msgstr "뒤로"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.nav.gallery"
+msgstr "디자인 갤러리"
+
+#. js-lingui-explicit-id
+#: apps/mobile/App.tsx
+msgid "gallery.mode"
+msgstr "디자인 갤러리 · 가상 자료"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "settings.localLedger"
+msgstr "로컬 원장"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.18"
+msgstr "마지막 성공 동기화"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.34"
+msgstr "마지막 성공 동기화 "
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.6"
+msgstr "본문으로 이동"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "common.loading"
+msgstr "불러오는 중"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.10"
+msgstr "상태 새로고침"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.11"
+msgstr "상태 조회 성공과 원장 읽기·쓰기 권한은 별도로 확인됩니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "nav.newTransaction"
+msgstr "새 거래"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+msgid "title.entry"
+msgstr "새 거래"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.24"
+msgstr "새 인증 확인 필요"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.35"
+msgstr "서버 버전 "
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.20"
+msgstr "서버 버전 / 상태"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.33"
+msgstr "서버 상태 "
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "error.protocol"
+msgstr "서버 응답을 확인하지 못했습니다. 저장 결과가 불명확할 수 있습니다. 같은 요청으로 결과를 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.3"
+msgstr "서버 주소"
+
+#. js-lingui-explicit-id
+#: apps/web/src/I18n.stories.tsx
+msgid "story.connectionHelp"
+msgstr "서버 주소와 접근 토큰을 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "error.http"
+msgstr "서버가 HTTP {status} 응답을 반환했습니다. 저장 결과가 불명확할 수 있습니다. 같은 요청으로 결과를 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.connection.error.2"
+msgstr "서버에 설정한 접근 토큰을 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+msgid "nav.settings"
+msgstr "설정"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "title.settings"
+msgstr "설정"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "connection.openSettings"
+msgstr "설정 열기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "connection.verify"
+msgstr "설정 화면에서 주소와 인증 토큰을 적용해 원장을 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.25"
+msgstr "설정에서 서버 주소와 접근 토큰을 입력하면 항목과 거래를 볼 수 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "connection.required"
+msgstr "설정에서 원장을 연결해 주세요"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.26"
+msgstr "설정으로 이동 "
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.26"
+msgstr "성공 이력 없음·확인되지 않음"
+
+#. js-lingui-explicit-id
+#: apps/mobile/App.tsx
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+#: apps/web/src/I18n.stories.tsx
+msgid "nav.prices"
+msgstr "시세"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+msgid "title.prices"
+msgstr "시세"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.03"
+msgstr "실제 기기에서는 컴퓨터의 LAN 주소를 사용하세요. localhost는 기기 자신입니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/App.tsx
+msgid "gallery.return"
+msgstr "실제 원장으로"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.13"
+msgstr "실행 중인 원장 서버 주소와 접근 토큰을 입력하세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.34"
+msgstr "아직 성공한 원장 조회가 없습니다"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "error.unknown"
+msgstr "알 수 없는 오류가 발생했습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.35"
+msgstr "알 수 없음"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.36"
+msgstr "알 수 없음"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.28"
+msgstr "알 수 없음"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "common.notice"
+msgstr "알림"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+msgid "settings.language"
+msgstr "언어"
+
+#. js-lingui-explicit-id
+#: apps/web/src/I18n.stories.tsx
+msgid "story.language"
+msgstr "언어"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "settings.languageSaveFailed"
+msgstr "언어 설정을 저장하지 못했습니다. 다시 선택해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.38"
+msgstr "없음"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.17"
+msgstr "연결 대상"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.09"
+msgstr "연결 상태"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.5"
+msgstr "연결 상태를 읽지 못했습니다"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.connection.error.8"
+msgstr "연결 상태를 읽지 못했습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.05"
+msgstr "연결 상태를 확인하지 못했어요"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.16"
+msgstr "연결 상태와 원장 자료 조회 권한은 각각 확인합니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/I18n.stories.tsx
+msgid "story.connection"
+msgstr "연결 설정"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.06"
+msgstr "연결 설정"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "connection.applied"
+msgstr "연결 설정을 적용했습니다. 인증 토큰은 이 앱 실행 중에만 보관합니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.connection.error.7"
+msgstr "연결 원장이 바뀌어 새 거래 입력을 비웠습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.07"
+msgstr "연결 적용 · 주소 기억"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.22"
+msgstr "연결 확인 전"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.29"
+msgstr "연결 확인 중…"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.33"
+msgstr "연결 확인 필요"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "common.requestFailed"
+msgstr "요청을 완료하지 못했어요"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.19"
+msgstr "원장 반영 지연"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.32"
+msgstr "원장 식별자 "
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.30"
+msgstr "원장 연결"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.27"
+msgstr "원장 연결 설정"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.11"
+msgstr "원장 연결 정보와 현재 상태를 확인합니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.32"
+msgstr "원장 연결됨"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.connection.error.5"
+msgstr "원장 접근 권한을 확인하지 못했습니다. 서버 주소와 접근 토큰을 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "description.transactions"
+msgstr "원장에 기록된 거래와 항목별 내역을 확인합니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "description.prices"
+msgstr "원장에 기록된 자산별 기준 시세입니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "common.requesting"
+msgstr "원장에 요청하고 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.remote.loading"
+msgstr "원장을 읽고 있습니다…"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.15"
+msgstr "원장의 현재 연결 상태"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.remote.1"
+msgstr "원장이 변경되어 목록을 다시 읽어야 합니다"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.23"
+msgstr "이 실행에서 인증 확인"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.30"
+msgstr "이 실행의 인증 토큰을 지웠습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "connection.previousRetained"
+msgstr "이전에 인증한 연결을 계속 사용합니다. 현재 사용 중인 주소를 아래에서 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.04"
+msgstr "인증 토큰"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.08"
+msgstr "인증 토큰 지우기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.01"
+msgstr "인증 토큰은 앱을 닫으면 지워집니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/App.tsx
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/I18n.stories.tsx
+msgid "nav.entry"
+msgstr "입력"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "connection.notApplied"
+msgstr "입력한 설정을 적용하지 않았습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.remote.2"
+msgstr "자료를 모두 불러오지 못했습니다"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.connection.error.4"
+msgstr "저장 결과를 확인하는 동안에는 기존 서버 주소를 유지해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.21"
+msgstr "저장 확인 대기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.4"
+msgstr "접근 토큰"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "connection.guidance"
+msgstr "주소와 인증 토큰을 적용하면 원장을 확인하고 조회·전송을 시작합니다. 이전 연결이 있다면 오프라인 임시 저장은 가능합니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.connection.error.3"
+msgstr "진행 중인 저장 요청이 끝난 뒤 다시 연결해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+#: apps/web/src/I18n.stories.tsx
+msgid "nav.books"
+msgstr "책"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.remote.4"
+msgstr "처음부터 다시 읽기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.38"
+msgstr "초"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.14"
+msgstr "토큰은 현재 창을 닫거나 새로고침하면 사라집니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/App.tsx
+#: apps/mobile/LedgerApp.tsx
+#: apps/web/src/App.tsx
+#: apps/web/src/I18n.stories.tsx
+msgid "nav.accounts"
+msgstr "항목"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "description.accounts"
+msgstr "항목의 흐름과 자산별 잔액을 살펴보세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.31"
+msgstr "현재 사용 중인 주소: "
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "settings.languageSaveHint"
+msgstr "현재 언어를 유지합니다. 앱을 다시 열기 전에 언어를 다시 선택해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "connection.none"
+msgstr "현재 인증된 연결이 없습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.25"
+msgstr "확인 전"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.27"
+msgstr "확인 전"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.settings.31"
+msgstr "확인 중"

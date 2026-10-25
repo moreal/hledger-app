@@ -1,4 +1,8 @@
-import { useState } from 'react';
+import { activateLocale, i18n } from '../../packages/i18n/src';
+import { I18nProvider, useLingui } from '../../packages/i18n/src/react';
+import { createLocalePreference } from './locale';
+import { createDurableStorage } from './storage';
+import { useEffect, useMemo, useState } from 'react';
 import LedgerApp from './LedgerApp';
 import { KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView, StatusBar, StyleSheet, Switch, Text, View, useWindowDimensions } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -28,6 +32,15 @@ const titles: Record<Screen, [string, string]> = {
 };
 
 function Gallery() {
+  const { _ } = useLingui();
+  const navigationLabels: Record<Screen, string> = {
+    accounts: _(/* i18n */ { id: 'nav.accounts', message: '항목' }),
+    transactions: _(/* i18n */ { id: 'nav.transactions', message: '거래' }),
+    entry: _(/* i18n */ { id: 'nav.entry', message: '입력' }),
+    prices: _(/* i18n */ { id: 'nav.prices', message: '시세' }),
+    sync: _(/* i18n */ { id: 'nav.sync', message: '동기화' }),
+    components: _(/* i18n */ { id: 'gallery.components', message: '기본 요소' }),
+  };
   const [screen, setScreen] = useState<Screen>('accounts');
   const [state, setState] = useState<PreviewState>('normal');
   const [worst, setWorst] = useState(false);
@@ -111,12 +124,12 @@ function Gallery() {
         </View>
 
         <View style={styles.navigation}>
-          {screens.map(([key, label]) => <Pressable key={key} accessibilityRole="button"
-            accessibilityLabel={`${label} 화면 보기`} accessibilityState={{ selected: screen === key }}
+          {screens.map(([key]) => <Pressable key={key} accessibilityRole="button"
+            accessibilityLabel={navigationLabels[key]} accessibilityState={{ selected: screen === key }}
             onPress={() => navigate(key)} style={({ pressed }) => [styles.navigationItem,
               fontScale > 1.4 && styles.largeNavigationItem, screen === key && styles.navigationSelected,
               pressed && styles.navigationPressed]}>
-            <Text style={[styles.navigationText, screen === key && styles.navigationSelectedText]}>{label}</Text>
+            <Text style={[styles.navigationText, screen === key && styles.navigationSelectedText]}>{navigationLabels[key]}</Text>
           </Pressable>)}
         </View>
         <View style={styles.reviewTools}>
@@ -294,18 +307,25 @@ function Gallery() {
   </SafeAreaView>;
 }
 
-export default function App() {
+function AppContent({ preference }: { preference: ReturnType<typeof createLocalePreference> }) {
+  const { _ } = useLingui();
   const [gallery, setGallery] = useState(false);
   return <SafeAreaProvider><View style={styles.flex}>
-    <View style={[styles.flex, gallery && { display: 'none' }]}><LedgerApp onOpenGallery={() => setGallery(true)} /></View>
+    <View style={[styles.flex, gallery && { display: 'none' }]}><LedgerApp localePreference={preference} onOpenGallery={() => setGallery(true)} /></View>
     {gallery && <>
       <SafeAreaView edges={['top']} style={styles.modeBar}>
-        <Text style={textStyles.caption}>디자인 갤러리 · 가상 자료</Text>
-        <Button variant="quiet" onPress={() => setGallery(false)}>실제 원장으로</Button>
+        <Text style={textStyles.caption}>{_(/* i18n */ { id: 'gallery.mode', message: '디자인 갤러리 · 가상 자료' })}</Text>
+        <Button variant="quiet" onPress={() => setGallery(false)}>{_(/* i18n */ { id: 'gallery.return', message: '실제 원장으로' })}</Button>
       </SafeAreaView>
       <Gallery />
     </>}
   </View></SafeAreaProvider>;
+}
+
+export default function App() {
+  const preference = useMemo(() => createLocalePreference(createDurableStorage('locale'), activateLocale), []);
+  useEffect(() => { void preference.hydrate(); }, [preference]);
+  return <I18nProvider i18n={i18n}><AppContent preference={preference} /></I18nProvider>;
 }
 
 const styles = StyleSheet.create({

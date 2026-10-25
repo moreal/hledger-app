@@ -42,7 +42,7 @@ export function verifyHermes(buffer) {
   if (!buffer.subarray(0, 8).equals(magic)) throw new Error('Packaged bundle is not Hermes bytecode');
   return { version: buffer.readUInt32LE(8), bytes: buffer.length, sha256: createHash('sha256').update(buffer).digest('hex') };
 }
-const sourceRoots = new Set(['package.json', 'yarn.lock', '.yarnrc.yml', 'tsconfig.json', 'apps', 'packages']);
+const sourceRoots = new Set(['package.json', 'yarn.lock', '.yarnrc.yml', 'tsconfig.json', 'lingui.config.ts', 'apps', 'packages']);
 const excluded = new Set(['.hledger-app', '.aws', '.codex', '.agents','node_modules', 'ios', 'android', '.git', '.expo', '.rollipop', '.yarn', 'dist', 'build', '.gradle', 'Pods']);
 export function stageSource(root, destination) {
   cpSync(root, destination, { recursive: true, filter: source => {
@@ -50,7 +50,7 @@ export function stageSource(root, destination) {
     if (lstatSync(source).isSymbolicLink()) return false;
     const parts = path.relative(root, source).split(path.sep);
     if (parts[0] === 'packages' && parts[1] === 'api-contract' && parts[2] === 'generated') return false;
-    return sourceRoots.has(parts[0]) && !(parts[0] === 'apps' && parts[1] === 'web' && parts.some(part => ['public', '.storybook'].includes(part))) && !parts.some(part => excluded.has(part) || part.startsWith('.env'));
+    return (sourceRoots.has(parts[0]) || (parts[0] === 'scripts' && (parts.length === 1 || parts[1] === 'i18n-check.mjs'))) && !(parts[0] === 'apps' && parts[1] === 'web' && parts.some(part => ['public', '.storybook'].includes(part))) && !parts.some(part => excluded.has(part) || part.startsWith('.env'));
   } });
 }
 export function canonicalPath(value) {
@@ -67,6 +67,8 @@ function run(command, args, cwd, env = process.env, capture = false) {
   return result.stdout;
 }
 export function validateStagedSource(stage, env = { ...process.env, CI: '1' }) {
+  // Always compile the staged PO sources before tests or native bundling load catalogs.
+  run(process.execPath, [path.join(stage, 'node_modules/@lingui/cli/dist/lingui.js'), 'compile', '--typescript', '--strict'], stage, env);
   // Client-backed tests import generated GraphQL documents, absent in fresh checkouts.
   run(process.execPath, [path.join(stage, 'node_modules/@graphql-codegen/cli/cjs/bin.js'), '--config', 'packages/api-contract/codegen.ts'], stage, env);
   run(process.execPath, ['--test', 'apps/mobile/plugins/with-loopback-network-security.test.cjs'], stage, env);

@@ -1,5 +1,8 @@
+import { translateError, type AppLocale } from '../../packages/i18n/src';
+import { useLingui } from '../../packages/i18n/src/react';
+import type { createLocalePreference } from './locale';
 import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
-import { BackHandler, KeyboardAvoidingView, Platform, ScrollView, StatusBar, StyleSheet, Switch, Text, View } from 'react-native';
+import { BackHandler, KeyboardAvoidingView, Platform, Pressable, ScrollView, StatusBar, StyleSheet, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { randomUUID } from 'expo-crypto';
 import {
@@ -19,7 +22,7 @@ import { arePostingsBalanced } from '../../packages/domain/src/trade';
 import { TradeFields } from './TradeFields';
 import { AssetUnitField } from './AssetUnitField';
 import { Books } from './Books';
-import { failedConnectionMessage } from './connection-feedback';
+
 
 type TabScreen = 'accounts' | 'transactions' | 'entry' | 'prices' | 'books' | 'sync';
 type Screen = TabScreen | 'settings';
@@ -32,13 +35,11 @@ type Draft = Omit<CreateTransactionInput, 'postings' | 'tags'> & {
   postings: { accountName: string; amount: { commodity: string; value: string }; memo?: string | null; cost?: CreateTransactionInput['postings'][number]['cost'] }[];
   tags: { key: string; value: string }[];
 };
-const tabs: [TabScreen, string][] = [['accounts', '항목'], ['transactions', '거래'], ['entry', '입력'], ['prices', '시세'], ['books', '책'], ['sync', '동기화']];
-const titles: Record<Screen, string> = { accounts: '내 항목', transactions: '거래 기록', entry: '새 거래', prices: '시세', books: '내 책', sync: '동기화', settings: '설정' };
 const today = () => { const date = new Date(); return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`; };
 const freshKey = () => newIdempotencyKey(randomUUID);
 const newDraft = (): Draft => ({ idempotencyKey: freshKey(), date: today(), description: '', code: '', clientReference: '',
   postings: [{ accountName: '', amount: { commodity: 'KRW', value: '' }, memo: '' }, { accountName: '', amount: { commodity: 'KRW', value: '' }, memo: '' }], tags: [] });
-const explain = (error: unknown) => error instanceof Error ? error.message : '요청을 처리하지 못했습니다.';
+const explain = translateError;
 const graphErrors = (errors?: { message: string; extensions?: Record<string, unknown> }[]) => errors?.map(error => `${error.extensions?.code ? `${error.extensions.code}: ` : ''}${error.message}`).join('\n') ?? '';
 const validDate = (value: string) => /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(new Date(`${value}T00:00:00Z`).valueOf()) && new Date(`${value}T00:00:00Z`).toISOString().slice(0, 10) === value;
 const galleryTransaction = (transaction: TransactionFieldsFragment): GalleryTransaction => ({ ...transaction, createdAt: null,
@@ -79,7 +80,20 @@ export function blocksFreshRequest(records: readonly OutboxRecord[], selectedId:
   return uncertain.some(record => fingerprint(record.input) === candidate);
 }
 
-export default function LedgerApp({ onOpenGallery }: { onOpenGallery?: () => void }) {
+/** Retains failure semantics so an already visible notice follows the active language. */
+class ConnectionAttemptError extends Error {
+  constructor(readonly originalCause: unknown, readonly hadVerifiedConnection: boolean) {
+    super('Connection attempt failed');
+  }
+}
+
+export default function LedgerApp({ onOpenGallery, localePreference }: { onOpenGallery?: () => void; localePreference: ReturnType<typeof createLocalePreference> }) {
+  const { _, i18n } = useLingui();
+  const [localeError, setLocaleError] = useState(false);
+  const selectLocale = (locale: AppLocale) => { setLocaleError(false); void localePreference.select(locale).catch(() => setLocaleError(true)); };
+
+  const tabs: [TabScreen, string][] = [['accounts', _(/* i18n */ { id: 'nav.accounts', message: '항목' })],['transactions', _(/* i18n */ { id: 'nav.transactions', message: '거래' })],['entry', _(/* i18n */ { id: 'nav.entry', message: '입력' })],['prices', _(/* i18n */ { id: 'nav.prices', message: '시세' })],['books', _(/* i18n */ { id: 'nav.books', message: '책' })],['sync', _(/* i18n */ { id: 'nav.sync', message: '동기화' })]];
+  const titles: Record<Screen, string> = {accounts: _(/* i18n */ { id: 'title.accounts', message: '내 항목' }),transactions: _(/* i18n */ { id: 'title.transactions', message: '거래 기록' }),entry: _(/* i18n */ { id: 'title.entry', message: '새 거래' }),prices: _(/* i18n */ { id: 'title.prices', message: '시세' }),books: _(/* i18n */ { id: 'title.books', message: '내 책' }),sync: _(/* i18n */ { id: 'title.sync', message: '동기화' }),settings: _(/* i18n */ { id: 'title.settings', message: '설정' })};
   const [screen, setScreen] = useState<Screen>('accounts');
   const [screenBeforeSettings, setScreenBeforeSettings] = useState<TabScreen>('accounts');
   const [connection, setConnection] = useState({ endpoint: 'http://localhost:4000/graphql', token: '', ledgerId: undefined as string | undefined, verified: false });
@@ -89,11 +103,11 @@ export default function LedgerApp({ onOpenGallery }: { onOpenGallery?: () => voi
   const [storageWarning, setStorageWarning] = useState('');
   const [storageError, setStorageError] = useState('');
   const [notice, setNotice] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState<unknown>('');
   const [loading, setLoading] = useState(false);
   const [busy, setBusy] = useState(false);
   const [health, setHealth] = useState<HealthQuery['health']>(null);
-  const [healthError, setHealthError] = useState('');
+  const [healthError, setHealthError] = useState<unknown>('');
   const [queue, setQueue] = useState<OutboxRecord[]>([]);
   const [templates, setTemplates] = useState<OutboxTemplate[]>([]);
   const [queueReady, setQueueReady] = useState(false);
@@ -310,12 +324,12 @@ export default function LedgerApp({ onOpenGallery }: { onOpenGallery?: () => voi
       setHealth(handshake.data?.health ?? null);
       setSelectedAccount(null); setAccountDetail(null); setSelectedTransaction(null); setAccounts(null); setTransactions(null); setPrices(null); setRecent([]);
       setConnection({ endpoint: validated, token, ledgerId, verified: true });
-      setNotice('연결 설정을 적용했습니다. 인증 토큰은 이 앱 실행 중에만 보관합니다.');
-    } catch (cause) { setError(failedConnectionMessage(cause, connection.verified)); }
+      setNotice(_(/* i18n */ { id: 'connection.applied', message: '연결 설정을 적용했습니다. 인증 토큰은 이 앱 실행 중에만 보관합니다.' }));
+    } catch (cause) { setError(new ConnectionAttemptError(cause, connection.verified)); }
     finally { setBusy(false); }
   }
   async function read<T>(work: () => Promise<{ data?: T | null; errors?: { message: string; extensions?: Record<string, unknown> }[] }>, apply: (data: T) => void) {
-    if (!connection.verified) { setError('설정 화면에서 주소와 인증 토큰을 적용해 원장을 확인해 주세요.'); return; }
+    if (!connection.verified) { setError(_(/* i18n */ { id: 'connection.verify', message: '설정 화면에서 주소와 인증 토큰을 적용해 원장을 확인해 주세요.' })); return; }
     const id = ++request.current;
     setLoading(true); setError('');
     try {
@@ -325,7 +339,7 @@ export default function LedgerApp({ onOpenGallery }: { onOpenGallery?: () => voi
       const failures = graphErrors(response.errors);
       if (failures) setError(failures);
       else if (!response.data) setError('서버가 조회 자료를 반환하지 않았습니다.');
-    } catch (cause) { if (id === request.current) setError(explain(cause)); }
+    } catch (cause) { if (id === request.current) setError(cause); }
     finally { if (id === request.current) setLoading(false); }
   }
   async function loadAccounts(after?: string, scope?: AccountsQueryVariables) {
@@ -335,7 +349,7 @@ export default function LedgerApp({ onOpenGallery }: { onOpenGallery?: () => voi
       if (depth && !/^(?:[1-9]|10)$/.test(depth)) throw new Error('계층 깊이는 1~10 또는 빈칸입니다.');
       variables = after ? { ...accountScope, after } : scope ?? { first: 30, asOf: to, includeSubaccounts,
         filter: { includeEmpty, ...(accountQuery.trim() ? { query: accountQuery.trim() } : {}), ...(depth ? { depth: Number(depth) } : {}) } };
-    } catch (cause) { setError(explain(cause)); return; }
+    } catch (cause) { setError(cause); return; }
     await read(() => client.accounts(variables), data => {
       setAccountScope(variables);
       setAccounts(data.accounts ? after && accounts ? { ...data.accounts, edges: [...accounts.edges, ...data.accounts.edges] } : data.accounts : null);
@@ -348,7 +362,7 @@ export default function LedgerApp({ onOpenGallery }: { onOpenGallery?: () => voi
       if (!validDate(from) || !validDate(to) || from > to) throw new Error('유효한 시작일과 종료일을 입력해 주세요.');
       variables = after && detailScope ? { ...detailScope, after } : { id: account.id, first: 20, from, to, asOf: from === '0001-01-01' ? undefined : previousDate(from), includeSubaccounts,
         filter: { from, to, includeSubaccounts } };
-    } catch (cause) { setError(explain(cause)); return; }
+    } catch (cause) { setError(cause); return; }
     setSelectedAccount(account);
     if (!after) setAccountDetail(null);
     await read(() => client.accountTransactions(variables), data => {
@@ -401,13 +415,13 @@ export default function LedgerApp({ onOpenGallery }: { onOpenGallery?: () => voi
       const result = await client.health();
       if (id !== healthRequest.current) return;
       setHealth(result.data?.health ?? null); setHealthError(graphErrors(result.errors));
-    } catch (cause) { if (id === healthRequest.current) { setHealth(null); setHealthError(explain(cause)); } }
+    } catch (cause) { if (id === healthRequest.current) { setHealth(null); setHealthError(cause); } }
   }
   function syncQueue() { setQueue(outbox.list()); setTemplates(outbox.listTemplates()); }
   async function queueAction(action: () => Promise<unknown>) {
     setBusy(true); setError(''); setNotice('');
     try { await action(); }
-    catch (cause) { setError(explain(cause)); }
+    catch (cause) { setError(cause); }
     finally { syncQueue(); setBusy(false); }
   }
   async function save(send: boolean) {
@@ -472,19 +486,23 @@ export default function LedgerApp({ onOpenGallery }: { onOpenGallery?: () => voi
     <StatusBar barStyle="dark-content" />
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView ref={scrollView} contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag">
-        <View style={styles.header}><Text accessibilityRole="header" style={[styles.brand, styles.flex]}>hledger</Text><Badge tone={pendingCount ? 'warning' : 'neutral'}>{pendingCount ? `대기 ${pendingCount}건` : '실제 원장'}</Badge>{onOpenGallery && <Button variant="quiet" disabled={busy} onPress={onOpenGallery}>갤러리</Button>}<Button variant="quiet" disabled={busy} onPress={screen === 'settings' ? closeSettings : openSettings}>{screen === 'settings' ? '뒤로' : '설정'}</Button></View>
+        <View style={styles.header}><Text accessibilityRole="header" style={[styles.brand, styles.flex]}>hledger</Text><Badge tone={pendingCount ? 'warning' : 'neutral'}>{pendingCount ? `대기 ${pendingCount}건` : '실제 원장'}</Badge>{onOpenGallery && <Button variant="quiet" disabled={busy} onPress={onOpenGallery}>{_(/* i18n */ { id: 'nav.gallery', message: '갤러리' })}</Button>}<View testID={screen === 'settings' ? 'nav-back' : 'nav-settings'}><Button variant="quiet" disabled={busy} onPress={screen === 'settings' ? closeSettings : openSettings}>{screen === 'settings' ? _(/* i18n */ { id: 'nav.back', message: '뒤로' }) : _(/* i18n */ { id: 'nav.settings', message: '설정' })}</Button></View></View>
         {screen !== 'settings' && <View style={styles.navigation}>{tabs.map(([tab, label]) => <Button key={tab} selected={screen === tab} disabled={busy} onPress={() => { setSelectedAccount(null); setAccountDetail(null); setSelectedTransaction(null); setScreen(tab); }}>{label}</Button>)}</View>}
         <Heading>{titles[screen]}</Heading>
-        {!connection.verified && screen !== 'settings' && <Notice title="설정에서 원장을 연결해 주세요" tone="accent" action={{ label: '설정 열기', onPress: openSettings }}>주소와 인증 토큰을 적용하면 원장을 확인하고 조회·전송을 시작합니다. 이전 연결이 있다면 오프라인 임시 저장은 가능합니다.</Notice>}
-        {loading && <Notice title="불러오는 중">원장에 요청하고 있습니다.</Notice>}
-        {error ? <Notice title="요청을 완료하지 못했어요" tone="danger">{error}</Notice> : null}
+        {!connection.verified && screen !== 'settings' && <Notice title={_(/* i18n */ { id: 'connection.required', message: '설정에서 원장을 연결해 주세요' })} tone="accent" action={{ label: _(/* i18n */ { id: 'connection.openSettings', message: '설정 열기' }), onPress: openSettings }}>{_(/* i18n */ { id: 'connection.guidance', message: '주소와 인증 토큰을 적용하면 원장을 확인하고 조회·전송을 시작합니다. 이전 연결이 있다면 오프라인 임시 저장은 가능합니다.' })}</Notice>}
+        {loading && <Notice title={_(/* i18n */ { id: 'common.loading', message: '불러오는 중' })}>{_(/* i18n */ { id: 'common.requesting', message: '원장에 요청하고 있습니다.' })}</Notice>}
+        {error ? <Notice title={_(/* i18n */ { id: 'common.requestFailed', message: '요청을 완료하지 못했어요' })} tone="danger">{error instanceof ConnectionAttemptError
+          ? [translateError(error.originalCause), _(/* i18n */ { id: 'connection.notApplied', message: '입력한 설정을 적용하지 않았습니다.' }), error.hadVerifiedConnection
+            ? _(/* i18n */ { id: 'connection.previousRetained', message: '이전에 인증한 연결을 계속 사용합니다. 현재 사용 중인 주소를 아래에서 확인해 주세요.' })
+            : _(/* i18n */ { id: 'connection.none', message: '현재 인증된 연결이 없습니다.' })].join('\n')
+          : typeof error === 'string' ? error : translateError(error)}</Notice> : null}
         {assetMetadataError && connection.verified ? <Notice title="자산 표시 정보를 불러오지 못했어요" tone="warning"
           action={{ label: '표시 정보 다시 불러오기', onPress: () => setAssetMetadataReload(value => value + 1) }}>
           {assetMetadataError} 원장의 자산와 금액은 그대로 표시합니다.
         </Notice> : null}
-        {notice ? <Notice title="알림" tone="accent">{notice}</Notice> : null}
-        {storageWarning ? <Notice title="기기 저장소 알림" tone="warning">{storageWarning}</Notice> : null}
-        {storageError ? <Notice title="기기 저장소를 사용할 수 없어요" tone="danger">{storageError} 입력을 유지하며 전송을 중단했습니다. 앱을 다시 열어 저장 자료를 확인해 주세요.</Notice> : null}
+        {notice ? <Notice title={_(/* i18n */ { id: 'common.notice', message: '알림' })} tone="accent">{notice}</Notice> : null}
+        {storageWarning ? <Notice title={_(/* i18n */ { id: 'common.storageNotice', message: '기기 저장소 알림' })} tone="warning">{storageWarning}</Notice> : null}
+        {storageError ? <Notice title={_(/* i18n */ { id: 'common.storageUnavailable', message: '기기 저장소를 사용할 수 없어요' })} tone="danger">{storageError} 입력을 유지하며 전송을 중단했습니다. 앱을 다시 열어 저장 자료를 확인해 주세요.</Notice> : null}
 
         {screen === 'accounts' && <>
           {(selectedAccount ?? accounts?.edges[0]?.node) && <View style={styles.feature}><Text style={styles.featureLabel}>{(selectedAccount ?? accounts?.edges[0]?.node)?.fullName}</Text><Text style={styles.featureMuted}>{accountScope.asOf} 기준 · {accountScope.includeSubaccounts ? '하위 항목 포함' : '항목 자체 잔액'}</Text>
@@ -591,19 +609,23 @@ export default function LedgerApp({ onOpenGallery }: { onOpenGallery?: () => voi
           </Panel></>}
 
         {screen === 'settings' && <>
-          <Panel><Heading subtitle="인증 토큰은 앱을 닫으면 지워집니다.">연결 설정</Heading><Field label="GraphQL 주소" value={endpoint} onChangeText={setEndpoint} editable={!busy} autoCapitalize="none" autoCorrect={false} keyboardType="url" hint="실제 기기에서는 컴퓨터의 LAN 주소를 사용하세요. localhost는 기기 자신입니다." />
-            <Field label="인증 토큰" value={token} onChangeText={setToken} editable={!busy} secureTextEntry autoCapitalize="none" autoCorrect={false} textContentType="none" autoComplete="off" />
-            <Button variant="primary" disabled={busy || !settingsReady} onPress={() => void applyConnection()}>연결 적용 · 주소 기억</Button>
-            <Button disabled={busy} onPress={() => { setToken(''); setConnection({ ...connection, token: '', verified: false }); setHealth(null); setNotice('이 실행의 인증 토큰을 지웠습니다.'); }}>인증 토큰 지우기</Button>
+          <Panel><Heading>{_(/* i18n */ { id: 'settings.language', message: '언어' })}</Heading>
+            <View style={styles.wrap}>{(['ko', 'en'] as const).map(locale => <Pressable key={locale} testID={`locale-${locale}`} accessibilityRole="button" accessibilityState={{ selected: i18n.locale === locale }} accessibilityLabel={locale === 'ko' ? '한국어' : 'English'} onPress={() => selectLocale(locale)} style={styles.posting}><Text style={textStyles.strong}>{locale === 'ko' ? '한국어' : 'English'}</Text></Pressable>)}</View>
+            {localeError && <Notice tone="warning" title={_(/* i18n */ { id: 'settings.languageSaveFailed', message: '언어 설정을 저장하지 못했습니다. 다시 선택해 주세요.' })}>{_(/* i18n */ { id: 'settings.languageSaveHint', message: '현재 언어를 유지합니다. 앱을 다시 열기 전에 언어를 다시 선택해 주세요.' })}</Notice>}
           </Panel>
-          <Panel><Heading>연결 상태</Heading><Button disabled={busy} onPress={() => void loadHealth()}>상태 새로고침</Button>
-            <Text selectable style={textStyles.strong}>현재 사용 중인 주소: {connection.endpoint}</Text>
-            {healthError && <Notice title="연결 상태를 확인하지 못했어요" tone="danger">{healthError}</Notice>}
-            <Text selectable style={textStyles.caption}>원장 식별자 {connection.ledgerId ?? '연결 확인 전'} · {connection.verified ? '이 실행에서 인증 확인' : '새 인증 확인 필요'}</Text>
-            <Text style={textStyles.strong}>서버 상태 {health?.status ?? '확인 전'} · 원장 연결 {health?.connectionStatus ?? 'UNKNOWN'}</Text>
-            <Text style={textStyles.muted}>마지막 성공 동기화 {health?.lastSuccessfulSyncAt ?? '성공 이력 없음·확인되지 않음'}</Text>
-            <Text style={textStyles.caption}>서버 버전 {health?.version ?? '확인 전'} · 인덱서 지연 {health?.indexerLagSeconds == null ? '알 수 없음' : `${health.indexerLagSeconds}초`}</Text>
-            <Text style={textStyles.caption}>상태 조회 성공과 원장 읽기·쓰기 권한은 별도로 확인됩니다.</Text>
+          <Panel><Heading subtitle={_(/* i18n */ { id: 'native.settings.01', message: '인증 토큰은 앱을 닫으면 지워집니다.' })}>{_(/* i18n */ { id: 'native.settings.06', message: '연결 설정' })}</Heading><Field label={_(/* i18n */ { id: 'native.settings.02', message: 'GraphQL 주소' })} value={endpoint} onChangeText={setEndpoint} editable={!busy} autoCapitalize="none" autoCorrect={false} keyboardType="url" hint={_(/* i18n */ { id: 'native.settings.03', message: '실제 기기에서는 컴퓨터의 LAN 주소를 사용하세요. localhost는 기기 자신입니다.' })} />
+            <Field label={_(/* i18n */ { id: 'native.settings.04', message: '인증 토큰' })} value={token} onChangeText={setToken} editable={!busy} secureTextEntry autoCapitalize="none" autoCorrect={false} textContentType="none" autoComplete="off" />
+            <Button variant="primary" disabled={busy || !settingsReady} onPress={() => void applyConnection()}>{_(/* i18n */ { id: 'native.settings.07', message: '연결 적용 · 주소 기억' })}</Button>
+            <Button disabled={busy} onPress={() => { setToken(''); setConnection({ ...connection, token: '', verified: false }); setHealth(null); setNotice(_(/* i18n */ { id: 'native.settings.30', message: '이 실행의 인증 토큰을 지웠습니다.' })); }}>{_(/* i18n */ { id: 'native.settings.08', message: '인증 토큰 지우기' })}</Button>
+          </Panel>
+          <Panel><Heading>{_(/* i18n */ { id: 'native.settings.09', message: '연결 상태' })}</Heading><Button disabled={busy} onPress={() => void loadHealth()}>{_(/* i18n */ { id: 'native.settings.10', message: '상태 새로고침' })}</Button>
+            <Text selectable style={textStyles.strong}>{_(/* i18n */ { id: 'native.settings.31', message: '현재 사용 중인 주소: ' })}{connection.endpoint}</Text>
+            {!!healthError && <Notice title={_(/* i18n */ { id: 'native.settings.05', message: '연결 상태를 확인하지 못했어요' })} tone="danger">{typeof healthError === 'string' ? healthError : translateError(healthError)}</Notice>}
+            <Text selectable style={textStyles.caption}>{_(/* i18n */ { id: 'native.settings.32', message: '원장 식별자 ' })}{connection.ledgerId ?? _(/* i18n */ { id: 'native.settings.22', message: '연결 확인 전' })} · {connection.verified ? _(/* i18n */ { id: 'native.settings.23', message: '이 실행에서 인증 확인' }) : _(/* i18n */ { id: 'native.settings.24', message: '새 인증 확인 필요' })}</Text>
+            <Text style={textStyles.strong}>{_(/* i18n */ { id: 'native.settings.33', message: '서버 상태 ' })}{health?.status ?? _(/* i18n */ { id: 'native.settings.25', message: '확인 전' })}{_(/* i18n */ { id: 'native.settings.36', message: ' · 원장 연결 ' })}{health?.connectionStatus ?? 'UNKNOWN'}</Text>
+            <Text style={textStyles.muted}>{_(/* i18n */ { id: 'native.settings.34', message: '마지막 성공 동기화 ' })}{health?.lastSuccessfulSyncAt ?? _(/* i18n */ { id: 'native.settings.26', message: '성공 이력 없음·확인되지 않음' })}</Text>
+            <Text style={textStyles.caption}>{_(/* i18n */ { id: 'native.settings.35', message: '서버 버전 ' })}{health?.version ?? _(/* i18n */ { id: 'native.settings.27', message: '확인 전' })}{_(/* i18n */ { id: 'native.settings.37', message: ' · 인덱서 지연 ' })}{health?.indexerLagSeconds == null ? _(/* i18n */ { id: 'native.settings.28', message: '알 수 없음' }) : _(/* i18n */ { id: 'native.settings.38', message: '초' }) + ` ${health.indexerLagSeconds}`}</Text>
+            <Text style={textStyles.caption}>{_(/* i18n */ { id: 'native.settings.11', message: '상태 조회 성공과 원장 읽기·쓰기 권한은 별도로 확인됩니다.' })}</Text>
           </Panel>
         </>}
         {screen === 'sync' && <>
