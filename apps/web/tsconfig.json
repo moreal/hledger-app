@@ -1,6 +1,12 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": { "types": ["vite/client", "node", "react"] },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts", "../../packages/**/*.ts", "../../packages/**/*.tsx"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "vite.config.ts",
+    "../../packages/**/*.ts",
+    "../../packages/**/*.tsx"
+  ],
   "exclude": ["../../node_modules", "../../packages/api-contract/legacy"]
 }

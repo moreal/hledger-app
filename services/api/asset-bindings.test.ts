@@ -9,9 +9,17 @@ import { createAssetBindingStore } from './asset-bindings.ts';
 import type { Asset } from '../../packages/domain/src/asset-catalog.ts';
 
 const asset: Asset = {
-  id: 'stock:NASDAQ:AAPL', symbol: 'AAPL', name: 'Apple Inc.', exchange: 'NASDAQ', kind: 'STOCK',
-  isin: 'US0378331005', source: 'test-catalog', sourceUrl: 'https://example.org/catalog', asOf: '2026-10-21',
-  iconText: 'A', iconUrl: 'https://cdn.brandfetch.io/apple.com',
+  id: 'stock:NASDAQ:AAPL',
+  symbol: 'AAPL',
+  name: 'Apple Inc.',
+  exchange: 'NASDAQ',
+  kind: 'STOCK',
+  isin: 'US0378331005',
+  source: 'test-catalog',
+  sourceUrl: 'https://example.org/catalog',
+  asOf: '2026-10-21',
+  iconText: 'A',
+  iconUrl: 'https://cdn.brandfetch.io/apple.com',
 };
 async function fixture() {
   const directory = await mkdtemp(join(tmpdir(), 'asset-bindings-'));
@@ -19,8 +27,15 @@ async function fixture() {
   return { directory, path, store: createAssetBindingStore({ path, ledgerId: 'ledger-a' }) };
 }
 async function child(source: string) {
-  const process = spawn(globalThis.process.execPath, ['--import', 'tsx', '--input-type=module', '-e', source], { stdio: ['ignore', 'pipe', 'pipe'] });
-  let stderr = ''; process.stderr.on('data', chunk => { stderr += chunk; });
+  const process = spawn(
+    globalThis.process.execPath,
+    ['--import', 'tsx', '--input-type=module', '-e', source],
+    { stdio: ['ignore', 'pipe', 'pipe'] },
+  );
+  let stderr = '';
+  process.stderr.on('data', (chunk) => {
+    stderr += chunk;
+  });
   const [code, signal] = await once(process, 'exit');
   return { code, signal, stderr };
 }
@@ -44,9 +59,14 @@ test('bindings persist asset snapshots across restart and removal without changi
     selected.name = 'Changed upstream';
     assert.equal((await restarted.list())[0]?.asset.name, 'Apple Inc.');
     assert.equal(await restarted.set('AAPL', null), null);
-    assert.deepEqual(await createAssetBindingStore({ path: f.path, ledgerId: 'ledger-a' }).list(), []);
+    assert.deepEqual(
+      await createAssetBindingStore({ path: f.path, ledgerId: 'ledger-a' }).list(),
+      [],
+    );
     assert.equal(await readFile(journal, 'utf8'), bytes);
-  } finally { await rm(f.directory, { recursive: true, force: true }); }
+  } finally {
+    await rm(f.directory, { recursive: true, force: true });
+  }
 });
 
 test('commodity spelling, case, spaces and Unicode code points remain exact', async () => {
@@ -54,13 +74,21 @@ test('commodity spelling, case, spaces and Unicode code points remain exact', as
   try {
     const commodities = ['AAPL', 'aapl', ' custom unit ', '🪙'.repeat(32), '__proto__'];
     for (const commodity of commodities) await f.store.set(commodity, asset);
-    assert.deepEqual(new Set((await f.store.list()).map(binding => binding.commodity)), new Set(commodities));
-    assert.deepEqual((await f.store.list(['aapl', 'missing'])).map(binding => binding.commodity), ['aapl']);
+    assert.deepEqual(
+      new Set((await f.store.list()).map((binding) => binding.commodity)),
+      new Set(commodities),
+    );
+    assert.deepEqual(
+      (await f.store.list(['aapl', 'missing'])).map((binding) => binding.commodity),
+      ['aapl'],
+    );
     for (const commodity of ['', ' ', 'x'.repeat(33), 'bad\nunit', 'bad\u0000unit']) {
       await assert.rejects(f.store.set(commodity, asset), { code: 'INVALID_INPUT' });
     }
     assert.equal((await f.store.list()).length, commodities.length);
-  } finally { await rm(f.directory, { recursive: true, force: true }); }
+  } finally {
+    await rm(f.directory, { recursive: true, force: true });
+  }
 });
 
 test('invalid asset snapshots and unsafe icon URLs fail before modifying saved bindings', async () => {
@@ -68,11 +96,21 @@ test('invalid asset snapshots and unsafe icon URLs fail before modifying saved b
   try {
     await f.store.set('AAPL', asset);
     const before = await readFile(f.path, 'utf8');
-    for (const patch of [{ name: '' }, { kind: 'OTHER' }, { iconUrl: 'javascript:alert(1)' }, { iconUrl: 'http://example.com/a.png' }, { iconUrl: 'https://user:secret@example.com/a.png' }]) {
-      await assert.rejects(f.store.set('AAPL', { ...asset, ...patch } as Asset), { code: 'INVALID_INPUT' });
+    for (const patch of [
+      { name: '' },
+      { kind: 'OTHER' },
+      { iconUrl: 'javascript:alert(1)' },
+      { iconUrl: 'http://example.com/a.png' },
+      { iconUrl: 'https://user:secret@example.com/a.png' },
+    ]) {
+      await assert.rejects(f.store.set('AAPL', { ...asset, ...patch } as Asset), {
+        code: 'INVALID_INPUT',
+      });
       assert.equal(await readFile(f.path, 'utf8'), before);
     }
-  } finally { await rm(f.directory, { recursive: true, force: true }); }
+  } finally {
+    await rm(f.directory, { recursive: true, force: true });
+  }
 });
 
 test('wrong ledger namespace rejects reads and writes and preserves the file', async () => {
@@ -84,7 +122,9 @@ test('wrong ledger namespace rejects reads and writes and preserves the file', a
     await assert.rejects(other.list(), { code: 'METADATA_UNAVAILABLE' });
     await assert.rejects(other.set('AAPL', null), { code: 'METADATA_UNAVAILABLE' });
     assert.equal(await readFile(f.path, 'utf8'), before);
-  } finally { await rm(f.directory, { recursive: true, force: true }); }
+  } finally {
+    await rm(f.directory, { recursive: true, force: true });
+  }
 });
 
 test('corrupt, unsupported or invalid metadata never gets replaced by a new write', async () => {
@@ -92,35 +132,62 @@ test('corrupt, unsupported or invalid metadata never gets replaced by a new writ
   try {
     await f.store.set('AAPL', asset);
     const valid = JSON.parse(await readFile(f.path, 'utf8'));
-    const contents = ['{broken', JSON.stringify({ ...valid, version: 99 }), JSON.stringify({ ...valid, bindings: [{ commodity: 'AAPL', asset: { ...asset, iconUrl: 'javascript:bad' }, updatedAt: new Date().toISOString() }] })];
+    const contents = [
+      '{broken',
+      JSON.stringify({ ...valid, version: 99 }),
+      JSON.stringify({
+        ...valid,
+        bindings: [
+          {
+            commodity: 'AAPL',
+            asset: { ...asset, iconUrl: 'javascript:bad' },
+            updatedAt: new Date().toISOString(),
+          },
+        ],
+      }),
+    ];
     for (const content of contents) {
       await writeFile(f.path, content);
       await assert.rejects(f.store.list(), { code: 'METADATA_UNAVAILABLE' });
       await assert.rejects(f.store.set('OTHER', asset), { code: 'METADATA_UNAVAILABLE' });
       assert.equal(await readFile(f.path, 'utf8'), content);
     }
-  } finally { await rm(f.directory, { recursive: true, force: true }); }
+  } finally {
+    await rm(f.directory, { recursive: true, force: true });
+  }
 });
 
 test('independent store instances preserve every concurrent update', async () => {
   const f = await fixture();
   try {
-    await Promise.all(Array.from({ length: 24 }, (_, index) => createAssetBindingStore({ path: f.path, ledgerId: 'ledger-a' }).set(`unit ${index}`, asset)));
+    await Promise.all(
+      Array.from({ length: 24 }, (_, index) =>
+        createAssetBindingStore({ path: f.path, ledgerId: 'ledger-a' }).set(`unit ${index}`, asset),
+      ),
+    );
     assert.equal((await f.store.list()).length, 24);
-  } finally { await rm(f.directory, { recursive: true, force: true }); }
+  } finally {
+    await rm(f.directory, { recursive: true, force: true });
+  }
 });
 
 test('independent processes preserve every concurrent update', async () => {
   const f = await fixture();
   try {
-    const results = await Promise.all(Array.from({ length: 4 }, (_, index) => child(`
+    const results = await Promise.all(
+      Array.from({ length: 4 }, (_, index) =>
+        child(`
       const {createAssetBindingStore} = await import(${JSON.stringify(moduleUrl)});
       const store = createAssetBindingStore(${JSON.stringify({ path: f.path, ledgerId: 'ledger-a' })});
       for (let i=0; i<4; i++) await store.set(${JSON.stringify(`process ${index}:`)}+i, ${JSON.stringify(asset)});
-    `)));
+    `),
+      ),
+    );
     for (const result of results) assert.equal(result.code, 0, result.stderr);
     assert.equal((await f.store.list()).length, 16);
-  } finally { await rm(f.directory, { recursive: true, force: true }); }
+  } finally {
+    await rm(f.directory, { recursive: true, force: true });
+  }
 });
 
 test('a failed atomic replacement preserves the previous complete snapshot', async () => {
@@ -141,7 +208,9 @@ test('a failed atomic replacement preserves the previous complete snapshot', asy
     assert.equal(await readFile(f.path, 'utf8'), before);
     await f.store.set('AFTER', asset);
     assert.equal((await f.store.list()).length, 2);
-  } finally { await rm(f.directory, { recursive: true, force: true }); }
+  } finally {
+    await rm(f.directory, { recursive: true, force: true });
+  }
 });
 
 test('an interrupted writer leaves the old snapshot readable and its lock is reclaimed', async () => {
@@ -160,22 +229,36 @@ test('an interrupted writer leaves the old snapshot readable and its lock is rec
     assert.equal(result.signal, 'SIGKILL', result.stderr);
     assert.equal(await readFile(f.path, 'utf8'), before);
     await f.store.set('AFTER', asset);
-    assert.deepEqual(new Set((await f.store.list()).map(binding => binding.commodity)), new Set(['AAPL', 'AFTER']));
-  } finally { await rm(f.directory, { recursive: true, force: true }); }
+    assert.deepEqual(
+      new Set((await f.store.list()).map((binding) => binding.commodity)),
+      new Set(['AAPL', 'AFTER']),
+    );
+  } finally {
+    await rm(f.directory, { recursive: true, force: true });
+  }
 });
-
 
 test('normalized PNG icons persist across store restart', async () => {
   const f = await fixture();
   try {
-    const iconUrl = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aXioAAAAASUVORK5CYII=';
+    const iconUrl =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aXioAAAAASUVORK5CYII=';
     const saved = await f.store.set('AAPL', { ...asset, iconUrl });
     const restarted = createAssetBindingStore({ path: f.path, ledgerId: 'ledger-a' });
     assert.deepEqual(await restarted.list(), [saved]);
     assert.equal((await restarted.list())[0]?.asset.iconUrl, iconUrl);
-    for (const invalid of ['data:image/svg+xml;base64,PHN2Zz4=', 'data:image/png;base64,PHN2Zz4=', iconUrl + '=', iconUrl + 'A'.repeat(400000)]) {
-      await assert.rejects(restarted.set('AAPL', { ...asset, iconUrl: invalid }), { code: 'INVALID_INPUT' });
+    for (const invalid of [
+      'data:image/svg+xml;base64,PHN2Zz4=',
+      'data:image/png;base64,PHN2Zz4=',
+      iconUrl + '=',
+      iconUrl + 'A'.repeat(400000),
+    ]) {
+      await assert.rejects(restarted.set('AAPL', { ...asset, iconUrl: invalid }), {
+        code: 'INVALID_INPUT',
+      });
     }
     assert.deepEqual(await restarted.list(), [saved]);
-  } finally { await rm(f.directory, { recursive: true, force: true }); }
+  } finally {
+    await rm(f.directory, { recursive: true, force: true });
+  }
 });

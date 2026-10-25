@@ -1,114 +1,352 @@
-fragment MoneyFields on MoneyAmount { commodity value }
-fragment PageFields on PageInfo { hasNextPage endCursor }
+fragment MoneyFields on MoneyAmount {
+  commodity
+  value
+}
+fragment PageFields on PageInfo {
+  hasNextPage
+  endCursor
+}
 fragment TransactionFields on Transaction {
-  id date description code status createdAt source
-  tags { key value }
-  postings { accountId accountName memo amount { ...MoneyFields } cost { type amount { ...MoneyFields } } }
-}
-
-query Health {
-  health { status timestamp version indexerLagSeconds connectionStatus lastSuccessfulSyncAt details }
-}
-
-query Accounts($filter: AccountFilter, $first: Int, $after: String, $asOf: Date, $includeSubaccounts: Boolean = false) {
-  accounts(filter: $filter, first: $first, after: $after) {
-    edges { cursor node {
-      id name fullName parentId depth transactionCount lastPostedDate
-      tags { key value }
-      balances(asOf: $asOf, includeSubaccounts: $includeSubaccounts) { ...MoneyFields }
-    } }
-    pageInfo { ...PageFields }
-    limit totalEstimate
+  id
+  date
+  description
+  code
+  status
+  createdAt
+  source
+  tags {
+    key
+    value
+  }
+  postings {
+    accountId
+    accountName
+    memo
+    amount {
+      ...MoneyFields
+    }
+    cost {
+      type
+      amount {
+        ...MoneyFields
+      }
+    }
   }
 }
 
-query AccountTransactions($id: ID!, $filter: TransactionFilter, $first: Int, $after: String, $from: Date, $to: Date, $asOf: Date, $includeSubaccounts: Boolean = false) {
+query Health {
+  health {
+    status
+    timestamp
+    version
+    indexerLagSeconds
+    connectionStatus
+    lastSuccessfulSyncAt
+    details
+  }
+}
+
+query Accounts(
+  $filter: AccountFilter
+  $first: Int
+  $after: String
+  $asOf: Date
+  $includeSubaccounts: Boolean = false
+) {
+  accounts(filter: $filter, first: $first, after: $after) {
+    edges {
+      cursor
+      node {
+        id
+        name
+        fullName
+        parentId
+        depth
+        transactionCount
+        lastPostedDate
+        tags {
+          key
+          value
+        }
+        balances(asOf: $asOf, includeSubaccounts: $includeSubaccounts) {
+          ...MoneyFields
+        }
+      }
+    }
+    pageInfo {
+      ...PageFields
+    }
+    limit
+    totalEstimate
+  }
+}
+
+query AccountTransactions(
+  $id: ID!
+  $filter: TransactionFilter
+  $first: Int
+  $after: String
+  $from: Date
+  $to: Date
+  $asOf: Date
+  $includeSubaccounts: Boolean = false
+) {
   account(id: $id) {
-    id name fullName parentId depth transactionCount lastPostedDate
-    tags { key value }
-    opening: balances(asOf: $asOf, includeSubaccounts: $includeSubaccounts) { ...MoneyFields }
-    movements(from: $from, to: $to, includeSubaccounts: $includeSubaccounts) { ...MoneyFields }
+    id
+    name
+    fullName
+    parentId
+    depth
+    transactionCount
+    lastPostedDate
+    tags {
+      key
+      value
+    }
+    opening: balances(asOf: $asOf, includeSubaccounts: $includeSubaccounts) {
+      ...MoneyFields
+    }
+    movements(from: $from, to: $to, includeSubaccounts: $includeSubaccounts) {
+      ...MoneyFields
+    }
     transactions(filter: $filter, first: $first, after: $after) {
-      edges { cursor node { ...TransactionFields } }
-      pageInfo { ...PageFields }
-      limit totalEstimate
+      edges {
+        cursor
+        node {
+          ...TransactionFields
+        }
+      }
+      pageInfo {
+        ...PageFields
+      }
+      limit
+      totalEstimate
     }
   }
 }
 
 query Transactions($filter: TransactionFilter, $first: Int, $after: String) {
   transactions(filter: $filter, first: $first, after: $after) {
-    edges { cursor node { ...TransactionFields } }
-    pageInfo { ...PageFields }
-    limit totalEstimate
+    edges {
+      cursor
+      node {
+        ...TransactionFields
+      }
+    }
+    pageInfo {
+      ...PageFields
+    }
+    limit
+    totalEstimate
   }
 }
 
 query Prices($filter: PriceFilter, $first: Int, $after: String) {
   prices(filter: $filter, first: $first, after: $after) {
-    edges { cursor node { commodity quoteCommodity date rate source } }
-    pageInfo { ...PageFields }
-    limit totalEstimate
+    edges {
+      cursor
+      node {
+        commodity
+        quoteCommodity
+        date
+        rate
+        source
+      }
+    }
+    pageInfo {
+      ...PageFields
+    }
+    limit
+    totalEstimate
   }
 }
 
 mutation CreateTransaction($input: CreateTransactionInput!) {
   createTransaction(input: $input) {
-    transaction { ...TransactionFields }
-    idempotency { key replayed }
-    errors { path code message requestId timestamp details }
+    transaction {
+      ...TransactionFields
+    }
+    idempotency {
+      key
+      replayed
+    }
+    errors {
+      path
+      code
+      message
+      requestId
+      timestamp
+      details
+    }
   }
 }
 
 fragment AssetFields on Asset {
-  id symbol name exchange kind isin source sourceUrl asOf iconText iconUrl
+  id
+  symbol
+  name
+  exchange
+  kind
+  isin
+  source
+  sourceUrl
+  asOf
+  iconText
+  iconUrl
 }
 fragment AssetBindingFields on AssetBinding {
-  commodity updatedAt asset { ...AssetFields }
+  commodity
+  updatedAt
+  asset {
+    ...AssetFields
+  }
 }
 query Assets($query: String!, $first: Int) {
   assets(query: $query, first: $first) {
-    items { ...AssetFields }
-    providers { provider status updatedAt message }
+    items {
+      ...AssetFields
+    }
+    providers {
+      provider
+      status
+      updatedAt
+      message
+    }
   }
 }
 query AssetBindings($commodities: [String!]) {
-  assetBindings(commodities: $commodities) { ...AssetBindingFields }
+  assetBindings(commodities: $commodities) {
+    ...AssetBindingFields
+  }
 }
 mutation SetAssetBinding($commodity: String!, $assetId: ID) {
   setAssetBinding(commodity: $commodity, assetId: $assetId) {
-    commodity binding { ...AssetBindingFields }
+    commodity
+    binding {
+      ...AssetBindingFields
+    }
   }
 }
 
 fragment BookFields on BookCopy {
-  id commodity isbn title authors coverUrl purchaseDate status disposalDate assetAccount
-  purchasePrice { ...MoneyFields }
-  saleProceeds { ...MoneyFields }
-  realizedGain { ...MoneyFields }
+  id
+  commodity
+  isbn
+  title
+  authors
+  coverUrl
+  purchaseDate
+  status
+  disposalDate
+  assetAccount
+  purchasePrice {
+    ...MoneyFields
+  }
+  saleProceeds {
+    ...MoneyFields
+  }
+  realizedGain {
+    ...MoneyFields
+  }
 }
-query Books { books { ...BookFields } }
+query Books {
+  books {
+    ...BookFields
+  }
+}
 mutation PurchaseBook($input: PurchaseBookInput!) {
-  purchaseBook(input: $input) { book { ...BookFields } idempotency { key replayed } errors { path code message } }
+  purchaseBook(input: $input) {
+    book {
+      ...BookFields
+    }
+    idempotency {
+      key
+      replayed
+    }
+    errors {
+      path
+      code
+      message
+    }
+  }
 }
 mutation DisposeBook($input: DisposeBookInput!) {
-  disposeBook(input: $input) { book { ...BookFields } idempotency { key replayed } errors { path code message } }
+  disposeBook(input: $input) {
+    book {
+      ...BookFields
+    }
+    idempotency {
+      key
+      replayed
+    }
+    errors {
+      path
+      code
+      message
+    }
+  }
 }
 
 query BookMetadata($isbn: String!) {
-  bookMetadata(isbn: $isbn) { status message book { isbn title authors coverUrl coverSource coverSourceUrl sourceUrl attribution } }
+  bookMetadata(isbn: $isbn) {
+    status
+    message
+    book {
+      isbn
+      title
+      authors
+      coverUrl
+      coverSource
+      coverSourceUrl
+      sourceUrl
+      attribution
+    }
+  }
 }
 
 fragment BooksFeatureFields on BooksFeature {
-  moduleId version migrationVersion enabled migratedExistingData canRead canWrite canLookupMetadata canRecover
+  moduleId
+  version
+  migrationVersion
+  enabled
+  migratedExistingData
+  canRead
+  canWrite
+  canLookupMetadata
+  canRecover
 }
-query LedgerFeatures { ledgerFeatures { ledgerId books { ...BooksFeatureFields } } }
+query LedgerFeatures {
+  ledgerFeatures {
+    ledgerId
+    books {
+      ...BooksFeatureFields
+    }
+  }
+}
 mutation SetBooksEnabled($enabled: Boolean!, $expectedVersion: Int!, $hasPending: Boolean = false) {
   setBooksEnabled(enabled: $enabled, expectedVersion: $expectedVersion, hasPending: $hasPending) {
-    feature { ...BooksFeatureFields }
-    errors { path code message requestId timestamp details }
+    feature {
+      ...BooksFeatureFields
+    }
+    errors {
+      path
+      code
+      message
+      requestId
+      timestamp
+      details
+    }
   }
 }
 query BookRequestStatus($input: BookRequestStatusInput!) {
-  bookRequestStatus(input: $input) { status book { ...BookFields } idempotency { key replayed } }
+  bookRequestStatus(input: $input) {
+    status
+    book {
+      ...BookFields
+    }
+    idempotency {
+      key
+      replayed
+    }
+  }
 }

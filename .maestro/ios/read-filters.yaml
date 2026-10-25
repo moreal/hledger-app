@@ -17,7 +17,7 @@ name: iOS exercised transaction search and pagination
     commands:
       - assertVisible: 거래 필터 접기
       - tapOn:
-          point: "90%,42%"
+          point: '90%,42%'
           waitToSettleTimeoutMs: 300
       - eraseText: 100
       - inputText: ${output.readQuery}

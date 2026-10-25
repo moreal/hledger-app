@@ -4,19 +4,11 @@
   "title": "GET /v1/health response",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "status",
-    "timestamp",
-    "version",
-    "indexer_lag_seconds"
-  ],
+  "required": ["status", "timestamp", "version", "indexer_lag_seconds"],
   "properties": {
     "status": {
       "type": "string",
-      "enum": [
-        "ok",
-        "degraded"
-      ]
+      "enum": ["ok", "degraded"]
     },
     "timestamp": {
       "type": "string",

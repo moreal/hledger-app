@@ -1,0 +1,35 @@
+name: oxfmt
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: oxfmt-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Check oxfmt
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '26.12.0'
+      - name: Install pinned Yarn and dependencies
+        run: | # zizmor: ignore[adhoc-packages] -- Pinned package-manager bootstrap; app dependencies use yarn.lock.
+          npm install --global corepack@0.34.0
+          corepack enable
+          corepack prepare yarn@4.12.0 --activate
+          yarn install --immutable
+      - name: Run oxfmt
+        run: yarn fmt:check

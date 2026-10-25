@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { isPngDataUrl } from './icon-url.ts';
 
-const png = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aXioAAAAASUVORK5CYII=';
+const png =
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aXioAAAAASUVORK5CYII=';
 const uri = (data: string) => `data:image/png;base64,${data}`;
 
 test('recognizes bounded PNG data URLs without Node decoding APIs', () => {
@@ -11,9 +12,19 @@ test('recognizes bounded PNG data URLs without Node decoding APIs', () => {
 });
 
 test('rejects incorrect MIME types, malformed base64, signature and IHDR', () => {
-  for (const value of [null, {}, 'data:image/svg+xml;base64,PHN2Zz4=', 'data:text/html;base64,PGgxPg==',
-    `data:image/png;charset=utf-8;base64,${png}`, uri(png + '\n'), uri(png.slice(0, -1)), uri(png + '='), uri('!!!!'),
-    uri(png.replace('II=', 'IJ=')), uri(Buffer.from('<svg>not a png</svg>').toString('base64'))]) {
+  for (const value of [
+    null,
+    {},
+    'data:image/svg+xml;base64,PHN2Zz4=',
+    'data:text/html;base64,PGgxPg==',
+    `data:image/png;charset=utf-8;base64,${png}`,
+    uri(png + '\n'),
+    uri(png.slice(0, -1)),
+    uri(png + '='),
+    uri('!!!!'),
+    uri(png.replace('II=', 'IJ=')),
+    uri(Buffer.from('<svg>not a png</svg>').toString('base64')),
+  ]) {
     assert.equal(isPngDataUrl(value), false, String(value));
   }
   for (const offset of [0, 11, 12, 19, 24, 25, 26, 27, 28]) {
@@ -29,7 +40,6 @@ test('bounds decoded bytes even at a base64 padding boundary', () => {
   assert.equal(isPngDataUrl(uri(bytes.subarray(0, 256 * 1024).toString('base64'))), true);
   assert.equal(isPngDataUrl(uri(bytes.toString('base64'))), false);
 });
-
 
 test('rejects PNG headers with excessive image dimensions', () => {
   for (const offset of [16, 20]) {

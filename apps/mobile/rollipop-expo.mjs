@@ -14,16 +14,31 @@ export const expoAssetInteropRule = {
 export function createExpoGoManifest({ platform, origin, expoConfig, sdkVersion }) {
   if (!['ios', 'android'].includes(platform)) throw new Error('Expected native Expo platform');
   const base = new URL(origin);
-  if (base.protocol !== 'http:' || !['localhost', '127.0.0.1', '[::1]'].includes(base.hostname) || base.username || base.password) throw new Error('Expo Go development server must use HTTP loopback');
+  if (
+    base.protocol !== 'http:' ||
+    !['localhost', '127.0.0.1', '[::1]'].includes(base.hostname) ||
+    base.username ||
+    base.password
+  )
+    throw new Error('Expo Go development server must use HTTP loopback');
   const launch = new URL('/index.bundle', base);
   launch.search = new URLSearchParams({ platform, dev: 'true', minify: 'false' }).toString();
   return {
-    id: randomUUID(), createdAt: new Date().toISOString(), runtimeVersion: `exposdk:${sdkVersion}`,
+    id: randomUUID(),
+    createdAt: new Date().toISOString(),
+    runtimeVersion: `exposdk:${sdkVersion}`,
     launchAsset: { key: 'bundle', contentType: 'application/javascript', url: launch.href },
-    assets: [], metadata: {},
+    assets: [],
+    metadata: {},
     extra: {
-      eas: {}, expoClient: { ...expoConfig, sdkVersion, hostUri: base.host },
-      expoGo: { debuggerHost: base.host, developer: { tool: 'rollipop' }, packagerOpts: { dev: true }, mainModuleName: 'index' },
+      eas: {},
+      expoClient: { ...expoConfig, sdkVersion, hostUri: base.host },
+      expoGo: {
+        debuggerHost: base.host,
+        developer: { tool: 'rollipop' },
+        packagerOpts: { dev: true },
+        mainModuleName: 'index',
+      },
       scopeKey: `@anonymous/${expoConfig.slug}-rollipop-local`,
     },
   };
@@ -38,7 +53,10 @@ export function expoGoManifestPlugin(expoConfig, sdkVersion) {
       server.middlewares.use((request, response, next) => {
         if (new URL(request.url, server.serverBaseUrl).pathname !== '/') return next();
         const platform = request.headers['expo-platform'];
-        if (!['ios', 'android'].includes(platform)) { response.statusCode = 400; return response.end('Use Expo Go for iOS or Android'); }
+        if (!['ios', 'android'].includes(platform)) {
+          response.statusCode = 400;
+          return response.end('Use Expo Go for iOS or Android');
+        }
         if (request.headers['expo-expect-signature']) {
           let anonymousExpoRoot = false;
           try {
@@ -46,11 +64,25 @@ export function expoGoManifestPlugin(expoConfig, sdkVersion) {
             // Same anonymous-development case as Expo CLI getCodeSigningInfoAsync:
             // expo-root without an EAS project returns null (no signing identity).
             const algorithm = expected.get('alg');
-            anonymousExpoRoot = expected.get('keyid')?.[0] === 'expo-root' && (!algorithm || typeof algorithm[0] === 'string') && !expoConfig.extra?.eas?.projectId && !expoConfig.updates?.codeSigningCertificate;
-          } catch { /* Invalid signature expectations remain an error. */ }
-          if (!anonymousExpoRoot) { response.statusCode = 406; return response.end('This local adapter cannot satisfy the requested signing identity'); }
+            anonymousExpoRoot =
+              expected.get('keyid')?.[0] === 'expo-root' &&
+              (!algorithm || typeof algorithm[0] === 'string') &&
+              !expoConfig.extra?.eas?.projectId &&
+              !expoConfig.updates?.codeSigningCertificate;
+          } catch {
+            /* Invalid signature expectations remain an error. */
+          }
+          if (!anonymousExpoRoot) {
+            response.statusCode = 406;
+            return response.end('This local adapter cannot satisfy the requested signing identity');
+          }
         }
-        const manifest = createExpoGoManifest({ platform, origin: server.serverBaseUrl, expoConfig, sdkVersion });
+        const manifest = createExpoGoManifest({
+          platform,
+          origin: server.serverBaseUrl,
+          expoConfig,
+          sdkVersion,
+        });
         console.info(`[rollipop-expo] ${platform} manifest -> ${manifest.launchAsset.url}`);
         response.setHeader('content-type', 'application/expo+json');
         response.setHeader('expo-protocol-version', '0');

@@ -1,0 +1,11 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "singleQuote": true,
+  "ignorePatterns": [
+    "**/*.md",
+    "**/*.po",
+    "yarn.lock",
+    "packages/api-contract/generated/**",
+    "packages/i18n/locales/**/messages.ts"
+  ]
+}

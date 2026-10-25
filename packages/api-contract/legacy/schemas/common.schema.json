@@ -8,10 +8,7 @@
     "MoneyAmount": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "commodity",
-        "value"
-      ],
+      "required": ["commodity", "value"],
       "properties": {
         "commodity": {
           "type": "string",
@@ -27,17 +24,10 @@
     "CursorPage": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "next_cursor",
-        "has_more",
-        "limit"
-      ],
+      "required": ["next_cursor", "has_more", "limit"],
       "properties": {
         "next_cursor": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "has_more": {
           "type": "boolean"
@@ -48,10 +38,7 @@
           "maximum": 200
         },
         "total_estimate": {
-          "type": [
-            "integer",
-            "null"
-          ],
+          "type": ["integer", "null"],
           "minimum": 0
         }
       }
@@ -65,12 +52,7 @@
     "ApiError": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "code",
-        "message",
-        "request_id",
-        "timestamp"
-      ],
+      "required": ["code", "message", "request_id", "timestamp"],
       "properties": {
         "code": {
           "type": "string",
@@ -100,10 +82,7 @@
     "IdempotencyInfo": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "key",
-        "replayed"
-      ],
+      "required": ["key", "replayed"],
       "properties": {
         "key": {
           "type": "string",

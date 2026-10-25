@@ -12,14 +12,21 @@ export interface Asset {
   iconText: string;
   iconUrl: string | null;
 }
-export interface AssetBinding { commodity: string; asset: Asset; updatedAt: string }
+export interface AssetBinding {
+  commodity: string;
+  asset: Asset;
+  updatedAt: string;
+}
 export interface AssetProviderStatus {
   provider: string;
   status: 'READY' | 'STALE' | 'UNCONFIGURED' | 'UNAVAILABLE';
   updatedAt: string | null;
   message: string | null;
 }
-export interface AssetCatalogSearchResult { items: Asset[]; providers: AssetProviderStatus[] }
+export interface AssetCatalogSearchResult {
+  items: Asset[];
+  providers: AssetProviderStatus[];
+}
 export interface AssetCatalog {
   search(query: string, first?: number): Promise<AssetCatalogSearchResult>;
   get(id: string): Promise<Asset | null>;

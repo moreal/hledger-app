@@ -43,22 +43,27 @@ function displayName(unit: Iso4217Unit, locale: UnitLocale): string {
 }
 
 const sortedFiatUnits = iso4217Units
-  .filter(unit => unit.kind === 'currency')
+  .filter((unit) => unit.kind === 'currency')
   .sort((left, right) => {
     const leftIndex = commonCodes.indexOf(left.code);
     const rightIndex = commonCodes.indexOf(right.code);
     if (leftIndex !== rightIndex && (leftIndex >= 0 || rightIndex >= 0)) {
-      return (leftIndex < 0 ? commonCodes.length : leftIndex)
-        - (rightIndex < 0 ? commonCodes.length : rightIndex);
+      return (
+        (leftIndex < 0 ? commonCodes.length : leftIndex) -
+        (rightIndex < 0 ? commonCodes.length : rightIndex)
+      );
     }
     return left.code < right.code ? -1 : left.code > right.code ? 1 : 0;
   });
 
-const fiatOptionsByLocale = new Map<UnitLocale, readonly (AssetUnitOption & { searchText: string })[]>();
+const fiatOptionsByLocale = new Map<
+  UnitLocale,
+  readonly (AssetUnitOption & { searchText: string })[]
+>();
 function fiatOptionsForLocale(locale: UnitLocale) {
   let options = fiatOptionsByLocale.get(locale);
   if (!options) {
-    options = sortedFiatUnits.map(unit => ({
+    options = sortedFiatUnits.map((unit) => ({
       value: unit.code,
       label: `${unit.code} · ${displayName(unit, locale)}`,
       kind: 'currency' as const,
@@ -82,9 +87,9 @@ export function getAssetUnitOptions(
   const fiatOptions = fiatOptionsForLocale(/^en(?:-|$)/i.test(locale) ? 'en' : 'ko');
   const search = query.trim().toLowerCase();
   const matches = (value: string) => value.toLowerCase().includes(search);
-  const seen = new Set(fiatOptions.map(option => option.value));
+  const seen = new Set(fiatOptions.map((option) => option.value));
   const options: AssetUnitOption[] = fiatOptions
-    .filter(option => !search || matches(option.searchText))
+    .filter((option) => !search || matches(option.searchText))
     .map(({ value, label, kind }) => ({ value, label, kind }));
 
   for (const value of customValues) {

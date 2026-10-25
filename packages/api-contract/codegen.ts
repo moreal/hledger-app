@@ -16,7 +16,10 @@ const config: CodegenConfig = {
     },
   },
   generates: {
-    'packages/api-contract/generated/client/': { preset: 'client', presetConfig: { fragmentMasking: false } },
+    'packages/api-contract/generated/client/': {
+      preset: 'client',
+      presetConfig: { fragmentMasking: false },
+    },
     'packages/api-contract/generated/server/resolvers.ts': {
       plugins: ['typescript', 'typescript-resolvers'],
     },

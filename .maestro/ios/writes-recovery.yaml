@@ -53,72 +53,79 @@ name: iOS isolated ledger writes and staged recovery
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "입력"
+      - tapOn: '입력'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "빈 새 거래"
+            text: '빈 새 거래'
           direction: DOWN
           timeout: 20000
-      - tapOn: "빈 새 거래"
+      - tapOn: '빈 새 거래'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "거래 입력"
+            text: '거래 입력'
           direction: UP
           timeout: 20000
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "거래일"
+            text: '거래일'
             index: 1
           direction: UP
           timeout: 20000
       - tapOn:
-          text: "거래일"
+          text: '거래일'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "2026-10-25"
+      - inputText: '2026-10-25'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "내용"
+            text: '내용'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "내용"
+          text: '내용'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "${QA_RUN_ID}-general"
+      - inputText: '${QA_RUN_ID}-general'
       - hideKeyboard
-      - scrollUntilVisible: {"element": {"text": "^참고\\ 번호\\ \\(선택\\)$", "index": 1}, "direction": "DOWN", "timeout": 20000, "visibilityPercentage": 10, "centerElement": true}
-      - tapOn: {"text": "^참고\\ 번호\\ \\(선택\\)$", "index": 1, "point": "95%,50%"}
+      - scrollUntilVisible:
+          {
+            'element': { 'text': "^참고\\ 번호\\ \\(선택\\)$", 'index': 1 },
+            'direction': 'DOWN',
+            'timeout': 20000,
+            'visibilityPercentage': 10,
+            'centerElement': true,
+          }
+      - tapOn: { 'text': "^참고\\ 번호\\ \\(선택\\)$", 'index': 1, 'point': '95%,50%' }
       - eraseText: 500
-      - inputText: "QA-IOS-REF-001"
+      - inputText: 'QA-IOS-REF-001'
       - hideKeyboard
       - assertVisible: "QA\\-IOS\\-REF\\-001"
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "내역 1 항목 경로"
+            text: '내역 1 항목 경로'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "내역 1 항목 경로"
+          text: '내역 1 항목 경로'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "expenses:qa"
+      - inputText: 'expenses:qa'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
@@ -131,30 +138,37 @@ name: iOS isolated ledger writes and staged recovery
       - tapOn:
           text: "내역 1 금액/수량 \\(부호 포함\\)"
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "137"
+      - inputText: '137'
       - hideKeyboard
-      - scrollUntilVisible: {"element": {"text": "^내역\\ 1\\ 메모\\ \\(선택\\)$", "index": 1}, "direction": "DOWN", "timeout": 20000, "visibilityPercentage": 10, "centerElement": true}
-      - tapOn: {"text": "^내역\\ 1\\ 메모\\ \\(선택\\)$", "index": 1, "point": "95%,50%"}
+      - scrollUntilVisible:
+          {
+            'element': { 'text': "^내역\\ 1\\ 메모\\ \\(선택\\)$", 'index': 1 },
+            'direction': 'DOWN',
+            'timeout': 20000,
+            'visibilityPercentage': 10,
+            'centerElement': true,
+          }
+      - tapOn: { 'text': "^내역\\ 1\\ 메모\\ \\(선택\\)$", 'index': 1, 'point': '95%,50%' }
       - eraseText: 500
-      - inputText: "QA iOS nonempty memo"
+      - inputText: 'QA iOS nonempty memo'
       - hideKeyboard
       - assertVisible: "QA\\ iOS\\ nonempty\\ memo"
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "내역 2 항목 경로"
+            text: '내역 2 항목 경로'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "내역 2 항목 경로"
+          text: '내역 2 항목 경로'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "assets:cash"
+      - inputText: 'assets:cash'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
@@ -167,22 +181,42 @@ name: iOS isolated ledger writes and staged recovery
       - tapOn:
           text: "내역 2 금액/수량 \\(부호 포함\\)"
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "-137"
+      - inputText: '-137'
       - hideKeyboard
-      - scrollUntilVisible: {"element":"태그 추가","direction":"DOWN","visibilityPercentage":10,"centerElement":true}
+      - scrollUntilVisible:
+          {
+            'element': '태그 추가',
+            'direction': 'DOWN',
+            'visibilityPercentage': 10,
+            'centerElement': true,
+          }
       - tapOn: 태그 추가
-      - scrollUntilVisible: {"element": {"text": "^태그\\ 1\\ 키$", "index": 1}, "direction": "DOWN", "timeout": 20000, "visibilityPercentage": 10, "centerElement": true}
-      - tapOn: {"text": "^태그\\ 1\\ 키$", "index": 1, "point": "95%,50%"}
+      - scrollUntilVisible:
+          {
+            'element': { 'text': "^태그\\ 1\\ 키$", 'index': 1 },
+            'direction': 'DOWN',
+            'timeout': 20000,
+            'visibilityPercentage': 10,
+            'centerElement': true,
+          }
+      - tapOn: { 'text': "^태그\\ 1\\ 키$", 'index': 1, 'point': '95%,50%' }
       - eraseText: 500
-      - inputText: "qa"
+      - inputText: 'qa'
       - hideKeyboard
-      - assertVisible: "qa"
-      - scrollUntilVisible: {"element": {"text": "^태그\\ 1\\ 값$", "index": 1}, "direction": "DOWN", "timeout": 20000, "visibilityPercentage": 10, "centerElement": true}
-      - tapOn: {"text": "^태그\\ 1\\ 값$", "index": 1, "point": "95%,50%"}
+      - assertVisible: 'qa'
+      - scrollUntilVisible:
+          {
+            'element': { 'text': "^태그\\ 1\\ 값$", 'index': 1 },
+            'direction': 'DOWN',
+            'timeout': 20000,
+            'visibilityPercentage': 10,
+            'centerElement': true,
+          }
+      - tapOn: { 'text': "^태그\\ 1\\ 값$", 'index': 1, 'point': '95%,50%' }
       - eraseText: 500
-      - inputText: "native-ios"
+      - inputText: 'native-ios'
       - hideKeyboard
       - assertVisible: "native\\-ios"
       - takeScreenshot: W01.1-general-memo-tag-reference-inputs
@@ -190,18 +224,18 @@ name: iOS isolated ledger writes and staged recovery
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "기기에 보관하고 원장에 저장"
+            text: '기기에 보관하고 원장에 저장'
           direction: DOWN
           timeout: 20000
-      - tapOn: "기기에 보관하고 원장에 저장"
+      - tapOn: '기기에 보관하고 원장에 저장'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "원장 저장 확인"
+            text: '원장 저장 확인'
           direction: UP
           timeout: 20000
-      - assertVisible: "원장 저장 확인"
+      - assertVisible: '원장 저장 확인'
       - takeScreenshot: W01.1-general-saved
       - repeat:
           times: 12
@@ -209,15 +243,15 @@ name: iOS isolated ledger writes and staged recovery
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "동기화"
+      - tapOn: '동기화'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "기기 기록 지우기"
+            text: '기기 기록 지우기'
           direction: DOWN
           timeout: 20000
-      - tapOn: "기기 기록 지우기"
+      - tapOn: '기기 기록 지우기'
       - takeScreenshot: W01.8-completed-device-record-deleted
 - runFlow:
     when:
@@ -229,44 +263,44 @@ name: iOS isolated ledger writes and staged recovery
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "입력"
+      - tapOn: '입력'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "빈 새 거래"
+            text: '빈 새 거래'
           direction: DOWN
           timeout: 20000
-      - tapOn: "빈 새 거래"
+      - tapOn: '빈 새 거래'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "거래 입력"
+            text: '거래 입력'
           direction: UP
           timeout: 20000
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "입력 방식: 일반 거래 · 누르면 변경"
+            text: '입력 방식: 일반 거래 · 누르면 변경'
           direction: UP
           timeout: 20000
-      - tapOn: "입력 방식: 일반 거래 · 누르면 변경"
+      - tapOn: '입력 방식: 일반 거래 · 누르면 변경'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "주식 자산"
+            text: '주식 자산'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "주식 자산"
+          text: '주식 자산'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "QA_STOCK"
+      - inputText: 'QA_STOCK'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
@@ -279,54 +313,54 @@ name: iOS isolated ledger writes and staged recovery
       - tapOn:
           text: "수량 \\(양수\\)"
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "2"
+      - inputText: '2'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "1주당 가격"
+            text: '1주당 가격'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "1주당 가격"
+          text: '1주당 가격'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "100"
+      - inputText: '100'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "주식 보유 항목 경로"
+            text: '주식 보유 항목 경로'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "주식 보유 항목 경로"
+          text: '주식 보유 항목 경로'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "assets:stock"
+      - inputText: 'assets:stock'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "현금 항목 경로"
+            text: '현금 항목 경로'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "현금 항목 경로"
+          text: '현금 항목 경로'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "assets:cash"
+      - inputText: 'assets:cash'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
@@ -339,88 +373,88 @@ name: iOS isolated ledger writes and staged recovery
       - tapOn:
           text: "수수료 \\(결제 자산, 0 이상\\)"
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "2"
+      - inputText: '2'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "수수료 비용 항목 경로"
+            text: '수수료 비용 항목 경로'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "수수료 비용 항목 경로"
+          text: '수수료 비용 항목 경로'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "expenses:fees"
+      - inputText: 'expenses:fees'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "매매 내용을 아래 내역에 적용"
+            text: '매매 내용을 아래 내역에 적용'
           direction: DOWN
           timeout: 20000
-      - tapOn: "매매 내용을 아래 내역에 적용"
+      - tapOn: '매매 내용을 아래 내역에 적용'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "거래일"
+            text: '거래일'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "거래일"
+          text: '거래일'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "2026-10-25"
+      - inputText: '2026-10-25'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "내용"
+            text: '내용'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "내용"
+          text: '내용'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "${QA_RUN_ID}-stock-buy"
+      - inputText: '${QA_RUN_ID}-stock-buy'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "보존된 원가: 단가 100 KRW"
+            text: '보존된 원가: 단가 100 KRW'
           direction: DOWN
           timeout: 20000
-      - assertVisible: "보존된 원가: 단가 100 KRW"
+      - assertVisible: '보존된 원가: 단가 100 KRW'
       - takeScreenshot: W01.2-buy-cost
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "기기에 보관하고 원장에 저장"
+            text: '기기에 보관하고 원장에 저장'
           direction: DOWN
           timeout: 20000
-      - tapOn: "기기에 보관하고 원장에 저장"
+      - tapOn: '기기에 보관하고 원장에 저장'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "원장 저장 확인"
+            text: '원장 저장 확인'
           direction: UP
           timeout: 20000
-      - assertVisible: "원장 저장 확인"
+      - assertVisible: '원장 저장 확인'
       - takeScreenshot: W01.2-buy-saved
       - repeat:
           times: 12
@@ -428,15 +462,15 @@ name: iOS isolated ledger writes and staged recovery
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "동기화"
+      - tapOn: '동기화'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "기기 기록 지우기"
+            text: '기기 기록 지우기'
           direction: DOWN
           timeout: 20000
-      - tapOn: "기기 기록 지우기"
+      - tapOn: '기기 기록 지우기'
       - takeScreenshot: W01.8-completed-device-record-deleted
 - runFlow:
     when:
@@ -448,52 +482,52 @@ name: iOS isolated ledger writes and staged recovery
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "입력"
+      - tapOn: '입력'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "빈 새 거래"
+            text: '빈 새 거래'
           direction: DOWN
           timeout: 20000
-      - tapOn: "빈 새 거래"
+      - tapOn: '빈 새 거래'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "거래 입력"
+            text: '거래 입력'
           direction: UP
           timeout: 20000
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "입력 방식: 일반 거래 · 누르면 변경"
+            text: '입력 방식: 일반 거래 · 누르면 변경'
           direction: UP
           timeout: 20000
-      - tapOn: "입력 방식: 일반 거래 · 누르면 변경"
+      - tapOn: '입력 방식: 일반 거래 · 누르면 변경'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "거래 방향: 매수 · 누르면 변경"
+            text: '거래 방향: 매수 · 누르면 변경'
           direction: DOWN
           timeout: 20000
-      - tapOn: "거래 방향: 매수 · 누르면 변경"
+      - tapOn: '거래 방향: 매수 · 누르면 변경'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "주식 자산"
+            text: '주식 자산'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "주식 자산"
+          text: '주식 자산'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "QA_STOCK"
+      - inputText: 'QA_STOCK'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
@@ -506,54 +540,54 @@ name: iOS isolated ledger writes and staged recovery
       - tapOn:
           text: "수량 \\(양수\\)"
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "1"
+      - inputText: '1'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "1주당 가격"
+            text: '1주당 가격'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "1주당 가격"
+          text: '1주당 가격'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "120"
+      - inputText: '120'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "주식 보유 항목 경로"
+            text: '주식 보유 항목 경로'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "주식 보유 항목 경로"
+          text: '주식 보유 항목 경로'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "assets:stock"
+      - inputText: 'assets:stock'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "현금 항목 경로"
+            text: '현금 항목 경로'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "현금 항목 경로"
+          text: '현금 항목 경로'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "assets:cash"
+      - inputText: 'assets:cash'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
@@ -566,88 +600,88 @@ name: iOS isolated ledger writes and staged recovery
       - tapOn:
           text: "수수료 \\(결제 자산, 0 이상\\)"
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "2"
+      - inputText: '2'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "수수료 비용 항목 경로"
+            text: '수수료 비용 항목 경로'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "수수료 비용 항목 경로"
+          text: '수수료 비용 항목 경로'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "expenses:fees"
+      - inputText: 'expenses:fees'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "매매 내용을 아래 내역에 적용"
+            text: '매매 내용을 아래 내역에 적용'
           direction: DOWN
           timeout: 20000
-      - tapOn: "매매 내용을 아래 내역에 적용"
+      - tapOn: '매매 내용을 아래 내역에 적용'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "거래일"
+            text: '거래일'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "거래일"
+          text: '거래일'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "2026-10-25"
+      - inputText: '2026-10-25'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "내용"
+            text: '내용'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "내용"
+          text: '내용'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "${QA_RUN_ID}-stock-sell"
+      - inputText: '${QA_RUN_ID}-stock-sell'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "보존된 원가: 단가 120 KRW"
+            text: '보존된 원가: 단가 120 KRW'
           direction: DOWN
           timeout: 20000
-      - assertVisible: "보존된 원가: 단가 120 KRW"
+      - assertVisible: '보존된 원가: 단가 120 KRW'
       - takeScreenshot: W01.2-sell-cost
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "기기에 보관하고 원장에 저장"
+            text: '기기에 보관하고 원장에 저장'
           direction: DOWN
           timeout: 20000
-      - tapOn: "기기에 보관하고 원장에 저장"
+      - tapOn: '기기에 보관하고 원장에 저장'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "원장 저장 확인"
+            text: '원장 저장 확인'
           direction: UP
           timeout: 20000
-      - assertVisible: "원장 저장 확인"
+      - assertVisible: '원장 저장 확인'
       - takeScreenshot: W01.2-sell-saved
       - repeat:
           times: 12
@@ -655,15 +689,15 @@ name: iOS isolated ledger writes and staged recovery
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "동기화"
+      - tapOn: '동기화'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "기기 기록 지우기"
+            text: '기기 기록 지우기'
           direction: DOWN
           timeout: 20000
-      - tapOn: "기기 기록 지우기"
+      - tapOn: '기기 기록 지우기'
       - takeScreenshot: W01.8-completed-device-record-deleted
 - runFlow:
     when:
@@ -675,180 +709,180 @@ name: iOS isolated ledger writes and staged recovery
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "책"
+      - tapOn: '책'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "ISBN"
+            text: 'ISBN'
             index: 1
           direction: UP
           timeout: 20000
       - tapOn:
-          text: "ISBN"
+          text: 'ISBN'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "9788936434595"
+      - inputText: '9788936434595'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "ISBN 정보 다시 조회"
+            text: 'ISBN 정보 다시 조회'
           direction: DOWN
           timeout: 20000
-      - tapOn: "ISBN 정보 다시 조회"
+      - tapOn: 'ISBN 정보 다시 조회'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "책 제목"
+            text: '책 제목'
             index: 1
           direction: UP
           timeout: 20000
       - extendedWaitUntil:
-          visible: "채식주의자"
+          visible: '채식주의자'
           timeout: 20000
-      - assertVisible: "한강"
+      - assertVisible: '한강'
       - takeScreenshot: W01.3-auto-metadata
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "거래일"
+            text: '거래일'
             index: 1
           direction: UP
           timeout: 20000
       - tapOn:
-          text: "거래일"
+          text: '거래일'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "2026-10-25"
+      - inputText: '2026-10-25'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "구매 금액"
+            text: '구매 금액'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "구매 금액"
+          text: '구매 금액'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "12500"
+      - inputText: '12500'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "책 항목"
+            text: '책 항목'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "책 항목"
+          text: '책 항목'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "assets:books"
+      - inputText: 'assets:books'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "통화"
+            text: '통화'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "통화"
+          text: '통화'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "KRW"
+      - inputText: 'KRW'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "현금 항목"
+            text: '현금 항목'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "현금 항목"
+          text: '현금 항목'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "assets:cash"
+      - inputText: 'assets:cash'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "이 실물 책 구매 기록"
+            text: '이 실물 책 구매 기록'
           direction: DOWN
           timeout: 20000
-      - tapOn: "이 실물 책 구매 기록"
+      - tapOn: '이 실물 책 구매 기록'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "책과 원장 거래를 저장했습니다."
+            text: '책과 원장 거래를 저장했습니다.'
           direction: UP
           timeout: 20000
-      - assertVisible: "책과 원장 거래를 저장했습니다."
+      - assertVisible: '책과 원장 거래를 저장했습니다.'
       - takeScreenshot: W01.3-auto-purchased
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "ISBN"
+            text: 'ISBN'
             index: 1
           direction: UP
           timeout: 20000
       - tapOn:
-          text: "ISBN"
+          text: 'ISBN'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "9780000000002"
+      - inputText: '9780000000002'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "ISBN 정보 다시 조회"
+            text: 'ISBN 정보 다시 조회'
           direction: DOWN
           timeout: 20000
-      - tapOn: "ISBN 정보 다시 조회"
+      - tapOn: 'ISBN 정보 다시 조회'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: ".*책 정보를 찾지 못.*"
+            text: '.*책 정보를 찾지 못.*'
           direction: UP
           timeout: 20000
-      - assertVisible: ".*책 정보를 찾지 못.*"
+      - assertVisible: '.*책 정보를 찾지 못.*'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "책 제목"
+            text: '책 제목'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "책 제목"
+          text: '책 제목'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "${QA_RUN_ID}-manual-book"
+      - inputText: '${QA_RUN_ID}-manual-book'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
@@ -861,107 +895,107 @@ name: iOS isolated ledger writes and staged recovery
       - tapOn:
           text: "저자 \\(선택 · 한 줄에 한 명\\)"
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "QA Author"
+      - inputText: 'QA Author'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "거래일"
+            text: '거래일'
             index: 1
           direction: UP
           timeout: 20000
       - tapOn:
-          text: "거래일"
+          text: '거래일'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "2026-10-25"
+      - inputText: '2026-10-25'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "구매 금액"
+            text: '구매 금액'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "구매 금액"
+          text: '구매 금액'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "15000"
+      - inputText: '15000'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "책 항목"
+            text: '책 항목'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "책 항목"
+          text: '책 항목'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "assets:books"
+      - inputText: 'assets:books'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "통화"
+            text: '통화'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "통화"
+          text: '통화'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "KRW"
+      - inputText: 'KRW'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "현금 항목"
+            text: '현금 항목'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "현금 항목"
+          text: '현금 항목'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "assets:cash"
+      - inputText: 'assets:cash'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "이 실물 책 구매 기록"
+            text: '이 실물 책 구매 기록'
           direction: DOWN
           timeout: 20000
-      - tapOn: "이 실물 책 구매 기록"
+      - tapOn: '이 실물 책 구매 기록'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "책과 원장 거래를 저장했습니다."
+            text: '책과 원장 거래를 저장했습니다.'
           direction: UP
           timeout: 20000
-      - assertVisible: "책과 원장 거래를 저장했습니다."
+      - assertVisible: '책과 원장 거래를 저장했습니다.'
       - takeScreenshot: W01.3-manual-purchased
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "${QA_RUN_ID}-manual-book"
+            text: '${QA_RUN_ID}-manual-book'
           direction: DOWN
           timeout: 20000
       - assertVisible: ${QA_RUN_ID}-manual-book
@@ -969,57 +1003,57 @@ name: iOS isolated ledger writes and staged recovery
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "이 책 판매·폐기"
+            text: '이 책 판매·폐기'
             below: ${QA_RUN_ID}-manual-book
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "이 책 판매·폐기"
+          text: '이 책 판매·폐기'
           below: ${QA_RUN_ID}-manual-book
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "거래일"
+            text: '거래일'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "거래일"
+          text: '거래일'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "2026-10-25"
+      - inputText: '2026-10-25'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "현금 항목"
+            text: '현금 항목'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "현금 항목"
+          text: '현금 항목'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "assets:cash"
+      - inputText: 'assets:cash'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "손실 항목"
+            text: '손실 항목'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "손실 항목"
+          text: '손실 항목'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "expenses:bookloss"
+      - inputText: 'expenses:bookloss'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
@@ -1032,159 +1066,159 @@ name: iOS isolated ledger writes and staged recovery
       - tapOn:
           text: "판매 대금 \\(수수료 차감 전\\)"
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "17000"
+      - inputText: '17000'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "수수료"
+            text: '수수료'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "수수료"
+          text: '수수료'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "500"
+      - inputText: '500'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "이익 항목"
+            text: '이익 항목'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "이익 항목"
+          text: '이익 항목'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "income:bookgain"
+      - inputText: 'income:bookgain'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "수수료 항목"
+            text: '수수료 항목'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "수수료 항목"
+          text: '수수료 항목'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "expenses:fees"
+      - inputText: 'expenses:fees'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "판매와 실현 손익 기록"
+            text: '판매와 실현 손익 기록'
           direction: DOWN
           timeout: 20000
-      - tapOn: "판매와 실현 손익 기록"
+      - tapOn: '판매와 실현 손익 기록'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "책과 원장 거래를 저장했습니다."
+            text: '책과 원장 거래를 저장했습니다.'
           direction: UP
           timeout: 20000
-      - assertVisible: "책과 원장 거래를 저장했습니다."
+      - assertVisible: '책과 원장 거래를 저장했습니다.'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "${QA_RUN_ID}-manual-book"
+            text: '${QA_RUN_ID}-manual-book'
           direction: DOWN
           timeout: 20000
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "판매 완료"
+            text: '판매 완료'
           direction: DOWN
           timeout: 20000
-      - assertVisible: "판매 완료"
+      - assertVisible: '판매 완료'
       - takeScreenshot: W01.4-sold-fee-gain
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "채식주의자"
+            text: '채식주의자'
           direction: UP
           timeout: 20000
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "이 책 판매·폐기"
-            below: "채식주의자"
+            text: '이 책 판매·폐기'
+            below: '채식주의자'
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "이 책 판매·폐기"
-          below: "채식주의자"
+          text: '이 책 판매·폐기'
+          below: '채식주의자'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "폐기"
+            text: '폐기'
           direction: DOWN
           timeout: 20000
-      - tapOn: "폐기"
+      - tapOn: '폐기'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "손실 항목"
+            text: '손실 항목'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "손실 항목"
+          text: '손실 항목'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "expenses:bookloss"
+      - inputText: 'expenses:bookloss'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "폐기와 손실 기록"
+            text: '폐기와 손실 기록'
           direction: DOWN
           timeout: 20000
-      - tapOn: "폐기와 손실 기록"
+      - tapOn: '폐기와 손실 기록'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "책과 원장 거래를 저장했습니다."
+            text: '책과 원장 거래를 저장했습니다.'
           direction: UP
           timeout: 20000
-      - assertVisible: "책과 원장 거래를 저장했습니다."
+      - assertVisible: '책과 원장 거래를 저장했습니다.'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "채식주의자"
+            text: '채식주의자'
           direction: DOWN
           timeout: 20000
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "폐기 완료"
+            text: '폐기 완료'
           direction: DOWN
           timeout: 20000
-      - assertVisible: "폐기 완료"
+      - assertVisible: '폐기 완료'
       - takeScreenshot: W01.4-discarded-loss
 - runFlow:
     when:
@@ -1196,66 +1230,66 @@ name: iOS isolated ledger writes and staged recovery
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "입력"
+      - tapOn: '입력'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "빈 새 거래"
+            text: '빈 새 거래'
           direction: DOWN
           timeout: 20000
-      - tapOn: "빈 새 거래"
+      - tapOn: '빈 새 거래'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "거래 입력"
+            text: '거래 입력'
           direction: UP
           timeout: 20000
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "거래일"
+            text: '거래일'
             index: 1
           direction: UP
           timeout: 20000
       - tapOn:
-          text: "거래일"
+          text: '거래일'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "2026-10-25"
+      - inputText: '2026-10-25'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "내용"
+            text: '내용'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "내용"
+          text: '내용'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "${QA_RUN_ID}-${output.caseName}"
+      - inputText: '${QA_RUN_ID}-${output.caseName}'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "내역 1 항목 경로"
+            text: '내역 1 항목 경로'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "내역 1 항목 경로"
+          text: '내역 1 항목 경로'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "expenses:qa"
+      - inputText: 'expenses:qa'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
@@ -1268,24 +1302,24 @@ name: iOS isolated ledger writes and staged recovery
       - tapOn:
           text: "내역 1 금액/수량 \\(부호 포함\\)"
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "137"
+      - inputText: '137'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "내역 2 항목 경로"
+            text: '내역 2 항목 경로'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "내역 2 항목 경로"
+          text: '내역 2 항목 경로'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "assets:cash"
+      - inputText: 'assets:cash'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
@@ -1298,30 +1332,30 @@ name: iOS isolated ledger writes and staged recovery
       - tapOn:
           text: "내역 2 금액/수량 \\(부호 포함\\)"
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "-137"
+      - inputText: '-137'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "오프라인 임시 저장 · 전송하지 않음"
+            text: '오프라인 임시 저장 · 전송하지 않음'
           direction: DOWN
           timeout: 20000
-      - tapOn: "오프라인 임시 저장 · 전송하지 않음"
+      - tapOn: '오프라인 임시 저장 · 전송하지 않음'
       - repeat:
           times: 12
           commands:
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "동기화"
+      - tapOn: '동기화'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "${QA_RUN_ID}-${output.caseName}"
+            text: '${QA_RUN_ID}-${output.caseName}'
           direction: DOWN
           timeout: 20000
       - assertVisible: ${QA_RUN_ID}-${output.caseName}
@@ -1329,15 +1363,15 @@ name: iOS isolated ledger writes and staged recovery
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "기기에 저장 · 전송 대기"
+            text: '기기에 저장 · 전송 대기'
           direction: DOWN
           timeout: 20000
-      - assertVisible: "기기에 저장 · 전송 대기"
+      - assertVisible: '기기에 저장 · 전송 대기'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "요청 키 .*"
+            text: '요청 키 .*'
           direction: DOWN
           timeout: 20000
       - takeScreenshot: W01.5-queued-key-before-relaunch
@@ -1349,12 +1383,12 @@ name: iOS isolated ledger writes and staged recovery
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "동기화"
+      - tapOn: '동기화'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "${QA_RUN_ID}-${output.caseName}"
+            text: '${QA_RUN_ID}-${output.caseName}'
           direction: DOWN
           timeout: 20000
       - assertVisible: ${QA_RUN_ID}-${output.caseName}
@@ -1362,15 +1396,15 @@ name: iOS isolated ledger writes and staged recovery
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "기기에 저장 · 전송 대기"
+            text: '기기에 저장 · 전송 대기'
           direction: DOWN
           timeout: 20000
-      - assertVisible: "기기에 저장 · 전송 대기"
+      - assertVisible: '기기에 저장 · 전송 대기'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "요청 키 .*"
+            text: '요청 키 .*'
           direction: DOWN
           timeout: 20000
       - takeScreenshot: W01.5-restored-same-key-runner-audit-required
@@ -1384,12 +1418,12 @@ name: iOS isolated ledger writes and staged recovery
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "동기화"
+      - tapOn: '동기화'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "${QA_RUN_ID}-${output.caseName}"
+            text: '${QA_RUN_ID}-${output.caseName}'
           direction: DOWN
           timeout: 20000
       - assertVisible: ${QA_RUN_ID}-${output.caseName}
@@ -1397,7 +1431,7 @@ name: iOS isolated ledger writes and staged recovery
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "요청 키 .*"
+            text: '요청 키 .*'
           direction: DOWN
           timeout: 20000
       - takeScreenshot: W01-key-before-retry
@@ -1405,23 +1439,23 @@ name: iOS isolated ledger writes and staged recovery
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "같은 요청 키로 확인·재시도"
+            text: '같은 요청 키로 확인·재시도'
           direction: DOWN
           timeout: 20000
-      - tapOn: "같은 요청 키로 확인·재시도"
+      - tapOn: '같은 요청 키로 확인·재시도'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "원장 저장 확인"
+            text: '원장 저장 확인'
           direction: UP
           timeout: 20000
-      - assertVisible: "원장 저장 확인"
+      - assertVisible: '원장 저장 확인'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "요청 키 .*"
+            text: '요청 키 .*'
           direction: DOWN
           timeout: 20000
       - takeScreenshot: W01.6-retry-same-key-audit-required
@@ -1435,12 +1469,12 @@ name: iOS isolated ledger writes and staged recovery
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "동기화"
+      - tapOn: '동기화'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "${QA_RUN_ID}-${output.caseName}"
+            text: '${QA_RUN_ID}-${output.caseName}'
           direction: DOWN
           timeout: 20000
       - assertVisible: ${QA_RUN_ID}-${output.caseName}
@@ -1448,7 +1482,7 @@ name: iOS isolated ledger writes and staged recovery
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "요청 키 .*"
+            text: '요청 키 .*'
           direction: DOWN
           timeout: 20000
       - takeScreenshot: W01-key-before-response-loss
@@ -1456,30 +1490,30 @@ name: iOS isolated ledger writes and staged recovery
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "같은 요청 키로 확인·재시도"
+            text: '같은 요청 키로 확인·재시도'
           direction: DOWN
           timeout: 20000
-      - tapOn: "같은 요청 키로 확인·재시도"
+      - tapOn: '같은 요청 키로 확인·재시도'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "확인 필요 · 저장 결과 불명확"
+            text: '확인 필요 · 저장 결과 불명확'
           direction: UP
           timeout: 20000
-      - assertVisible: "확인 필요 · 저장 결과 불명확"
+      - assertVisible: '확인 필요 · 저장 결과 불명확'
       - takeScreenshot: W01.7-indeterminate-locked
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "내용을 새 거래로 복사"
+            text: '내용을 새 거래로 복사'
           direction: DOWN
           timeout: 20000
       - assertVisible:
-          text: "내용을 새 거래로 복사"
+          text: '내용을 새 거래로 복사'
           enabled: false
-      - assertNotVisible: "대기 요청 지우기"
+      - assertNotVisible: '대기 요청 지우기'
       - stopApp
       - launchApp
       - repeat:
@@ -1488,15 +1522,15 @@ name: iOS isolated ledger writes and staged recovery
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "동기화"
+      - tapOn: '동기화'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "확인 필요 · 저장 결과 불명확"
+            text: '확인 필요 · 저장 결과 불명확'
           direction: DOWN
           timeout: 20000
-      - assertVisible: "확인 필요 · 저장 결과 불명확"
+      - assertVisible: '확인 필요 · 저장 결과 불명확'
       - takeScreenshot: W01.7-indeterminate-relaunch
 - runFlow:
     when:
@@ -1508,12 +1542,12 @@ name: iOS isolated ledger writes and staged recovery
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "동기화"
+      - tapOn: '동기화'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "${QA_RUN_ID}-${output.caseName}"
+            text: '${QA_RUN_ID}-${output.caseName}'
           direction: DOWN
           timeout: 20000
       - assertVisible: ${QA_RUN_ID}-${output.caseName}
@@ -1521,7 +1555,7 @@ name: iOS isolated ledger writes and staged recovery
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "요청 키 .*"
+            text: '요청 키 .*'
           direction: DOWN
           timeout: 20000
       - takeScreenshot: W01-key-before-response-retry
@@ -1529,23 +1563,23 @@ name: iOS isolated ledger writes and staged recovery
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "같은 요청 키로 확인·재시도"
+            text: '같은 요청 키로 확인·재시도'
           direction: DOWN
           timeout: 20000
-      - tapOn: "같은 요청 키로 확인·재시도"
+      - tapOn: '같은 요청 키로 확인·재시도'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "원장 저장 확인"
+            text: '원장 저장 확인'
           direction: UP
           timeout: 20000
-      - assertVisible: "원장 저장 확인"
+      - assertVisible: '원장 저장 확인'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "요청 키 .*"
+            text: '요청 키 .*'
           direction: DOWN
           timeout: 20000
       - takeScreenshot: W01.6-response-retry-same-key-audit-required
@@ -1559,12 +1593,12 @@ name: iOS isolated ledger writes and staged recovery
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "동기화"
+      - tapOn: '동기화'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "${QA_RUN_ID}-${output.caseName}"
+            text: '${QA_RUN_ID}-${output.caseName}'
           direction: DOWN
           timeout: 20000
       - assertVisible: ${QA_RUN_ID}-${output.caseName}
@@ -1572,10 +1606,10 @@ name: iOS isolated ledger writes and staged recovery
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "기기 기록 지우기"
+            text: '기기 기록 지우기'
           direction: DOWN
           timeout: 20000
-      - tapOn: "기기 기록 지우기"
+      - tapOn: '기기 기록 지우기'
       - assertNotVisible: ${QA_RUN_ID}-${output.caseName}
       - takeScreenshot: W01.8-completed-cleanup
 - runFlow:
@@ -1588,66 +1622,66 @@ name: iOS isolated ledger writes and staged recovery
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "입력"
+      - tapOn: '입력'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "빈 새 거래"
+            text: '빈 새 거래'
           direction: DOWN
           timeout: 20000
-      - tapOn: "빈 새 거래"
+      - tapOn: '빈 새 거래'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "거래 입력"
+            text: '거래 입력'
           direction: UP
           timeout: 20000
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "거래일"
+            text: '거래일'
             index: 1
           direction: UP
           timeout: 20000
       - tapOn:
-          text: "거래일"
+          text: '거래일'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "2026-10-25"
+      - inputText: '2026-10-25'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "내용"
+            text: '내용'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "내용"
+          text: '내용'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "${QA_RUN_ID}-template-source"
+      - inputText: '${QA_RUN_ID}-template-source'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "내역 1 항목 경로"
+            text: '내역 1 항목 경로'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "내역 1 항목 경로"
+          text: '내역 1 항목 경로'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "expenses:qa"
+      - inputText: 'expenses:qa'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
@@ -1660,24 +1694,24 @@ name: iOS isolated ledger writes and staged recovery
       - tapOn:
           text: "내역 1 금액/수량 \\(부호 포함\\)"
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "137"
+      - inputText: '137'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "내역 2 항목 경로"
+            text: '내역 2 항목 경로'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "내역 2 항목 경로"
+          text: '내역 2 항목 경로'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "assets:cash"
+      - inputText: 'assets:cash'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
@@ -1690,60 +1724,60 @@ name: iOS isolated ledger writes and staged recovery
       - tapOn:
           text: "내역 2 금액/수량 \\(부호 포함\\)"
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "-137"
+      - inputText: '-137'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "템플릿 이름"
+            text: '템플릿 이름'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "템플릿 이름"
+          text: '템플릿 이름'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "${QA_RUN_ID}-template"
+      - inputText: '${QA_RUN_ID}-template'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "입력을 템플릿으로 저장"
+            text: '입력을 템플릿으로 저장'
           direction: DOWN
           timeout: 20000
-      - tapOn: "입력을 템플릿으로 저장"
+      - tapOn: '입력을 템플릿으로 저장'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "오프라인 임시 저장 · 전송하지 않음"
+            text: '오프라인 임시 저장 · 전송하지 않음'
           direction: DOWN
           timeout: 20000
-      - tapOn: "오프라인 임시 저장 · 전송하지 않음"
+      - tapOn: '오프라인 임시 저장 · 전송하지 않음'
       - repeat:
           times: 12
           commands:
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "동기화"
+      - tapOn: '동기화'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "${QA_RUN_ID}-template-source"
+            text: '${QA_RUN_ID}-template-source'
           direction: DOWN
           timeout: 20000
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "요청 키 .*"
+            text: '요청 키 .*'
           direction: DOWN
           timeout: 20000
       - takeScreenshot: W01.8-template-source-key
@@ -1751,10 +1785,10 @@ name: iOS isolated ledger writes and staged recovery
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "대기 요청 지우기"
+            text: '대기 요청 지우기'
           direction: DOWN
           timeout: 20000
-      - tapOn: "대기 요청 지우기"
+      - tapOn: '대기 요청 지우기'
       - assertNotVisible: ${QA_RUN_ID}-template-source
       - takeScreenshot: W01.8-pending-deleted
       - repeat:
@@ -1763,45 +1797,45 @@ name: iOS isolated ledger writes and staged recovery
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "입력"
+      - tapOn: '입력'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "빈 새 거래"
+            text: '빈 새 거래'
           direction: DOWN
           timeout: 20000
-      - tapOn: "빈 새 거래"
+      - tapOn: '빈 새 거래'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "거래 입력"
+            text: '거래 입력'
           direction: UP
           timeout: 20000
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "${QA_RUN_ID}-template"
+            text: '${QA_RUN_ID}-template'
           direction: UP
           timeout: 20000
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "템플릿으로 새 거래"
+            text: '템플릿으로 새 거래'
             below: ${QA_RUN_ID}-template
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "템플릿으로 새 거래"
+          text: '템플릿으로 새 거래'
           below: ${QA_RUN_ID}-template
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "내용"
+            text: '내용'
             index: 1
           direction: DOWN
           timeout: 20000
@@ -1810,44 +1844,44 @@ name: iOS isolated ledger writes and staged recovery
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "내용"
+            text: '내용'
             index: 1
           direction: DOWN
           timeout: 20000
       - tapOn:
-          text: "내용"
+          text: '내용'
           index: 1
-          point: "95%,50%"
+          point: '95%,50%'
       - eraseText: 500
-      - inputText: "${QA_RUN_ID}-template-reused"
+      - inputText: '${QA_RUN_ID}-template-reused'
       - hideKeyboard
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "오프라인 임시 저장 · 전송하지 않음"
+            text: '오프라인 임시 저장 · 전송하지 않음'
           direction: DOWN
           timeout: 20000
-      - tapOn: "오프라인 임시 저장 · 전송하지 않음"
+      - tapOn: '오프라인 임시 저장 · 전송하지 않음'
       - repeat:
           times: 12
           commands:
             - swipe:
                 direction: DOWN
                 duration: 150
-      - tapOn: "동기화"
+      - tapOn: '동기화'
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "${QA_RUN_ID}-template-reused"
+            text: '${QA_RUN_ID}-template-reused'
           direction: DOWN
           timeout: 20000
       - scrollUntilVisible:
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "요청 키 .*"
+            text: '요청 키 .*'
           direction: DOWN
           timeout: 20000
       - takeScreenshot: W01.8-template-reused-distinct-key-runner-audit-required
@@ -1855,8 +1889,8 @@ name: iOS isolated ledger writes and staged recovery
           visibilityPercentage: 10
           centerElement: true
           element:
-            text: "대기 요청 지우기"
+            text: '대기 요청 지우기'
           direction: DOWN
           timeout: 20000
-      - tapOn: "대기 요청 지우기"
+      - tapOn: '대기 요청 지우기'
       - assertNotVisible: ${QA_RUN_ID}-template-reused

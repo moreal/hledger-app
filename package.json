@@ -2,15 +2,11 @@
   "name": "hledger-app",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "yarn@4.12.0",
   "description": "hledger GraphQL API and React/Expo ledger clients",
-  "type": "module",
   "workspaces": [
     "apps/*"
   ],
-  "engines": {
-    "node": "^22.19.0 || ^24.3.0 || >=26.0.0"
-  },
+  "type": "module",
   "scripts": {
     "api:validate": "node packages/api-contract/validate.mjs",
     "api:codegen": "graphql-codegen --config packages/api-contract/codegen.ts",
@@ -36,7 +32,11 @@
     "i18n:extract": "lingui extract",
     "i18n:compile": "lingui compile --typescript --strict",
     "i18n:check": "node scripts/i18n-check.mjs",
-    "test:i18n": "node --import tsx --test packages/i18n/src/index.test.ts apps/web/src/locale.test.ts apps/mobile/locale.test.ts && node --test scripts/i18n-check.test.mjs"
+    "test:i18n": "node --import tsx --test packages/i18n/src/index.test.ts apps/web/src/locale.test.ts apps/mobile/locale.test.ts && node --test scripts/i18n-check.test.mjs",
+    "lint": "oxlint --deny-warnings",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "build:pages": "node scripts/build-pages.mjs"
   },
   "dependencies": {
     "@graphql-typed-document-node/core": "3.2.0",
@@ -58,7 +58,13 @@
     "@types/node": "22.20.5",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
+    "oxfmt": "0.74.0",
+    "oxlint": "1.89.0",
     "tsx": "4.23.15",
     "typescript": "5.9.3"
-  }
+  },
+  "engines": {
+    "node": "^22.19.0 || ^24.3.0 || >=26.0.0"
+  },
+  "packageManager": "yarn@4.12.0"
 }

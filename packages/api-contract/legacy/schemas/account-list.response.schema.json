@@ -4,10 +4,7 @@
   "title": "GET /v1/accounts response",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "data",
-    "page"
-  ],
+  "required": ["data", "page"],
   "properties": {
     "data": {
       "type": "array",
@@ -23,14 +20,7 @@
     "AccountSummary": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "id",
-        "name",
-        "full_name",
-        "depth",
-        "balances",
-        "transaction_count"
-      ],
+      "required": ["id", "name", "full_name", "depth", "balances", "transaction_count"],
       "properties": {
         "id": {
           "type": "string",
@@ -50,10 +40,7 @@
           "maximum": 20
         },
         "parent_id": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "balances": {
           "type": "array",
@@ -67,10 +54,7 @@
           "minimum": 0
         },
         "last_posted_date": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "format": "date"
         },
         "tags": {

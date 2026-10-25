@@ -24,7 +24,23 @@ for (let i = 0; i < incoming.length; i++) {
   }
 }
 const cwd = fileURLToPath(new URL('.', import.meta.url));
-const child = spawn(process.execPath, [fileURLToPath(new URL('./run-rollipop.mjs', import.meta.url)),
-  'bundle', ...forwarded, '--dev', 'false', '--minify', 'true'], { cwd, stdio: 'inherit', env: process.env });
-child.on('error', error => { console.error(error); process.exitCode = 1; });
-child.on('exit', code => { process.exitCode = code ?? 1; });
+const child = spawn(
+  process.execPath,
+  [
+    fileURLToPath(new URL('./run-rollipop.mjs', import.meta.url)),
+    'bundle',
+    ...forwarded,
+    '--dev',
+    'false',
+    '--minify',
+    'true',
+  ],
+  { cwd, stdio: 'inherit', env: process.env },
+);
+child.on('error', (error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
+child.on('exit', (code) => {
+  process.exitCode = code ?? 1;
+});

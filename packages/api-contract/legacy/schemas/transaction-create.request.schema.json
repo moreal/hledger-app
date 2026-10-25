@@ -4,11 +4,7 @@
   "title": "POST /v1/transactions request",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "date",
-    "description",
-    "postings"
-  ],
+  "required": ["date", "description", "postings"],
   "properties": {
     "date": {
       "type": "string",
@@ -20,10 +16,7 @@
       "maxLength": 512
     },
     "code": {
-      "type": [
-        "string",
-        "null"
-      ],
+      "type": ["string", "null"],
       "maxLength": 64
     },
     "postings": {
@@ -37,10 +30,7 @@
       "$ref": "./common.schema.json#/$defs/TagMap"
     },
     "client_reference": {
-      "type": [
-        "string",
-        "null"
-      ],
+      "type": ["string", "null"],
       "maxLength": 128
     }
   },
@@ -48,10 +38,7 @@
     "PostingInput": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "account_name",
-        "amount"
-      ],
+      "required": ["account_name", "amount"],
       "properties": {
         "account_name": {
           "type": "string",
@@ -61,10 +48,7 @@
           "$ref": "./common.schema.json#/$defs/MoneyAmount"
         },
         "memo": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "maxLength": 1000
         }
       }

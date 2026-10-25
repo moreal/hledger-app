@@ -15,16 +15,19 @@ const networkSecurityConfig = `<?xml version="1.0" encoding="utf-8"?>
 `;
 
 module.exports = function withLoopbackNetworkSecurity(config) {
-  config = withAndroidManifest(config, config => {
+  config = withAndroidManifest(config, (config) => {
     const application = config.modResults.manifest.application[0];
     application.$['android:networkSecurityConfig'] = '@xml/network_security_config';
     application.$['android:usesCleartextTraffic'] = 'false';
     return config;
   });
-  return withDangerousMod(config, ['android', async config => {
-    const directory = path.join(config.modRequest.platformProjectRoot, 'app/src/main/res/xml');
-    await mkdir(directory, { recursive: true });
-    await writeFile(path.join(directory, 'network_security_config.xml'), networkSecurityConfig);
-    return config;
-  }]);
+  return withDangerousMod(config, [
+    'android',
+    async (config) => {
+      const directory = path.join(config.modRequest.platformProjectRoot, 'app/src/main/res/xml');
+      await mkdir(directory, { recursive: true });
+      await writeFile(path.join(directory, 'network_security_config.xml'), networkSecurityConfig);
+      return config;
+    },
+  ]);
 };

@@ -19,7 +19,7 @@ name: iOS books metadata
 - tapOn:
     text: ISBN
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
 - inputText: '9788936434595'
 - hideKeyboard
@@ -49,15 +49,15 @@ name: iOS books metadata
     visibilityPercentage: 10
     centerElement: true
     element:
-      text: "책 제목"
+      text: '책 제목'
       index: 1
     direction: UP
 - tapOn:
-    text: "책 제목"
+    text: '책 제목'
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
-- inputText: "QA Manual Title"
+- inputText: 'QA Manual Title'
 - hideKeyboard
 - scrollUntilVisible:
     visibilityPercentage: 10
@@ -69,21 +69,21 @@ name: iOS books metadata
 - tapOn:
     text: '저자 \(선택 · 한 줄에 한 명\)'
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
-- inputText: "QA Manual Author"
+- inputText: 'QA Manual Author'
 - hideKeyboard
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
-    element: "ISBN 정보 다시 조회"
-- tapOn: "ISBN 정보 다시 조회"
+    element: 'ISBN 정보 다시 조회'
+- tapOn: 'ISBN 정보 다시 조회'
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
-    element: "책 정보를 채웠습니다. 내용을 확인해 주세요."
+    element: '책 정보를 채웠습니다. 내용을 확인해 주세요.'
     direction: UP
-- assertVisible: "책 정보를 채웠습니다. 내용을 확인해 주세요."
+- assertVisible: '책 정보를 채웠습니다. 내용을 확인해 주세요.'
 - takeScreenshot: B04.1-requery
 - scrollUntilVisible:
     visibilityPercentage: 10
@@ -97,44 +97,44 @@ name: iOS books metadata
     visibilityPercentage: 10
     centerElement: true
     element:
-      text: "ISBN"
+      text: 'ISBN'
       index: 1
     direction: UP
 - tapOn:
-    text: "ISBN"
+    text: 'ISBN'
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
-- inputText: "9780000000002"
+- inputText: '9780000000002'
 - hideKeyboard
-- assertVisible: "9780000000002"
+- assertVisible: '9780000000002'
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
-    element: "ISBN 정보 다시 조회"
-- tapOn: "ISBN 정보 다시 조회"
+    element: 'ISBN 정보 다시 조회'
+- tapOn: 'ISBN 정보 다시 조회'
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
-    element: ".*책 정보를 찾지 못.*"
+    element: '.*책 정보를 찾지 못.*'
     direction: UP
-- assertVisible: ".*책 정보를 찾지 못.*"
+- assertVisible: '.*책 정보를 찾지 못.*'
 - takeScreenshot: B03.1-not-found
-- assertNotVisible: "표지 제공:.*"
+- assertNotVisible: '표지 제공:.*'
 - takeScreenshot: B04.2-no-stale-cover-source
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
     element:
-      text: "책 제목"
+      text: '책 제목'
       index: 1
     direction: UP
 - tapOn:
-    text: "책 제목"
+    text: '책 제목'
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
-- inputText: "QA Manual Unknown"
+- inputText: 'QA Manual Unknown'
 - hideKeyboard
 - scrollUntilVisible:
     visibilityPercentage: 10
@@ -146,264 +146,264 @@ name: iOS books metadata
 - tapOn:
     text: '저자 \(선택 · 한 줄에 한 명\)'
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
-- inputText: "QA Unknown Author"
+- inputText: 'QA Unknown Author'
 - hideKeyboard
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
     element:
-      text: "구매 금액"
+      text: '구매 금액'
       index: 1
     direction: DOWN
 - tapOn:
-    text: "구매 금액"
+    text: '구매 금액'
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
-- inputText: "12500"
+- inputText: '12500'
 - hideKeyboard
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
     element:
-      text: "책 항목"
+      text: '책 항목'
       index: 1
     direction: DOWN
 - tapOn:
-    text: "책 항목"
+    text: '책 항목'
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
-- inputText: "assets:books"
+- inputText: 'assets:books'
 - hideKeyboard
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
     element:
-      text: "통화"
+      text: '통화'
       index: 1
     direction: DOWN
 - tapOn:
-    text: "통화"
+    text: '통화'
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
-- inputText: "KRW"
+- inputText: 'KRW'
 - hideKeyboard
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
     element:
-      text: "현금 항목"
+      text: '현금 항목'
       index: 1
     direction: DOWN
 - tapOn:
-    text: "현금 항목"
+    text: '현금 항목'
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
-- inputText: "assets:cash"
+- inputText: 'assets:cash'
 - hideKeyboard
 - takeScreenshot: B03.2-manual-edit
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
     element:
-      text: "구매 금액"
+      text: '구매 금액'
       index: 1
     direction: UP
 - tapOn:
-    text: "구매 금액"
+    text: '구매 금액'
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
 - hideKeyboard
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
-    element: "이 실물 책 구매 기록"
-- tapOn: "이 실물 책 구매 기록"
+    element: '이 실물 책 구매 기록'
+- tapOn: '이 실물 책 구매 기록'
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
-    element: "금액을 숫자와 소수점으로 정확하게 입력해 주세요."
+    element: '금액을 숫자와 소수점으로 정확하게 입력해 주세요.'
     direction: UP
-- assertVisible: "금액을 숫자와 소수점으로 정확하게 입력해 주세요."
+- assertVisible: '금액을 숫자와 소수점으로 정확하게 입력해 주세요.'
 - takeScreenshot: B05.1-empty-price
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
     element:
-      text: "구매 금액"
+      text: '구매 금액'
       index: 1
     direction: DOWN
 - tapOn:
-    text: "구매 금액"
+    text: '구매 금액'
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
-- inputText: "0"
+- inputText: '0'
 - hideKeyboard
-- assertVisible: "0"
+- assertVisible: '0'
 - takeScreenshot: B05.2-zero-entered
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
-    element: "이 실물 책 구매 기록"
-- tapOn: "이 실물 책 구매 기록"
+    element: '이 실물 책 구매 기록'
+- tapOn: '이 실물 책 구매 기록'
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
-    element: "금액은 정확한 양수로 입력해 주세요."
+    element: '금액은 정확한 양수로 입력해 주세요.'
     direction: UP
-- assertVisible: "금액은 정확한 양수로 입력해 주세요."
+- assertVisible: '금액은 정확한 양수로 입력해 주세요.'
 - takeScreenshot: B05.2-zero
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
     element:
-      text: "구매 금액"
+      text: '구매 금액'
       index: 1
     direction: DOWN
 - tapOn:
-    text: "구매 금액"
+    text: '구매 금액'
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
-- inputText: "-1"
+- inputText: '-1'
 - hideKeyboard
-- assertVisible: "-1"
+- assertVisible: '-1'
 - takeScreenshot: B05.2-negative-entered
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
-    element: "이 실물 책 구매 기록"
-- tapOn: "이 실물 책 구매 기록"
+    element: '이 실물 책 구매 기록'
+- tapOn: '이 실물 책 구매 기록'
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
-    element: "금액은 정확한 양수로 입력해 주세요."
+    element: '금액은 정확한 양수로 입력해 주세요.'
     direction: UP
-- assertVisible: "금액은 정확한 양수로 입력해 주세요."
+- assertVisible: '금액은 정확한 양수로 입력해 주세요.'
 - takeScreenshot: B05.2-negative
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
     element:
-      text: "구매 금액"
+      text: '구매 금액'
       index: 1
     direction: DOWN
 - tapOn:
-    text: "구매 금액"
+    text: '구매 금액'
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
-- inputText: "12500"
+- inputText: '12500'
 - hideKeyboard
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
     element:
-      text: "ISBN"
+      text: 'ISBN'
       index: 1
     direction: UP
 - tapOn:
-    text: "ISBN"
+    text: 'ISBN'
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
-- inputText: "123"
+- inputText: '123'
 - hideKeyboard
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
-    element: "이 실물 책 구매 기록"
-- tapOn: "이 실물 책 구매 기록"
+    element: '이 실물 책 구매 기록'
+- tapOn: '이 실물 책 구매 기록'
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
-    element: "ISBN을 올바른 ISBN-10 또는 ISBN-13 번호로 입력해 주세요."
+    element: 'ISBN을 올바른 ISBN-10 또는 ISBN-13 번호로 입력해 주세요.'
     direction: UP
-- assertVisible: "ISBN을 올바른 ISBN-10 또는 ISBN-13 번호로 입력해 주세요."
+- assertVisible: 'ISBN을 올바른 ISBN-10 또는 ISBN-13 번호로 입력해 주세요.'
 - takeScreenshot: B05.3-invalid-isbn
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
     element:
-      text: "ISBN"
+      text: 'ISBN'
       index: 1
     direction: DOWN
 - tapOn:
-    text: "ISBN"
+    text: 'ISBN'
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
-- inputText: "9780000000002"
+- inputText: '9780000000002'
 - hideKeyboard
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
     element:
-      text: "거래일"
+      text: '거래일'
       index: 1
     direction: UP
 - tapOn:
-    text: "거래일"
+    text: '거래일'
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
-- inputText: "2026-02-30"
+- inputText: '2026-02-30'
 - hideKeyboard
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
-    element: "이 실물 책 구매 기록"
-- tapOn: "이 실물 책 구매 기록"
+    element: '이 실물 책 구매 기록'
+- tapOn: '이 실물 책 구매 기록'
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
-    element: "날짜를 YYYY-MM-DD 형식의 올바른 날짜로 입력해 주세요."
+    element: '날짜를 YYYY-MM-DD 형식의 올바른 날짜로 입력해 주세요.'
     direction: UP
-- assertVisible: "날짜를 YYYY-MM-DD 형식의 올바른 날짜로 입력해 주세요."
+- assertVisible: '날짜를 YYYY-MM-DD 형식의 올바른 날짜로 입력해 주세요.'
 - takeScreenshot: B05.3-invalid-date
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
     element:
-      text: "거래일"
+      text: '거래일'
       index: 1
     direction: DOWN
 - tapOn:
-    text: "거래일"
+    text: '거래일'
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
-- inputText: "2026-10-25"
+- inputText: '2026-10-25'
 - hideKeyboard
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
     element:
-      text: "책 제목"
+      text: '책 제목'
       index: 1
     direction: DOWN
 - tapOn:
-    text: "책 제목"
+    text: '책 제목'
     index: 1
-    point: "95%,50%"
+    point: '95%,50%'
 - eraseText: 500
 - hideKeyboard
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
-    element: "이 실물 책 구매 기록"
-- tapOn: "이 실물 책 구매 기록"
+    element: '이 실물 책 구매 기록'
+- tapOn: '이 실물 책 구매 기록'
 - scrollUntilVisible:
     visibilityPercentage: 10
     centerElement: true
-    element: "책 제목을 1~200자로 입력해 주세요."
+    element: '책 제목을 1~200자로 입력해 주세요.'
     direction: UP
-- assertVisible: "책 제목을 1~200자로 입력해 주세요."
+- assertVisible: '책 제목을 1~200자로 입력해 주세요.'
 - takeScreenshot: B05.3-empty-title

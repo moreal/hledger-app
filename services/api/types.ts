@@ -1,8 +1,14 @@
 import type { CreateTransactionInput } from '../../packages/api-contract/generated/client/graphql.ts';
 
 export type { CreateTransactionInput };
-export interface LedgerTag { key: string; value: string }
-export interface LedgerAccount { name: string; tags: LedgerTag[] }
+export interface LedgerTag {
+  key: string;
+  value: string;
+}
+export interface LedgerAccount {
+  name: string;
+  tags: LedgerTag[];
+}
 export interface LedgerPosting {
   accountId: string | null;
   accountName: string;
@@ -39,12 +45,18 @@ export interface LedgerAdapter {
   read(): Promise<LedgerSnapshot>;
   /** Inspect durable evidence without recovering pending writes or creating lock files. */
   inspectReadOnly?(): Promise<LedgerSnapshot>;
-  create(input: CreateTransactionInput): Promise<{ transaction: LedgerTransaction; replayed: boolean }>;
+  create(
+    input: CreateTransactionInput,
+  ): Promise<{ transaction: LedgerTransaction; replayed: boolean }>;
 }
 
 /** Input/conflict errors are suitable for mutation field errors; storage failures are execution errors. */
 export class LedgerError extends Error {
-  constructor(public readonly code: string, message: string, public readonly path = 'input') {
+  constructor(
+    public readonly code: string,
+    message: string,
+    public readonly path = 'input',
+  ) {
     super(message);
     this.name = 'LedgerError';
   }

@@ -1,13 +1,55 @@
 import type { MessageDescriptor } from '@lingui/core';
-import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
-import { createLedgerClient, LedgerTransportError, addDecimals, previousDate, newIdempotencyKey, type AccountsQuery, type AccountTransactionsQuery, type TransactionsQuery, type PricesQuery, type HealthQuery, type CreateTransactionInput } from '../../../packages/client/index';
-import { AccountRow, AssetIdentity, AssetMetadataProvider, Badge, Button, Field, Icon, Money, Notice, TransactionRow, type IconName } from '../../../packages/ui-web/src/index';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FormEvent,
+  type KeyboardEvent,
+} from 'react';
+import {
+  createLedgerClient,
+  LedgerTransportError,
+  addDecimals,
+  previousDate,
+  newIdempotencyKey,
+  type AccountsQuery,
+  type AccountTransactionsQuery,
+  type TransactionsQuery,
+  type PricesQuery,
+  type HealthQuery,
+  type CreateTransactionInput,
+} from '../../../packages/client/index';
+import {
+  AccountRow,
+  AssetIdentity,
+  AssetMetadataProvider,
+  Badge,
+  Button,
+  Field,
+  Icon,
+  Money,
+  Notice,
+  TransactionRow,
+  type IconName,
+} from '../../../packages/ui-web/src/index';
 import { AssetUnitField, useAssetUnitSuggestions } from './AssetUnitField';
-import { buildTradePostings, arePostingsBalanced, sumPostingsAtCost } from '../../../packages/domain/src/trade';
+import {
+  buildTradePostings,
+  arePostingsBalanced,
+  sumPostingsAtCost,
+} from '../../../packages/domain/src/trade';
 import { TradeFields, blankTrade } from './TradeFields';
 import { BookModuleHost } from './book-module';
 import './app.css';
-import { activateLocale, i18n, translateError, formatTradeValidation, type AppLocale } from '../../../packages/i18n/src/index';
+import {
+  activateLocale,
+  i18n,
+  translateError,
+  formatTradeValidation,
+  type AppLocale,
+} from '../../../packages/i18n/src/index';
 import { useLingui } from '../../../packages/i18n/src/react';
 import { persistLocale } from './locale';
 
@@ -18,62 +60,299 @@ type AccountDetail = NonNullable<AccountTransactionsQuery['account']>;
 type Page = { hasNextPage: boolean; endCursor?: string | null };
 type LocalMessage = string | MessageDescriptor | { tradeCause: unknown };
 type UiError = LocalMessage | { cause: unknown };
-function localMessage(message: LocalMessage): string { return typeof message === 'string' ? message : 'tradeCause' in message ? formatTradeValidation(message.tradeCause) : i18n._(message); }
-type RemotePage<T, M = undefined> = { rows?: T[]; page?: Page; meta?: M; error?: UiError; stale?: boolean };
-type Config = { endpoint: string; token: string; ledgerId: string };
-const tabs: { id: Screen; label: { id: string; message: string }; icon: IconName }[] = [{ id: 'accounts', label: /* i18n */ { id: 'nav.accounts', message: '항목' }, icon: 'accounts' }, { id: 'transactions', label: /* i18n */ { id: 'nav.transactions', message: '거래' }, icon: 'transactions' }, { id: 'entry', label: /* i18n */ { id: 'nav.newTransaction', message: '새 거래' }, icon: 'plus' }, { id: 'prices', label: /* i18n */ { id: 'nav.prices', message: '시세' }, icon: 'prices' }, { id: 'books', label: /* i18n */ { id: 'nav.books', message: '책' }, icon: 'layers' }];
-type Screen = 'accounts' | 'transactions' | 'entry' | 'prices' | 'books';
-const copy = { books: [/* i18n */ { id: 'title.books', message: '내 책' }, /* i18n */ { id: 'description.books', message: '같은 ISBN의 책도 한 권씩 구입 금액과 보유 상태를 관리합니다.' }], accounts: [/* i18n */ { id: 'title.accounts', message: '내 항목' }, /* i18n */ { id: 'description.accounts', message: '항목의 흐름과 자산별 잔액을 살펴보세요.' }], transactions: [/* i18n */ { id: 'web.title.transactions', message: '거래 내역' }, /* i18n */ { id: 'description.transactions', message: '원장에 기록된 거래와 항목별 내역을 확인합니다.' }], entry: [/* i18n */ { id: 'title.entry', message: '새 거래' }, /* i18n */ { id: 'description.entry', message: '돈이 오간 항목과 금액을 적어 거래를 기록합니다.' }], prices: [/* i18n */ { id: 'title.prices', message: '시세' }, /* i18n */ { id: 'description.prices', message: '원장에 기록된 자산별 기준 시세입니다.' }] };
-const connectionMessages: Record<string, { id: string; message: string }> = {
-  'http 또는 https로 시작하는 서버 주소를 입력해 주세요.': /* i18n */ { id: 'web.connection.error.1', message: 'http 또는 https로 시작하는 서버 주소를 입력해 주세요.' },
-  '서버에 설정한 접근 토큰을 입력해 주세요.': /* i18n */ { id: 'web.connection.error.2', message: '서버에 설정한 접근 토큰을 입력해 주세요.' },
-  '진행 중인 저장 요청이 끝난 뒤 다시 연결해 주세요.': /* i18n */ { id: 'web.connection.error.3', message: '진행 중인 저장 요청이 끝난 뒤 다시 연결해 주세요.' },
-  '저장 결과를 확인하는 동안에는 기존 서버 주소를 유지해 주세요.': /* i18n */ { id: 'web.connection.error.4', message: '저장 결과를 확인하는 동안에는 기존 서버 주소를 유지해 주세요.' },
-  '원장 접근 권한을 확인하지 못했습니다. 서버 주소와 접근 토큰을 확인해 주세요.': /* i18n */ { id: 'web.connection.error.5', message: '원장 접근 권한을 확인하지 못했습니다. 서버 주소와 접근 토큰을 확인해 주세요.' },
-  '기존 요청의 원장과 다릅니다. 원래 원장에 다시 연결해야 저장 결과를 확인할 수 있습니다.': /* i18n */ { id: 'web.connection.error.6', message: '기존 요청의 원장과 다릅니다. 원래 원장에 다시 연결해야 저장 결과를 확인할 수 있습니다.' },
-  '연결 원장이 바뀌어 새 거래 입력을 비웠습니다.': /* i18n */ { id: 'web.connection.error.7', message: '연결 원장이 바뀌어 새 거래 입력을 비웠습니다.' },
-  '연결 상태를 읽지 못했습니다.': /* i18n */ { id: 'web.connection.error.8', message: '연결 상태를 읽지 못했습니다.' },
+function localMessage(message: LocalMessage): string {
+  return typeof message === 'string'
+    ? message
+    : 'tradeCause' in message
+      ? formatTradeValidation(message.tradeCause)
+      : i18n._(message);
+}
+type RemotePage<T, M = undefined> = {
+  rows?: T[];
+  page?: Page;
+  meta?: M;
+  error?: UiError;
+  stale?: boolean;
 };
-const accountGroupNoun = (name: string) => i18n._(/^(assets?|자산)$/i.test(name) ? /* i18n */ { id: 'accounts.group.accounts', message: '계좌' } : /^(income|revenues?|expenses?|수익|수입|비용|지출)$/i.test(name) ? /* i18n */ { id: 'accounts.group.categories', message: '분류' } : /* i18n */ { id: 'accounts.group.items', message: '항목' });
-const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+type Config = { endpoint: string; token: string; ledgerId: string };
+const tabs: { id: Screen; label: { id: string; message: string }; icon: IconName }[] = [
+  { id: 'accounts', label: /* i18n */ { id: 'nav.accounts', message: '항목' }, icon: 'accounts' },
+  {
+    id: 'transactions',
+    label: /* i18n */ { id: 'nav.transactions', message: '거래' },
+    icon: 'transactions',
+  },
+  { id: 'entry', label: /* i18n */ { id: 'nav.newTransaction', message: '새 거래' }, icon: 'plus' },
+  { id: 'prices', label: /* i18n */ { id: 'nav.prices', message: '시세' }, icon: 'prices' },
+  { id: 'books', label: /* i18n */ { id: 'nav.books', message: '책' }, icon: 'layers' },
+];
+type Screen = 'accounts' | 'transactions' | 'entry' | 'prices' | 'books';
+const copy = {
+  books: [
+    /* i18n */ { id: 'title.books', message: '내 책' },
+    /* i18n */ {
+      id: 'description.books',
+      message: '같은 ISBN의 책도 한 권씩 구입 금액과 보유 상태를 관리합니다.',
+    },
+  ],
+  accounts: [
+    /* i18n */ { id: 'title.accounts', message: '내 항목' },
+    /* i18n */ { id: 'description.accounts', message: '항목의 흐름과 자산별 잔액을 살펴보세요.' },
+  ],
+  transactions: [
+    /* i18n */ { id: 'web.title.transactions', message: '거래 내역' },
+    /* i18n */ {
+      id: 'description.transactions',
+      message: '원장에 기록된 거래와 항목별 내역을 확인합니다.',
+    },
+  ],
+  entry: [
+    /* i18n */ { id: 'title.entry', message: '새 거래' },
+    /* i18n */ {
+      id: 'description.entry',
+      message: '돈이 오간 항목과 금액을 적어 거래를 기록합니다.',
+    },
+  ],
+  prices: [
+    /* i18n */ { id: 'title.prices', message: '시세' },
+    /* i18n */ { id: 'description.prices', message: '원장에 기록된 자산별 기준 시세입니다.' },
+  ],
+};
+const connectionMessages: Record<string, { id: string; message: string }> = {
+  'http 또는 https로 시작하는 서버 주소를 입력해 주세요.': /* i18n */ {
+    id: 'web.connection.error.1',
+    message: 'http 또는 https로 시작하는 서버 주소를 입력해 주세요.',
+  },
+  '서버에 설정한 접근 토큰을 입력해 주세요.': /* i18n */ {
+    id: 'web.connection.error.2',
+    message: '서버에 설정한 접근 토큰을 입력해 주세요.',
+  },
+  '진행 중인 저장 요청이 끝난 뒤 다시 연결해 주세요.': /* i18n */ {
+    id: 'web.connection.error.3',
+    message: '진행 중인 저장 요청이 끝난 뒤 다시 연결해 주세요.',
+  },
+  '저장 결과를 확인하는 동안에는 기존 서버 주소를 유지해 주세요.': /* i18n */ {
+    id: 'web.connection.error.4',
+    message: '저장 결과를 확인하는 동안에는 기존 서버 주소를 유지해 주세요.',
+  },
+  '원장 접근 권한을 확인하지 못했습니다. 서버 주소와 접근 토큰을 확인해 주세요.': /* i18n */ {
+    id: 'web.connection.error.5',
+    message: '원장 접근 권한을 확인하지 못했습니다. 서버 주소와 접근 토큰을 확인해 주세요.',
+  },
+  '기존 요청의 원장과 다릅니다. 원래 원장에 다시 연결해야 저장 결과를 확인할 수 있습니다.':
+    /* i18n */ {
+      id: 'web.connection.error.6',
+      message:
+        '기존 요청의 원장과 다릅니다. 원래 원장에 다시 연결해야 저장 결과를 확인할 수 있습니다.',
+    },
+  '연결 원장이 바뀌어 새 거래 입력을 비웠습니다.': /* i18n */ {
+    id: 'web.connection.error.7',
+    message: '연결 원장이 바뀌어 새 거래 입력을 비웠습니다.',
+  },
+  '연결 상태를 읽지 못했습니다.': /* i18n */ {
+    id: 'web.connection.error.8',
+    message: '연결 상태를 읽지 못했습니다.',
+  },
+};
+const accountGroupNoun = (name: string) =>
+  i18n._(
+    /^(assets?|자산)$/i.test(name)
+      ? /* i18n */ { id: 'accounts.group.accounts', message: '계좌' }
+      : /^(income|revenues?|expenses?|수익|수입|비용|지출)$/i.test(name)
+        ? /* i18n */ { id: 'accounts.group.categories', message: '분류' }
+        : /* i18n */ { id: 'accounts.group.items', message: '항목' },
+  );
+const today = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
 const monthStart = () => `${today().slice(0, 7)}-01`;
 const decimal = /^-?[0-9]+(?:\.[0-9]+)?$/;
 function displayError(error: UiError): string {
   if (typeof error !== 'string' && !('cause' in error)) return localMessage(error);
   const cause = typeof error === 'string' ? error : error.cause;
   const message = cause instanceof Error ? cause.message : typeof cause === 'string' ? cause : '';
-  return connectionMessages[message] ? i18n._(connectionMessages[message]) : typeof cause === 'string' ? cause : translateError(cause);
+  return connectionMessages[message]
+    ? i18n._(connectionMessages[message])
+    : typeof cause === 'string'
+      ? cause
+      : translateError(cause);
 }
-function graphqlMessage(errors?: readonly { message: string; extensions?: Record<string, unknown> }[]) { return errors?.map((error) => `${error.message}${error.extensions?.requestId ? ` (${String(error.extensions.requestId)})` : ''}`).join(' · '); }
-function cursorError(errors?: readonly { extensions?: Record<string, unknown> }[]) { return errors?.some((error) => error.extensions?.code === 'INVALID_CURSOR') ?? false; }
-function savedEndpoint() { try { return localStorage.getItem('hledger.endpoint') || 'http://127.0.0.1:4000/graphql'; } catch { return 'http://127.0.0.1:4000/graphql'; } }
-function usePaged<T, M = undefined>(loader: (after?: string) => Promise<RemotePage<T, M>>, revision: number, enabled: boolean) {
+function graphqlMessage(
+  errors?: readonly { message: string; extensions?: Record<string, unknown> }[],
+) {
+  return errors
+    ?.map(
+      (error) =>
+        `${error.message}${error.extensions?.requestId ? ` (${String(error.extensions.requestId)})` : ''}`,
+    )
+    .join(' · ');
+}
+function cursorError(errors?: readonly { extensions?: Record<string, unknown> }[]) {
+  return errors?.some((error) => error.extensions?.code === 'INVALID_CURSOR') ?? false;
+}
+function savedEndpoint() {
+  try {
+    return localStorage.getItem('hledger.endpoint') || 'http://127.0.0.1:4000/graphql';
+  } catch {
+    return 'http://127.0.0.1:4000/graphql';
+  }
+}
+function usePaged<T, M = undefined>(
+  loader: (after?: string) => Promise<RemotePage<T, M>>,
+  revision: number,
+  enabled: boolean,
+) {
   const [state, setState] = useState<RemotePage<T, M>>({});
   const [loading, setLoading] = useState(false);
   const [reload, setReload] = useState(0);
   const generation = useRef(0);
   const activeLoader = useRef(loader);
   const busy = useRef(false);
-  const load = useCallback(async (after: string | undefined, serial: number) => {
-    busy.current = true; setLoading(true);
-    try {
-      const result = await loader(after);
-      if (serial !== generation.current) return;
-      setState((old) => ({ ...result, rows: result.rows ? after ? [...(old.rows ?? []), ...result.rows] : result.rows : old.rows, page: result.page ?? old.page, meta: result.meta ?? old.meta }));
-    } catch (error) { if (serial === generation.current) setState((old) => ({ ...old, error: { cause: error } })); }
-    finally { if (serial === generation.current) { busy.current = false; setLoading(false); } }
-  }, [loader]);
-  useEffect(() => { const serial = ++generation.current; const changed = activeLoader.current !== loader; activeLoader.current = loader; setState((old) => changed ? {} : { ...old, error: undefined, stale: false }); busy.current = false; setLoading(false); if (enabled) void load(undefined, serial); return () => { generation.current++; }; }, [load, loader, revision, enabled, reload]);
+  const load = useCallback(
+    async (after: string | undefined, serial: number) => {
+      busy.current = true;
+      setLoading(true);
+      try {
+        const result = await loader(after);
+        if (serial !== generation.current) return;
+        setState((old) => ({
+          ...result,
+          rows: result.rows
+            ? after
+              ? [...(old.rows ?? []), ...result.rows]
+              : result.rows
+            : old.rows,
+          page: result.page ?? old.page,
+          meta: result.meta ?? old.meta,
+        }));
+      } catch (error) {
+        if (serial === generation.current) setState((old) => ({ ...old, error: { cause: error } }));
+      } finally {
+        if (serial === generation.current) {
+          busy.current = false;
+          setLoading(false);
+        }
+      }
+    },
+    [loader],
+  );
+  useEffect(() => {
+    const serial = ++generation.current;
+    const changed = activeLoader.current !== loader;
+    activeLoader.current = loader;
+    setState((old) => (changed ? {} : { ...old, error: undefined, stale: false }));
+    busy.current = false;
+    setLoading(false);
+    if (enabled) void load(undefined, serial);
+    return () => {
+      generation.current++;
+    };
+  }, [load, loader, revision, enabled, reload]);
   const current = activeLoader.current === loader && enabled ? state : {};
-  return { ...current, loading: enabled && (loading || activeLoader.current !== loader), restart: () => setReload((n) => n + 1), more: () => { if (!busy.current && !current.stale && current.page?.hasNextPage && current.page.endCursor) void load(current.page.endCursor, generation.current); } };
+  return {
+    ...current,
+    loading: enabled && (loading || activeLoader.current !== loader),
+    restart: () => setReload((n) => n + 1),
+    more: () => {
+      if (!busy.current && !current.stale && current.page?.hasNextPage && current.page.endCursor)
+        void load(current.page.endCursor, generation.current);
+    },
+  };
 }
-function Empty({ title, children }: { title?: string; children?: React.ReactNode }) { const { _ } = useLingui(); return <div className="empty-state"><span className="empty-glyph"><Icon name="layers" /></span><h4>{title ?? _(/* i18n */ { id: 'web.forms.App.164', message: "표시할 기록이 없습니다" })}</h4><p>{children ?? _(/* i18n */ { id: 'web.forms.App.1', message: "기간이나 검색 조건을 바꾸어 다시 확인해 보세요." })}</p></div>; }
-function RemoteStatus({ loading, error, stale, restart, count }: { loading: boolean; error?: UiError; stale?: boolean; restart: () => void; count: number }) { const { _ } = useLingui(); return <>{error && <div className="app-error"><Notice tone="danger" title={stale ? _(/* i18n */ { id: 'web.remote.1', message: "원장이 변경되어 목록을 다시 읽어야 합니다" }) : _(/* i18n */ { id: 'web.remote.2', message: "자료를 모두 불러오지 못했습니다" })}>{displayError(error)}{count > 0 && _(/* i18n */ { id: 'web.remote.3', message: " 현재까지 읽은 결과는 아래에 남아 있습니다." })}</Notice><Button variant="secondary" onClick={restart}>{stale ? _(/* i18n */ { id: 'web.remote.4', message: "처음부터 다시 읽기" }) : _(/* i18n */ { id: 'web.remote.5', message: "다시 시도" })}</Button></div>}{loading && <p className="app-loading" role="status">{_(/* i18n */ { id: 'web.remote.loading', message: "원장을 읽고 있습니다…" })}</p>}</>; }
-function Amounts({ values }: { values: readonly { value: string; commodity: string }[] }) { return <>{values.map((amount, i) => <Money key={`${amount.commodity}-${i}`} {...amount} />)}</>; }
+function Empty({ title, children }: { title?: string; children?: React.ReactNode }) {
+  const { _ } = useLingui();
+  return (
+    <div className="empty-state">
+      <span className="empty-glyph">
+        <Icon name="layers" />
+      </span>
+      <h4>
+        {title ?? _(/* i18n */ { id: 'web.forms.App.164', message: '표시할 기록이 없습니다' })}
+      </h4>
+      <p>
+        {children ??
+          _(
+            /* i18n */ {
+              id: 'web.forms.App.1',
+              message: '기간이나 검색 조건을 바꾸어 다시 확인해 보세요.',
+            },
+          )}
+      </p>
+    </div>
+  );
+}
+function RemoteStatus({
+  loading,
+  error,
+  stale,
+  restart,
+  count,
+}: {
+  loading: boolean;
+  error?: UiError;
+  stale?: boolean;
+  restart: () => void;
+  count: number;
+}) {
+  const { _ } = useLingui();
+  return (
+    <>
+      {error && (
+        <div className="app-error">
+          <Notice
+            tone="danger"
+            title={
+              stale
+                ? _(
+                    /* i18n */ {
+                      id: 'web.remote.1',
+                      message: '원장이 변경되어 목록을 다시 읽어야 합니다',
+                    },
+                  )
+                : _(/* i18n */ { id: 'web.remote.2', message: '자료를 모두 불러오지 못했습니다' })
+            }
+          >
+            {displayError(error)}
+            {count > 0 &&
+              _(
+                /* i18n */ {
+                  id: 'web.remote.3',
+                  message: ' 현재까지 읽은 결과는 아래에 남아 있습니다.',
+                },
+              )}
+          </Notice>
+          <Button variant="secondary" onClick={restart}>
+            {stale
+              ? _(/* i18n */ { id: 'web.remote.4', message: '처음부터 다시 읽기' })
+              : _(/* i18n */ { id: 'web.remote.5', message: '다시 시도' })}
+          </Button>
+        </div>
+      )}
+      {loading && (
+        <p className="app-loading" role="status">
+          {_(/* i18n */ { id: 'web.remote.loading', message: '원장을 읽고 있습니다…' })}
+        </p>
+      )}
+    </>
+  );
+}
+function Amounts({ values }: { values: readonly { value: string; commodity: string }[] }) {
+  return (
+    <>
+      {values.map((amount, i) => (
+        <Money key={`${amount.commodity}-${i}`} {...amount} />
+      ))}
+    </>
+  );
+}
 
 export function App() {
   const { i18n, _ } = useLingui();
-  function selectLocale(locale: AppLocale) { activateLocale(locale); persistLocale(locale); }
+  function selectLocale(locale: AppLocale) {
+    activateLocale(locale);
+    persistLocale(locale);
+  }
 
   const [config, setConfig] = useState<Config | null>(null);
   const [endpoint, setEndpoint] = useState(savedEndpoint);
@@ -86,7 +365,7 @@ export function App() {
   const [screen, setScreen] = useState<Screen>('accounts');
   const [bookPending, setBookPending] = useState(false);
   const [booksEnabled, setBooksEnabled] = useState(false);
-  const visibleTabs = tabs.filter(tab => tab.id !== 'books' || booksEnabled);
+  const visibleTabs = tabs.filter((tab) => tab.id !== 'books' || booksEnabled);
   const [revision, setRevision] = useState(0);
   const [health, setHealth] = useState<HealthQuery['health']>();
   const [healthError, setHealthError] = useState<UiError>('');
@@ -112,67 +391,198 @@ export function App() {
   const [pending, setPending] = useState<CreateTransactionInput | null>(null);
   const [saveMessage, setSaveMessageValue] = useState<LocalMessage>('');
   const [saveTransportError, setSaveTransportError] = useState<{ cause: unknown } | null>(null);
-  function setSaveMessage(message: LocalMessage) { setSaveMessageValue(message); setSaveTransportError(null); }
+  function setSaveMessage(message: LocalMessage) {
+    setSaveMessageValue(message);
+    setSaveTransportError(null);
+  }
   const [saveSuccess, setSaveSuccess] = useState(false);
   const saveBusy = useRef(false);
-  const client = useMemo(() => config ? createLedgerClient(config) : null, [config]);
+  const client = useMemo(() => (config ? createLedgerClient(config) : null), [config]);
   const invalidDates = Boolean(from && to && from > to);
-  const filter = useMemo(() => ({ ...(query.trim() ? { query: query.trim() } : {}), ...(from ? { from } : {}), ...(to ? { to } : {}), ...(accountId ? { accountId } : {}), includeSubaccounts: subaccounts, ...(tagKey ? { tags: [{ key: tagKey, value: tagValue }] } : {}) }), [query, from, to, accountId, subaccounts, tagKey, tagValue]);
-  const accountsLoader = useCallback(async (after?: string): Promise<RemotePage<Account>> => {
-    if (!client) return {};
-    const result = await client.accounts({ first: 100, after, filter: { includeEmpty: true, ...(accountQuery.trim() ? { query: accountQuery.trim() } : {}) }, asOf: to || undefined, includeSubaccounts: subaccounts });
-    const value = result.data?.accounts;
-    return { rows: value?.edges.map((edge) => edge.node), page: value?.pageInfo, error: graphqlMessage(result.errors), stale: cursorError(result.errors) };
-  }, [client, accountQuery, to, subaccounts]);
+  const filter = useMemo(
+    () => ({
+      ...(query.trim() ? { query: query.trim() } : {}),
+      ...(from ? { from } : {}),
+      ...(to ? { to } : {}),
+      ...(accountId ? { accountId } : {}),
+      includeSubaccounts: subaccounts,
+      ...(tagKey ? { tags: [{ key: tagKey, value: tagValue }] } : {}),
+    }),
+    [query, from, to, accountId, subaccounts, tagKey, tagValue],
+  );
+  const accountsLoader = useCallback(
+    async (after?: string): Promise<RemotePage<Account>> => {
+      if (!client) return {};
+      const result = await client.accounts({
+        first: 100,
+        after,
+        filter: {
+          includeEmpty: true,
+          ...(accountQuery.trim() ? { query: accountQuery.trim() } : {}),
+        },
+        asOf: to || undefined,
+        includeSubaccounts: subaccounts,
+      });
+      const value = result.data?.accounts;
+      return {
+        rows: value?.edges.map((edge) => edge.node),
+        page: value?.pageInfo,
+        error: graphqlMessage(result.errors),
+        stale: cursorError(result.errors),
+      };
+    },
+    [client, accountQuery, to, subaccounts],
+  );
   const accounts = usePaged(accountsLoader, revision, Boolean(client) && !invalidDates);
-  const transactionLoader = useCallback(async (after?: string): Promise<RemotePage<Transaction, AccountDetail>> => {
-    if (!client) return {};
-    if (accountId) {
-      const result = await client.accountTransactions({ id: accountId, filter, first: 50, after, from: from || undefined, to: to || undefined, asOf: from && from !== '0001-01-01' ? previousDate(from) : undefined, includeSubaccounts: subaccounts });
-      const detail = result.data?.account;
-      return { rows: detail?.transactions?.edges.map((edge) => edge.node), page: detail?.transactions?.pageInfo, meta: detail ?? undefined, error: graphqlMessage(result.errors) || (!detail ? /* i18n */ { id: 'accounts.selectedMissing', message: '선택한 항목을 찾을 수 없습니다. 항목을 다시 선택해 주세요.' } : undefined), stale: cursorError(result.errors) };
-    }
-    const result = await client.transactions({ filter, first: 50, after });
-    const value = result.data?.transactions;
-    return { rows: value?.edges.map((edge) => edge.node), page: value?.pageInfo, error: graphqlMessage(result.errors), stale: cursorError(result.errors) };
-  }, [client, accountId, filter, from, to, subaccounts]);
-  const transactions = usePaged(transactionLoader, revision, Boolean(client) && screen === 'transactions' && !invalidDates);
-  const priceLoader = useCallback(async (after?: string): Promise<RemotePage<Price>> => {
-    if (!client) return {};
-    const result = await client.prices({ first: 50, after, filter: { ...(commodity ? { commodity } : {}), ...(quoteCommodity ? { quoteCommodity } : {}), ...(from ? { from } : {}), ...(to ? { to } : {}) } });
-    const value = result.data?.prices;
-    return { rows: value?.edges.map((edge) => edge.node), page: value?.pageInfo, error: graphqlMessage(result.errors), stale: cursorError(result.errors) };
-  }, [client, commodity, quoteCommodity, from, to]);
-  const prices = usePaged(priceLoader, revision, Boolean(client) && screen === 'prices' && !invalidDates);
-  const observedAssetUnits = useMemo(() => [
-    ...(accounts.rows ?? []).flatMap((account) => account.balances.map((amount) => amount.commodity)),
-    ...(transactions.rows ?? []).flatMap((transaction) => transaction.postings.map((posting) => posting.amount.commodity)),
-    ...(transactions.meta?.opening ?? []).map((amount) => amount.commodity),
-    ...(transactions.meta?.movements ?? []).map((amount) => amount.commodity),
-    ...(prices.rows ?? []).flatMap((price) => [price.commodity, price.quoteCommodity]),
-  ], [accounts.rows, transactions.rows, transactions.meta, prices.rows]);
-  const assetUnits = useAssetUnitSuggestions(config?.endpoint, config?.ledgerId, observedAssetUnits);
+  const transactionLoader = useCallback(
+    async (after?: string): Promise<RemotePage<Transaction, AccountDetail>> => {
+      if (!client) return {};
+      if (accountId) {
+        const result = await client.accountTransactions({
+          id: accountId,
+          filter,
+          first: 50,
+          after,
+          from: from || undefined,
+          to: to || undefined,
+          asOf: from && from !== '0001-01-01' ? previousDate(from) : undefined,
+          includeSubaccounts: subaccounts,
+        });
+        const detail = result.data?.account;
+        return {
+          rows: detail?.transactions?.edges.map((edge) => edge.node),
+          page: detail?.transactions?.pageInfo,
+          meta: detail ?? undefined,
+          error:
+            graphqlMessage(result.errors) ||
+            (!detail
+              ? /* i18n */ {
+                  id: 'accounts.selectedMissing',
+                  message: '선택한 항목을 찾을 수 없습니다. 항목을 다시 선택해 주세요.',
+                }
+              : undefined),
+          stale: cursorError(result.errors),
+        };
+      }
+      const result = await client.transactions({ filter, first: 50, after });
+      const value = result.data?.transactions;
+      return {
+        rows: value?.edges.map((edge) => edge.node),
+        page: value?.pageInfo,
+        error: graphqlMessage(result.errors),
+        stale: cursorError(result.errors),
+      };
+    },
+    [client, accountId, filter, from, to, subaccounts],
+  );
+  const transactions = usePaged(
+    transactionLoader,
+    revision,
+    Boolean(client) && screen === 'transactions' && !invalidDates,
+  );
+  const priceLoader = useCallback(
+    async (after?: string): Promise<RemotePage<Price>> => {
+      if (!client) return {};
+      const result = await client.prices({
+        first: 50,
+        after,
+        filter: {
+          ...(commodity ? { commodity } : {}),
+          ...(quoteCommodity ? { quoteCommodity } : {}),
+          ...(from ? { from } : {}),
+          ...(to ? { to } : {}),
+        },
+      });
+      const value = result.data?.prices;
+      return {
+        rows: value?.edges.map((edge) => edge.node),
+        page: value?.pageInfo,
+        error: graphqlMessage(result.errors),
+        stale: cursorError(result.errors),
+      };
+    },
+    [client, commodity, quoteCommodity, from, to],
+  );
+  const prices = usePaged(
+    priceLoader,
+    revision,
+    Boolean(client) && screen === 'prices' && !invalidDates,
+  );
+  const observedAssetUnits = useMemo(
+    () => [
+      ...(accounts.rows ?? []).flatMap((account) =>
+        account.balances.map((amount) => amount.commodity),
+      ),
+      ...(transactions.rows ?? []).flatMap((transaction) =>
+        transaction.postings.map((posting) => posting.amount.commodity),
+      ),
+      ...(transactions.meta?.opening ?? []).map((amount) => amount.commodity),
+      ...(transactions.meta?.movements ?? []).map((amount) => amount.commodity),
+      ...(prices.rows ?? []).flatMap((price) => [price.commodity, price.quoteCommodity]),
+    ],
+    [accounts.rows, transactions.rows, transactions.meta, prices.rows],
+  );
+  const assetUnits = useAssetUnitSuggestions(
+    config?.endpoint,
+    config?.ledgerId,
+    observedAssetUnits,
+  );
   useEffect(() => {
     if (!client) return;
-    let current = true; setHealthBusy(true); setHealthError('');
-    client.health().then((result) => { if (current) { setHealth(result.data?.health); setHealthError(graphqlMessage(result.errors) || (!result.data?.health ? '연결 상태를 읽지 못했습니다.' : '')); } }).catch((error: unknown) => { if (current) setHealthError({ cause: error }); }).finally(() => { if (current) setHealthBusy(false); });
-    return () => { current = false; };
+    let current = true;
+    setHealthBusy(true);
+    setHealthError('');
+    client
+      .health()
+      .then((result) => {
+        if (current) {
+          setHealth(result.data?.health);
+          setHealthError(
+            graphqlMessage(result.errors) ||
+              (!result.data?.health ? '연결 상태를 읽지 못했습니다.' : ''),
+          );
+        }
+      })
+      .catch((error: unknown) => {
+        if (current) setHealthError({ cause: error });
+      })
+      .finally(() => {
+        if (current) setHealthBusy(false);
+      });
+    return () => {
+      current = false;
+    };
   }, [client, revision]);
   const visibleAccounts = accounts.rows ?? [];
-  const featured = visibleAccounts.find((item) => item.id === selectedAccount) ?? visibleAccounts[0];
+  const featured =
+    visibleAccounts.find((item) => item.id === selectedAccount) ?? visibleAccounts[0];
   const groups = new Map<string, Account[]>();
-  for (const account of visibleAccounts) { const name = account.fullName.split(':')[0]; groups.set(name, [...(groups.get(name) ?? []), account]); }
+  for (const account of visibleAccounts) {
+    const name = account.fullName.split(':')[0];
+    groups.set(name, [...(groups.get(name) ?? []), account]);
+  }
   let entrySums = new Map<string, string>();
   let balanced = false;
   let tradeError: LocalMessage = '';
   let draftPostings: CreateTransactionInput['postings'] = entry.postings;
   try {
     if (entryMode === 'trade') draftPostings = buildTradePostings(trade);
-    entrySums = new Map(sumPostingsAtCost(draftPostings).map((amount) => [amount.commodity, amount.value]));
+    entrySums = new Map(
+      sumPostingsAtCost(draftPostings).map((amount) => [amount.commodity, amount.value]),
+    );
     balanced = arePostingsBalanced(draftPostings);
-  } catch (error) { tradeError = entryMode === 'trade' ? { tradeCause: error } : /* i18n */ { id: 'web.forms.App.invalidAmount', message: '금액과 가격은 쉼표 없는 숫자여야 하며 가격은 양수여야 합니다.' }; }
+  } catch (error) {
+    tradeError =
+      entryMode === 'trade'
+        ? { tradeCause: error }
+        : /* i18n */ {
+            id: 'web.forms.App.invalidAmount',
+            message: '금액과 가격은 쉼표 없는 숫자여야 하며 가격은 양수여야 합니다.',
+          };
+  }
   function openSettings() {
-    settingsReturnFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    settingsReturnFocus.current =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null;
     setSettings(true);
     requestAnimationFrame(() => document.getElementById('settings-title')?.focus());
   }
@@ -184,93 +594,1966 @@ export function App() {
       else document.getElementById(`app-tab-${screen}`)?.focus();
     });
   }
-  function navigate(next: Screen) { setScreen(next); setFeedback(''); }
-  function tabKey(event: KeyboardEvent<HTMLButtonElement>, index: number) { let next = index; if (event.key === 'ArrowRight') next = (index + 1) % visibleTabs.length; else if (event.key === 'ArrowLeft') next = (index + visibleTabs.length - 1) % visibleTabs.length; else if (event.key === 'Home') next = 0; else if (event.key === 'End') next = visibleTabs.length - 1; else return; event.preventDefault(); navigate(visibleTabs[next].id); document.getElementById(`app-tab-${visibleTabs[next].id}`)?.focus(); }
+  function navigate(next: Screen) {
+    setScreen(next);
+    setFeedback('');
+  }
+  function tabKey(event: KeyboardEvent<HTMLButtonElement>, index: number) {
+    let next = index;
+    if (event.key === 'ArrowRight') next = (index + 1) % visibleTabs.length;
+    else if (event.key === 'ArrowLeft')
+      next = (index + visibleTabs.length - 1) % visibleTabs.length;
+    else if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = visibleTabs.length - 1;
+    else return;
+    event.preventDefault();
+    navigate(visibleTabs[next].id);
+    document.getElementById(`app-tab-${visibleTabs[next].id}`)?.focus();
+  }
   async function connect(event: FormEvent) {
     event.preventDefault();
-    try { const url = new URL(endpoint); if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password || url.hash) throw new Error(); } catch { setConnectionError('http 또는 https로 시작하는 서버 주소를 입력해 주세요.'); document.getElementById('connection-endpoint')?.focus(); return; }
-    if (!token.trim()) { setConnectionError('서버에 설정한 접근 토큰을 입력해 주세요.'); document.getElementById('connection-token')?.focus(); return; }
-    if (saveBusy.current) { setConnectionError('진행 중인 저장 요청이 끝난 뒤 다시 연결해 주세요.'); return; }
-    if ((pending || bookPending) && config && new URL(endpoint.trim()).toString() !== new URL(config.endpoint).toString()) { setConnectionError('저장 결과를 확인하는 동안에는 기존 서버 주소를 유지해 주세요.'); return; }
+    try {
+      const url = new URL(endpoint);
+      if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password || url.hash)
+        throw new Error();
+    } catch {
+      setConnectionError('http 또는 https로 시작하는 서버 주소를 입력해 주세요.');
+      document.getElementById('connection-endpoint')?.focus();
+      return;
+    }
+    if (!token.trim()) {
+      setConnectionError('서버에 설정한 접근 토큰을 입력해 주세요.');
+      document.getElementById('connection-token')?.focus();
+      return;
+    }
+    if (saveBusy.current) {
+      setConnectionError('진행 중인 저장 요청이 끝난 뒤 다시 연결해 주세요.');
+      return;
+    }
+    if (
+      (pending || bookPending) &&
+      config &&
+      new URL(endpoint.trim()).toString() !== new URL(config.endpoint).toString()
+    ) {
+      setConnectionError('저장 결과를 확인하는 동안에는 기존 서버 주소를 유지해 주세요.');
+      return;
+    }
     if (connecting) return;
     const attempt = ++connectionAttempt.current;
-    setConnectionError(''); setConnecting(true);
+    setConnectionError('');
+    setConnecting(true);
     try {
-      const handshake = await createLedgerClient({ endpoint: endpoint.trim(), token: token.trim() }).health();
+      const handshake = await createLedgerClient({
+        endpoint: endpoint.trim(),
+        token: token.trim(),
+      }).health();
       if (attempt !== connectionAttempt.current) return;
       const ledgerId = handshake.data?.health?.details?.ledgerId;
-      if (typeof ledgerId !== 'string' || !ledgerId) throw new Error(graphqlMessage(handshake.errors) || '원장 접근 권한을 확인하지 못했습니다. 서버 주소와 접근 토큰을 확인해 주세요.');
-      if ((pending || bookPending) && config && config.ledgerId !== ledgerId) throw new Error('기존 요청의 원장과 다릅니다. 원래 원장에 다시 연결해야 저장 결과를 확인할 수 있습니다.');
-      if (config && config.ledgerId !== ledgerId) { setEntry(blankEntry()); setEntryErrors({}); setSaveMessage(''); setSelectedAccount(''); setAccountId(''); setSelectedTransaction(''); setFeedback(/* i18n */ { id: 'web.forms.App.state.1', message: "연결 원장이 바뀌어 새 거래 입력을 비웠습니다." }); }
-      setHealth(handshake.data?.health); setConfig({ endpoint: endpoint.trim(), token: token.trim(), ledgerId }); closeSettings();
-      try { localStorage.setItem('hledger.endpoint', endpoint.trim()); } catch { /* Endpoint persistence is optional. */ }
-    } catch (error) { if (attempt === connectionAttempt.current) setConnectionError({ cause: error }); }
-    finally { if (attempt === connectionAttempt.current) setConnecting(false); }
+      if (typeof ledgerId !== 'string' || !ledgerId)
+        throw new Error(
+          graphqlMessage(handshake.errors) ||
+            '원장 접근 권한을 확인하지 못했습니다. 서버 주소와 접근 토큰을 확인해 주세요.',
+        );
+      if ((pending || bookPending) && config && config.ledgerId !== ledgerId)
+        throw new Error(
+          '기존 요청의 원장과 다릅니다. 원래 원장에 다시 연결해야 저장 결과를 확인할 수 있습니다.',
+        );
+      if (config && config.ledgerId !== ledgerId) {
+        setEntry(blankEntry());
+        setEntryErrors({});
+        setSaveMessage('');
+        setSelectedAccount('');
+        setAccountId('');
+        setSelectedTransaction('');
+        setFeedback(
+          /* i18n */ {
+            id: 'web.forms.App.state.1',
+            message: '연결 원장이 바뀌어 새 거래 입력을 비웠습니다.',
+          },
+        );
+      }
+      setHealth(handshake.data?.health);
+      setConfig({ endpoint: endpoint.trim(), token: token.trim(), ledgerId });
+      closeSettings();
+      try {
+        localStorage.setItem('hledger.endpoint', endpoint.trim());
+      } catch {
+        /* Endpoint persistence is optional. */
+      }
+    } catch (error) {
+      if (attempt === connectionAttempt.current) setConnectionError({ cause: error });
+    } finally {
+      if (attempt === connectionAttempt.current) setConnecting(false);
+    }
   }
-  function updateEntry(change: (old: Entry) => Entry) { if (pending || saving) return; setEntry(change); setEntryErrors({}); setSaveMessage(''); setSaveSuccess(false); }
+  function updateEntry(change: (old: Entry) => Entry) {
+    if (pending || saving) return;
+    setEntry(change);
+    setEntryErrors({});
+    setSaveMessage('');
+    setSaveSuccess(false);
+  }
   function copyTransaction(transaction: Transaction) {
-    if (pending || saving) { setFeedback(/* i18n */ { id: 'web.forms.App.state.2', message: "결과 확인이 필요한 거래를 먼저 재시도해 주세요." }); return; }
-    setEntryMode('normal'); setEntry({ date: today(), description: transaction.description, code: transaction.code ?? '', clientReference: '', postings: transaction.postings.map((posting) => ({ accountName: posting.accountName, memo: posting.memo ?? '', amount: { ...posting.amount }, ...(posting.cost ? { cost: { type: posting.cost.type, amount: { ...posting.cost.amount } } } : {}) })), tags: transaction.tags.map((tag) => ({ ...tag })) }); setEntryErrors({}); setSaveSuccess(false); setSaveMessage(''); setScreen('entry'); setFeedback(/* i18n */ { id: 'web.forms.App.state.3', message: "항목별 내역 {v0}개와 메모·태그를 모두 복사했습니다. 날짜는 오늘로 설정했습니다.", values: { v0: transaction.postings.length } });
+    if (pending || saving) {
+      setFeedback(
+        /* i18n */ {
+          id: 'web.forms.App.state.2',
+          message: '결과 확인이 필요한 거래를 먼저 재시도해 주세요.',
+        },
+      );
+      return;
+    }
+    setEntryMode('normal');
+    setEntry({
+      date: today(),
+      description: transaction.description,
+      code: transaction.code ?? '',
+      clientReference: '',
+      postings: transaction.postings.map((posting) => ({
+        accountName: posting.accountName,
+        memo: posting.memo ?? '',
+        amount: { ...posting.amount },
+        ...(posting.cost
+          ? { cost: { type: posting.cost.type, amount: { ...posting.cost.amount } } }
+          : {}),
+      })),
+      tags: transaction.tags.map((tag) => ({ ...tag })),
+    });
+    setEntryErrors({});
+    setSaveSuccess(false);
+    setSaveMessage('');
+    setScreen('entry');
+    setFeedback(
+      /* i18n */ {
+        id: 'web.forms.App.state.3',
+        message: '항목별 내역 {v0}개와 메모·태그를 모두 복사했습니다. 날짜는 오늘로 설정했습니다.',
+        values: { v0: transaction.postings.length },
+      },
+    );
     requestAnimationFrame(() => document.getElementById('entry-description')?.focus());
   }
   async function submitEntry(event: FormEvent) {
-    event.preventDefault(); if (!client || connecting || saveBusy.current) return;
+    event.preventDefault();
+    if (!client || connecting || saveBusy.current) return;
     const errors: Record<string, LocalMessage> = {};
-    if (!entry.date || !/^\d{4}-\d{2}-\d{2}$/.test(entry.date)) errors.date = /* i18n */ { id: 'web.forms.App.state.4', message: "거래 날짜를 입력해 주세요." };
-    if (!entry.description.trim()) errors.description = /* i18n */ { id: 'web.forms.App.state.5', message: "거래 내용을 입력해 주세요." };
-    draftPostings.forEach((posting, i) => { if (!posting.accountName.trim()) errors[`postings[${i}].accountName`] = /* i18n */ { id: 'web.forms.App.state.6', message: "항목 경로를 입력해 주세요." }; if (!decimal.test(posting.amount.value)) errors[`postings[${i}].amount.value`] = /* i18n */ { id: 'web.forms.App.state.7', message: "쉼표 없이 정확한 숫자를 입력해 주세요." }; if (!posting.amount.commodity.trim()) errors[`postings[${i}].amount.commodity`] = /* i18n */ { id: 'web.forms.App.state.8', message: "자산을 입력해 주세요." }; });
-    const keys = new Set<string>(); entry.tags.forEach((tag, i) => { if (keys.has(tag.key)) errors[`tags[${i}].key`] = /* i18n */ { id: 'web.forms.App.state.9', message: "같은 태그 키는 한 번만 사용할 수 있습니다." }; keys.add(tag.key); });
-    if (!balanced) errors.input = tradeError || /* i18n */ { id: 'web.forms.App.state.10', message: "가격을 반영한 자산별 금액의 합계가 0이 되어야 합니다." };
-    if (!pending && Object.keys(errors).length) { setEntryErrors(errors); focusError(errors); return; }
-    const input: CreateTransactionInput = pending ?? { idempotencyKey: newIdempotencyKey(), date: entry.date, description: entry.description, ...(entry.code ? { code: entry.code } : {}), ...(entry.clientReference ? { clientReference: entry.clientReference } : {}), postings: draftPostings.map((posting) => ({ accountName: posting.accountName, amount: { ...posting.amount }, ...(posting.cost ? { cost: { type: posting.cost.type, amount: { ...posting.cost.amount } } } : {}), ...(posting.memo ? { memo: posting.memo } : {}) })), tags: entry.tags.map((tag) => ({ ...tag })) };
+    if (!entry.date || !/^\d{4}-\d{2}-\d{2}$/.test(entry.date))
+      errors.date = /* i18n */ {
+        id: 'web.forms.App.state.4',
+        message: '거래 날짜를 입력해 주세요.',
+      };
+    if (!entry.description.trim())
+      errors.description = /* i18n */ {
+        id: 'web.forms.App.state.5',
+        message: '거래 내용을 입력해 주세요.',
+      };
+    draftPostings.forEach((posting, i) => {
+      if (!posting.accountName.trim())
+        errors[`postings[${i}].accountName`] = /* i18n */ {
+          id: 'web.forms.App.state.6',
+          message: '항목 경로를 입력해 주세요.',
+        };
+      if (!decimal.test(posting.amount.value))
+        errors[`postings[${i}].amount.value`] = /* i18n */ {
+          id: 'web.forms.App.state.7',
+          message: '쉼표 없이 정확한 숫자를 입력해 주세요.',
+        };
+      if (!posting.amount.commodity.trim())
+        errors[`postings[${i}].amount.commodity`] = /* i18n */ {
+          id: 'web.forms.App.state.8',
+          message: '자산을 입력해 주세요.',
+        };
+    });
+    const keys = new Set<string>();
+    entry.tags.forEach((tag, i) => {
+      if (keys.has(tag.key))
+        errors[`tags[${i}].key`] = /* i18n */ {
+          id: 'web.forms.App.state.9',
+          message: '같은 태그 키는 한 번만 사용할 수 있습니다.',
+        };
+      keys.add(tag.key);
+    });
+    if (!balanced)
+      errors.input = tradeError || /* i18n */ {
+        id: 'web.forms.App.state.10',
+        message: '가격을 반영한 자산별 금액의 합계가 0이 되어야 합니다.',
+      };
+    if (!pending && Object.keys(errors).length) {
+      setEntryErrors(errors);
+      focusError(errors);
+      return;
+    }
+    const input: CreateTransactionInput = pending ?? {
+      idempotencyKey: newIdempotencyKey(),
+      date: entry.date,
+      description: entry.description,
+      ...(entry.code ? { code: entry.code } : {}),
+      ...(entry.clientReference ? { clientReference: entry.clientReference } : {}),
+      postings: draftPostings.map((posting) => ({
+        accountName: posting.accountName,
+        amount: { ...posting.amount },
+        ...(posting.cost
+          ? { cost: { type: posting.cost.type, amount: { ...posting.cost.amount } } }
+          : {}),
+        ...(posting.memo ? { memo: posting.memo } : {}),
+      })),
+      tags: entry.tags.map((tag) => ({ ...tag })),
+    };
     assetUnits.remember(input.postings.map((posting) => posting.amount.commodity));
     const wasPending = pending !== null;
-    saveBusy.current = true; setSaving(true); setSaveMessage(''); setSaveSuccess(false); setEntryErrors({});
+    saveBusy.current = true;
+    setSaving(true);
+    setSaveMessage('');
+    setSaveSuccess(false);
+    setEntryErrors({});
     try {
       const result = await client.createTransaction(input);
       const payload = result.data?.createTransaction;
       if (payload?.transaction) {
-        setPending(null); setEntry(blankEntry()); setTrade(blankTrade()); setSaveSuccess(true); setSaveMessage(/* i18n */ { id: 'web.forms.App.state.11', message: "{replayed, select, yes {기존 저장 결과를 확인했습니다} other {거래를 원장에 저장했습니다}} · {v1}{v2}", values: { replayed: payload.idempotency?.replayed ? 'yes' : 'no', v1: payload.transaction.description, v2: result.errors?.length ? ` · ${graphqlMessage(result.errors)}` : '' } }); setRevision((n) => n + 1);
+        setPending(null);
+        setEntry(blankEntry());
+        setTrade(blankTrade());
+        setSaveSuccess(true);
+        setSaveMessage(
+          /* i18n */ {
+            id: 'web.forms.App.state.11',
+            message:
+              '{replayed, select, yes {기존 저장 결과를 확인했습니다} other {거래를 원장에 저장했습니다}} · {v1}{v2}',
+            values: {
+              replayed: payload.idempotency?.replayed ? 'yes' : 'no',
+              v1: payload.transaction.description,
+              v2: result.errors?.length ? ` · ${graphqlMessage(result.errors)}` : '',
+            },
+          },
+        );
+        setRevision((n) => n + 1);
       } else if (payload?.errors.length) {
-        setPending(wasPending ? input : null); const fields = Object.fromEntries(payload.errors.map((error) => [error.path, error.message])); setEntryErrors(fields); setSaveMessage(wasPending ? /* i18n */ { id: 'web.forms.App.state.12', message: "이번 재시도는 거부되었지만 원래 저장 결과는 아직 불명확합니다. 같은 요청을 유지합니다. {v0}", values: { v0: Object.values(fields).join(' · ') } } : graphqlMessage(result.errors) ?? /* i18n */ { id: 'web.forms.App.state.13', message: "입력 내용을 확인해 주세요." }); if (!wasPending) focusError(fields);
-      } else if (result.errors?.length && result.errors.every((error) => ['UNAUTHENTICATED', 'FORBIDDEN', 'INVALID_INPUT', 'GRAPHQL_VALIDATION_FAILED'].includes(String(error.extensions?.code)))) {
-        setPending(wasPending ? input : null); setSaveMessage(/* i18n */ { id: 'web.forms.App.state.14', message: "{pending, select, yes {이번 재시도는 거부되었지만 원래 저장 결과는 아직 불명확합니다. 연결 설정에서 같은 원장의 토큰을 갱신한 뒤 같은 요청으로 확인해 주세요.} other {요청이 거부되어 저장하지 못했습니다. 연결 설정이나 입력을 확인해 주세요.}} {v1}", values: { pending: wasPending ? 'yes' : 'no', v1: graphqlMessage(result.errors) } });
-      } else { setPending(input); setSaveMessage(/* i18n */ { id: 'web.forms.App.state.15', message: "저장 결과를 확인하지 못했습니다. 입력을 고정해 두었습니다. 같은 요청으로 결과를 확인해 주세요.{v0}", values: { v0: result.errors?.length ? ` ${graphqlMessage(result.errors)}` : '' } }); }
+        setPending(wasPending ? input : null);
+        const fields = Object.fromEntries(
+          payload.errors.map((error) => [error.path, error.message]),
+        );
+        setEntryErrors(fields);
+        setSaveMessage(
+          wasPending
+            ? /* i18n */ {
+                id: 'web.forms.App.state.12',
+                message:
+                  '이번 재시도는 거부되었지만 원래 저장 결과는 아직 불명확합니다. 같은 요청을 유지합니다. {v0}',
+                values: { v0: Object.values(fields).join(' · ') },
+              }
+            : (graphqlMessage(result.errors) ?? /* i18n */ {
+                id: 'web.forms.App.state.13',
+                message: '입력 내용을 확인해 주세요.',
+              }),
+        );
+        if (!wasPending) focusError(fields);
+      } else if (
+        result.errors?.length &&
+        result.errors.every((error) =>
+          ['UNAUTHENTICATED', 'FORBIDDEN', 'INVALID_INPUT', 'GRAPHQL_VALIDATION_FAILED'].includes(
+            String(error.extensions?.code),
+          ),
+        )
+      ) {
+        setPending(wasPending ? input : null);
+        setSaveMessage(
+          /* i18n */ {
+            id: 'web.forms.App.state.14',
+            message:
+              '{pending, select, yes {이번 재시도는 거부되었지만 원래 저장 결과는 아직 불명확합니다. 연결 설정에서 같은 원장의 토큰을 갱신한 뒤 같은 요청으로 확인해 주세요.} other {요청이 거부되어 저장하지 못했습니다. 연결 설정이나 입력을 확인해 주세요.}} {v1}',
+            values: { pending: wasPending ? 'yes' : 'no', v1: graphqlMessage(result.errors) },
+          },
+        );
+      } else {
+        setPending(input);
+        setSaveMessage(
+          /* i18n */ {
+            id: 'web.forms.App.state.15',
+            message:
+              '저장 결과를 확인하지 못했습니다. 입력을 고정해 두었습니다. 같은 요청으로 결과를 확인해 주세요.{v0}',
+            values: { v0: result.errors?.length ? ` ${graphqlMessage(result.errors)}` : '' },
+          },
+        );
+      }
     } catch (error) {
-      if (error instanceof LedgerTransportError && error.kind === 'http' && [401, 403, 409].includes(error.status ?? 0)) { setPending(wasPending ? input : null); setSaveMessage(/* i18n */ { id: 'web.forms.App.state.16', message: "{pending, select, yes {이번 재시도는 거부되었지만 원래 저장 결과는 아직 불명확합니다. 원래 원장에 연결하고 같은 요청으로 확인해 주세요.} other {요청이 거부되어 저장하지 못했습니다. 연결 대상과 접근 토큰을 다시 확인해 주세요.}}", values: { pending: wasPending ? 'yes' : 'no' } }); setSaveTransportError({ cause: error }); }
-      else { setPending(input); setSaveMessage(/* i18n */ { id: 'web.forms.App.state.17', message: "저장 결과가 불명확합니다. 같은 요청으로 결과를 확인해 주세요." }); setSaveTransportError({ cause: error }); }
+      if (
+        error instanceof LedgerTransportError &&
+        error.kind === 'http' &&
+        [401, 403, 409].includes(error.status ?? 0)
+      ) {
+        setPending(wasPending ? input : null);
+        setSaveMessage(
+          /* i18n */ {
+            id: 'web.forms.App.state.16',
+            message:
+              '{pending, select, yes {이번 재시도는 거부되었지만 원래 저장 결과는 아직 불명확합니다. 원래 원장에 연결하고 같은 요청으로 확인해 주세요.} other {요청이 거부되어 저장하지 못했습니다. 연결 대상과 접근 토큰을 다시 확인해 주세요.}}',
+            values: { pending: wasPending ? 'yes' : 'no' },
+          },
+        );
+        setSaveTransportError({ cause: error });
+      } else {
+        setPending(input);
+        setSaveMessage(
+          /* i18n */ {
+            id: 'web.forms.App.state.17',
+            message: '저장 결과가 불명확합니다. 같은 요청으로 결과를 확인해 주세요.',
+          },
+        );
+        setSaveTransportError({ cause: error });
+      }
+    } finally {
+      saveBusy.current = false;
+      setSaving(false);
     }
-    finally { saveBusy.current = false; setSaving(false); }
   }
-  function focusError(errors: Record<string, LocalMessage>) { const path = Object.keys(errors).find((key) => key !== 'input'); requestAnimationFrame(() => document.getElementById(path ? `entry-${path}` : 'entry-error-summary')?.focus()); }
-  const dateControls = <div className="app-date-controls"><Field label={_(/* i18n */ { id: 'web.forms.App.8', message: "시작일" })} type="date" value={from} max={to || undefined} onChange={(event) => setFrom(event.target.value)} /><Field label={_(/* i18n */ { id: 'web.forms.App.9', message: "종료일" })} type="date" value={to} min={from || undefined} onChange={(event) => setTo(event.target.value)} /></div>;
-  const moreButton = (data: { loading: boolean; stale?: boolean; page?: Page; more: () => void }) => data.page?.hasNextPage && <div className="app-more"><Button variant="secondary" disabled={data.loading || data.stale} onClick={data.more}>{data.loading ? _(/* i18n */ { id: 'web.forms.App.10', message: "읽는 중…" }) : _(/* i18n */ { id: 'web.forms.App.11', message: "더 불러오기" })}</Button></div>;
-  return <AssetMetadataProvider client={client} revision={revision}><div className="ledger-app gallery-shell"><a className="skip-link" href="#main">{_(/* i18n */ { id: 'web.settings.6', message: "본문으로 이동" })}</a><div className="main-shell"><header className="topbar"><a className="brand" href="/" aria-label={_(/* i18n */ { id: 'web.settings.1', message: "hledger 개인 원장" })}><span className="brand-mark" aria-hidden="true"><i /><i /><i /></span><h1>hledger<span className="brand-caption">{_(/* i18n */ { id: 'web.settings.7', message: "개인 원장" })}</span></h1></a><nav className="gallery-nav" aria-label={_(/* i18n */ { id: 'web.settings.2', message: "도구" })}><a href="/gallery">{_(/* i18n */ { id: 'web.nav.gallery', message: "디자인 갤러리" })}</a><Button data-testid="nav-settings" id="app-settings-button" variant="quiet" aria-current={settings ? 'page' : undefined} onClick={openSettings}>{_(/* i18n */ { id: 'nav.settings', message: "설정" })}</Button></nav></header><main id="main">
-      {settings && <section className="app-settings" id="app-settings" aria-labelledby="settings-title">
-        <div className="app-settings-heading"><div><h2 id="settings-title" tabIndex={-1}>{_(/* i18n */ { id: 'nav.settings', message: "설정" })}</h2><p>{_(/* i18n */ { id: 'web.settings.11', message: "원장 연결 정보와 현재 상태를 확인합니다." })}</p></div><Button variant="secondary" data-testid="nav-back" onClick={closeSettings}>{_(/* i18n */ { id: 'web.nav.back', message: "돌아가기" })}<Icon name="arrow" /></Button></div>
-        <section aria-label={_(/* i18n */ { id: 'settings.language', message: "언어" })}><h3>{_(/* i18n */ { id: 'settings.language', message: "언어" })}</h3><Button data-testid="locale-ko" variant="secondary" aria-pressed={i18n.locale === 'ko'} onClick={() => selectLocale('ko')}>{_(/* i18n */ { id: 'web.forms.App.23', message: "한국어" })}</Button> <Button data-testid="locale-en" variant="secondary" aria-pressed={i18n.locale === 'en'} onClick={() => selectLocale('en')}>English</Button></section>
-        <section className="app-connection" aria-labelledby="connection-title"><div><span className="eyebrow">{_(/* i18n */ { id: 'settings.localLedger', message: "로컬 원장" })}</span><h2 id="connection-title">{config ? _(/* i18n */ { id: 'web.settings.27', message: "원장 연결 설정" }) : _(/* i18n */ { id: 'web.settings.28', message: "내 원장과 연결하세요" })}</h2><p>{_(/* i18n */ { id: 'web.settings.13', message: "실행 중인 원장 서버 주소와 접근 토큰을 입력하세요." })}<br />{_(/* i18n */ { id: 'web.settings.14', message: "토큰은 현재 창을 닫거나 새로고침하면 사라집니다." })}</p></div><form onSubmit={connect} className="app-connection-form"><Field id="connection-endpoint" label={_(/* i18n */ { id: 'web.settings.3', message: "서버 주소" })} type="url" value={endpoint} onChange={(event) => setEndpoint(event.target.value)} required disabled={connecting || saving || Boolean(pending)} /><Field id="connection-token" label={_(/* i18n */ { id: 'web.settings.4', message: "접근 토큰" })} type="password" autoComplete="off" value={token} onChange={(event) => setToken(event.target.value)} required disabled={connecting || saving} />{connectionError && <Notice title={displayError(connectionError)} tone="danger" />}<Button type="submit" disabled={connecting || saving}>{connecting ? _(/* i18n */ { id: 'web.settings.29', message: "연결 확인 중…" }) : _(/* i18n */ { id: 'web.settings.30', message: "원장 연결" })} <Icon name="arrow" /></Button></form></section>
-        {config && <div className="sync-view"><div className="sync-summary"><span className="sync-icon"><Icon name="sync" /></span><Badge tone={health?.connectionStatus === 'CONNECTED' && !healthError ? 'success' : 'warning'}>{healthBusy ? _(/* i18n */ { id: 'web.settings.31', message: "확인 중" }) : health?.connectionStatus === 'CONNECTED' && !healthError ? _(/* i18n */ { id: 'web.settings.32', message: "원장 연결됨" }) : _(/* i18n */ { id: 'web.settings.33', message: "연결 확인 필요" })}</Badge><h4>{_(/* i18n */ { id: 'web.settings.15', message: "원장의 현재 연결 상태" })}</h4><p>{_(/* i18n */ { id: 'web.settings.16', message: "연결 상태와 원장 자료 조회 권한은 각각 확인합니다." })}</p></div>{healthError && <Notice tone="danger" title={_(/* i18n */ { id: 'web.settings.5', message: "연결 상태를 읽지 못했습니다" })}>{displayError(healthError)}</Notice>}<dl className="sync-details"><div><dt>{_(/* i18n */ { id: 'web.settings.17', message: "연결 대상" })}</dt><dd>{config.endpoint}</dd></div><div><dt>{_(/* i18n */ { id: 'web.settings.18', message: "마지막 성공 동기화" })}</dt><dd>{health?.lastSuccessfulSyncAt ? new Date(health.lastSuccessfulSyncAt).toLocaleString(i18n.locale === 'en' ? 'en-US' : 'ko-KR') : _(/* i18n */ { id: 'web.settings.34', message: "아직 성공한 원장 조회가 없습니다" })}</dd></div><div><dt>{_(/* i18n */ { id: 'web.settings.19', message: "원장 반영 지연" })}</dt><dd>{health?.indexerLagSeconds == null ? _(/* i18n */ { id: 'web.settings.35', message: "알 수 없음" }) : _(/* i18n */ { id: 'settings.lagSeconds', message: "{seconds}초", values: { seconds: health.indexerLagSeconds } })}</dd></div><div><dt>{_(/* i18n */ { id: 'web.settings.20', message: "서버 버전 / 상태" })}</dt><dd>{health ? `${health.version} / ${health.status}` : _(/* i18n */ { id: 'web.settings.36', message: "알 수 없음" })}</dd></div><div><dt>{_(/* i18n */ { id: 'web.settings.21', message: "저장 확인 대기" })}</dt><dd>{pending ? _(/* i18n */ { id: 'web.settings.37', message: "1건 · 새 거래 화면에서 같은 요청으로 확인" }) : _(/* i18n */ { id: 'web.settings.38', message: "없음" })}</dd></div></dl><Button variant="secondary" disabled={healthBusy} onClick={() => setRevision((n) => n + 1)}>{_(/* i18n */ { id: 'web.settings.22', message: "다시 읽기 " })}<Icon name="sync" /></Button></div>}
-      </section>}
-      {client && <BookModuleHost key={client.identity} client={client} ledgerId={config!.ledgerId} revision={revision} settings={settings} visible={screen === 'books'} disabled={connecting} onPendingChange={setBookPending} onEnabled={setBooksEnabled} onChanged={() => setRevision((n) => n + 1)} />}
-      {!settings && !config && <section className="app-welcome" aria-labelledby="welcome-title"><span className="eyebrow">{_(/* i18n */ { id: 'web.settings.23', message: "개인 원장" })}</span><h2 id="welcome-title">{_(/* i18n */ { id: 'web.settings.24', message: "내 원장과 연결하세요" })}</h2><p>{_(/* i18n */ { id: 'web.settings.25', message: "설정에서 서버 주소와 접근 토큰을 입력하면 항목과 거래를 볼 수 있습니다." })}</p><Button onClick={openSettings}>{_(/* i18n */ { id: 'web.settings.26', message: "설정으로 이동 " })}<Icon name="arrow" /></Button></section>}
-      {config && <section hidden={settings} className="screen-preview app-workspace" aria-label={_(/* i18n */ { id: 'web.forms.App.55', message: "원장" })}><div className="screen-tabs" role="tablist" aria-label={_(/* i18n */ { id: 'web.forms.App.56', message: "원장 화면" })}>{visibleTabs.map((tab, index) => <button key={tab.id} role="tab" id={`app-tab-${tab.id}`} aria-selected={screen === tab.id} tabIndex={screen === tab.id ? 0 : -1} aria-controls="app-screen" onClick={() => navigate(tab.id)} onKeyDown={(event) => tabKey(event, index)}><Icon name={tab.icon} />{_(tab.label)}</button>)}</div><div className="screen-body" role="tabpanel" id="app-screen" aria-labelledby={`app-tab-${screen}`}><div className="screen-heading"><div><span className="eyebrow">{today()}{_(/* i18n */ { id: 'web.forms.App.57', message: " · 개인 원장" })}</span><h3>{_(copy[screen][0])}</h3><p>{_(copy[screen][1])}</p></div>{screen === 'accounts' ? <Button onClick={() => navigate('entry')}><Icon name="plus" />{_(/* i18n */ { id: 'web.forms.App.58', message: "거래 입력" })}</Button> : <Button variant="quiet" onClick={() => setRevision((n) => n + 1)} disabled={healthBusy}><Icon name="sync" />{_(/* i18n */ { id: 'web.forms.App.59', message: "새로 읽기" })}</Button>}</div><div className="action-feedback" role="status">{localMessage(feedback)}</div>
-      {(screen === 'accounts' || screen === 'transactions' || screen === 'prices') && <>{dateControls}{invalidDates && <Notice tone="danger" title={_(/* i18n */ { id: 'web.forms.App.60', message: "시작일이 종료일보다 늦습니다" })}>{_(/* i18n */ { id: 'web.forms.App.61', message: "날짜 범위를 수정해 주세요." })}</Notice>}</>}
-      {screen === 'accounts' && <><RemoteStatus {...accounts} count={visibleAccounts.length} /><div className="accounts-layout"><aside className="account-overview">{featured ? <div className="balance-feature"><div className="balance-feature__top"><span><Icon name="accounts" />{_(/* i18n */ { id: 'web.forms.App.62', message: "선택한 항목" })}</span><span>{to || _(/* i18n */ { id: 'web.forms.App.63', message: "전체 기간" })}</span></div><h4>{featured.name}</h4><p className="feature-path">{featured.fullName}</p><div className="feature-balances"><Amounts values={featured.balances} /></div><div className="feature-meta"><span>{_(/* i18n */ { id: 'web.forms.App.64', message: "최근 거래" })}</span><strong>{featured.lastPostedDate ?? _(/* i18n */ { id: 'web.forms.App.65', message: "아직 없음" })}</strong></div><Button className="feature-action" variant="secondary" onClick={() => { setAccountId(featured.id); setAccountQuery(''); setQuery(''); setScreen('transactions'); }}>{_(/* i18n */ { id: 'web.forms.App.66', message: "이 항목의 거래 " })}<Icon name="arrow" /></Button></div> : <div className="balance-feature"><span className="eyebrow">{_(/* i18n */ { id: 'web.forms.App.67', message: "자산별 잔액" })}</span><h4>{_(/* i18n */ { id: 'web.forms.App.68', message: "항목을 선택하세요" })}</h4><p className="feature-path">{_(/* i18n */ { id: 'web.forms.App.69', message: "원장에서 읽은 항목이 여기에 표시됩니다." })}</p></div>}<p className="overview-note"><Icon name="info" />{_(/* i18n */ { id: 'web.forms.App.70', message: "잔액은 종료일까지의 누계입니다." })}<br />{_(/* i18n */ { id: 'web.forms.App.71', message: "다른 자산은 합산하지 않습니다." })}</p></aside><div className="accounts-ledger"><div className="accounts-ledger__heading"><h4>{_(/* i18n */ { id: 'web.forms.App.72', message: "전체 항목 " })}<span>{visibleAccounts.length}</span></h4><label className="app-check"><input type="checkbox" checked={subaccounts} onChange={(event) => setSubaccounts(event.target.checked)} />{_(/* i18n */ { id: 'web.forms.App.73', message: "하위 항목 포함" })}</label></div><div className="list-toolbar account-search"><span className="search-glyph"><Icon name="search" /></span><Field label={_(/* i18n */ { id: 'web.forms.App.74', message: "항목 검색" })} type="search" maxLength={200} placeholder={_(/* i18n */ { id: 'web.forms.App.75', message: "항목 이름이나 경로 검색" })} value={accountQuery} onChange={(event) => setAccountQuery(event.target.value)} /></div>{[...groups].map(([name, group]) => <section className="account-group" key={name} aria-label={`${name} ${accountGroupNoun(name)}`}><div className="account-group__heading"><h5>{name}</h5><span>{group.length}{_(/* i18n */ { id: 'web.forms.App.76', message: "개 " })}{accountGroupNoun(name)}</span></div>{group.map((account) => <div key={account.id} className="app-account-branch" style={{ '--account-indent': `${Math.min(account.depth - 1, 5) * 10}px` } as React.CSSProperties}><AccountRow name={account.name} path={account.fullName} balances={account.balances} count={account.transactionCount} selected={featured?.id === account.id} onClick={() => setSelectedAccount(account.id)} /></div>)}</section>)}{!accounts.loading && !accounts.error && !visibleAccounts.length && <Empty title={_(/* i18n */ { id: 'web.forms.App.77', message: "찾는 항목이 없습니다" })} />}{moreButton(accounts)}</div></div></>}
-      {screen === 'transactions' && <><form className="app-filters" onSubmit={(event) => { event.preventDefault(); transactions.restart(); }}><Field label={_(/* i18n */ { id: 'web.forms.App.78', message: "거래 검색" })} type="search" value={query} maxLength={200} placeholder={_(/* i18n */ { id: 'web.forms.App.79', message: "내용·항목·태그 검색" })} onChange={(event) => setQuery(event.target.value)} /><label className="field">{_(/* i18n */ { id: 'web.forms.App.80', message: "항목" })}<select value={accountId} onChange={(event) => { setAccountId(event.target.value); setSelectedTransaction(''); }}><option value="">{_(/* i18n */ { id: 'web.forms.App.81', message: "전체 항목" })}</option>{visibleAccounts.map((account) => <option key={account.id} value={account.id}>{account.fullName}</option>)}</select></label><Field label={_(/* i18n */ { id: 'web.forms.App.82', message: "태그 키" })} value={tagKey} onChange={(event) => setTagKey(event.target.value)} placeholder={_(/* i18n */ { id: 'web.forms.App.83', message: "예: project" })} /><Field label={_(/* i18n */ { id: 'web.forms.App.84', message: "태그 값" })} value={tagValue} onChange={(event) => setTagValue(event.target.value)} placeholder={_(/* i18n */ { id: 'web.forms.App.85', message: "정확한 값" })} /><label className="app-check"><input type="checkbox" checked={subaccounts} onChange={(event) => setSubaccounts(event.target.checked)} />{_(/* i18n */ { id: 'web.forms.App.86', message: "하위 항목 거래 포함" })}</label><Button variant="quiet" onClick={() => { setQuery(''); setAccountId(''); setTagKey(''); setTagValue(''); }}>{_(/* i18n */ { id: 'web.forms.App.87', message: "필터 지우기" })}</Button></form>{transactions.meta && <PeriodBalances detail={transactions.meta} from={from} to={to} includeSubaccounts={subaccounts} />}<RemoteStatus {...transactions} count={transactions.rows?.length ?? 0} />{(transactions.rows ?? []).map((transaction) => <div key={transaction.id}><TransactionRow date={transaction.date} description={transaction.description} account={transaction.postings.map((posting) => posting.accountName).join(' → ')} amount={transaction.postings[0].amount} status={transaction.status.toLowerCase() as 'unmarked' | 'pending' | 'cleared'} selected={selectedTransaction === transaction.id} onClick={() => setSelectedTransaction(selectedTransaction === transaction.id ? '' : transaction.id)} />{selectedTransaction === transaction.id && <div className="transaction-detail"><div className="app-detail-heading"><span className="eyebrow">{_(/* i18n */ { id: 'web.forms.App.88', message: "항목별 내역 · " })}{transaction.postings.length}{_(/* i18n */ { id: 'web.forms.App.89', message: "개" })}</span><Button variant="secondary" disabled={saving || Boolean(pending)} onClick={() => copyTransaction(transaction)}>{_(/* i18n */ { id: 'web.forms.App.90', message: "거래 복사 " })}<Icon name="plus" /></Button></div>{transaction.postings.map((posting, i) => <div className="detail-posting" key={i}><span>{posting.accountName}{posting.memo && <small>{posting.memo}</small>}</span><Money {...posting.amount} /></div>)}<div className="detail-tags">{transaction.tags.map((tag) => <Badge key={tag.key}>{tag.key}: {tag.value}</Badge>)}<span>{_(/* i18n */ { id: 'web.forms.App.91', message: "출처: " })}{transaction.source}{transaction.code ? _(/* i18n */ { id: 'web.forms.App.92', message: " · 참고 번호: {v0}", values: { v0: transaction.code } }) : ''}{transaction.createdAt ? _(/* i18n */ { id: 'web.forms.App.93', message: " · 생성: {v0}", values: { v0: transaction.createdAt } }) : ''}</span></div></div>}</div>)}{!transactions.loading && !transactions.error && !transactions.rows?.length && <Empty />}{moreButton(transactions)}<p className="list-footnote">{_(/* i18n */ { id: 'web.forms.App.94', message: "목록 금액은 첫 번째 항목의 금액입니다. 거래를 선택하면 항목별 내역을 볼 수 있습니다." })}</p></>}
-      {screen === 'entry' && <form noValidate className="entry-form" onSubmit={submitEntry} onKeyDown={(event) => { if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') { event.preventDefault(); event.currentTarget.requestSubmit(); } }}><div id="entry-error-summary" tabIndex={-1}>{Object.keys(entryErrors).length > 0 && <Notice tone="danger" title={_(/* i18n */ { id: 'web.forms.App.95', message: "수정이 필요한 항목이 있습니다" })}>{Object.values(entryErrors).map(localMessage).join(' · ')}</Notice>}</div>{saveMessage && <Notice tone={saveSuccess ? 'success' : pending ? 'warning' : 'danger'} title={saveSuccess ? _(/* i18n */ { id: 'web.forms.App.96', message: "저장 완료" }) : pending ? _(/* i18n */ { id: 'web.forms.App.97', message: "저장 결과 확인 필요" }) : _(/* i18n */ { id: 'web.forms.App.98', message: "저장하지 못했습니다" })}>{localMessage(saveMessage)}{saveTransportError && <> {displayError(saveTransportError)}</>}</Notice>}{pending && <p className="form-help">{_(/* i18n */ { id: 'web.forms.App.99', message: "입력과 원장을 고정했습니다. 연결 설정에서 같은 원장의 토큰을 갱신할 수 있습니다. 아래 버튼은 같은 중복 방지 키로 원래 요청을 재시도합니다. 이 창을 닫으면 확인 정보가 사라집니다." })}</p>}<fieldset disabled={saving || Boolean(pending)} className="app-fieldset"><div className="entry-basics"><Field id="entry-date" error={entryErrors.date ? localMessage(entryErrors.date) : undefined} label={_(/* i18n */ { id: 'web.forms.App.100', message: "날짜" })} type="date" value={entry.date} onChange={(event) => updateEntry((old) => ({ ...old, date: event.target.value }))} required /><Field id="entry-description" error={entryErrors.description ? localMessage(entryErrors.description) : undefined} label={_(/* i18n */ { id: 'web.forms.App.101', message: "내용" })} value={entry.description} onChange={(event) => updateEntry((old) => ({ ...old, description: event.target.value }))} maxLength={512} required placeholder={_(/* i18n */ { id: 'web.forms.App.102', message: "어떤 거래였나요?" })} /></div><div className="app-entry-extra"><Field id="entry-code" error={entryErrors.code ? localMessage(entryErrors.code) : undefined} label={_(/* i18n */ { id: 'web.forms.App.103', message: "참고 번호 (선택)" })} hint={_(/* i18n */ { id: 'web.forms.App.104', message: "영수증 번호나 주문 번호처럼 거래를 찾을 때 참고할 번호입니다. 없어도 됩니다." })} maxLength={64} value={entry.code} onChange={(event) => updateEntry((old) => ({ ...old, code: event.target.value }))} /><Field id="entry-clientReference" error={entryErrors.clientReference ? localMessage(entryErrors.clientReference) : undefined} label={_(/* i18n */ { id: 'web.forms.App.105', message: "외부 서비스 참조 (선택)" })} hint={_(/* i18n */ { id: 'web.forms.App.106', message: "다른 서비스와 연결할 때 사용하는 별도 식별자입니다. 직접 입력하는 거래에서는 비워 두어도 됩니다." })} maxLength={128} value={entry.clientReference} onChange={(event) => updateEntry((old) => ({ ...old, clientReference: event.target.value }))} /></div><label className="field">{_(/* i18n */ { id: 'web.forms.App.107', message: "거래 종류" })}<select value={entryMode} onChange={(event) => { setEntryMode(event.target.value as 'normal' | 'trade'); setEntryErrors({}); }}><option value="normal">{_(/* i18n */ { id: 'web.forms.App.108', message: "일반 거래" })}</option><option value="trade">{_(/* i18n */ { id: 'web.forms.App.109', message: "주식 매매" })}</option></select></label><datalist id="ledger-account-options">{visibleAccounts.map((account) => <option value={account.fullName} key={account.id} />)}</datalist>{entryMode === 'trade' ? <TradeFields value={trade} onChange={(next) => { setTrade(next); setEntryErrors({}); setSaveMessage(''); }} customValues={assetUnits.values} onCommit={assetUnits.remember} /> : <><div className="form-divider"><h4>{_(/* i18n */ { id: 'web.forms.App.110', message: "항목별 내역" })}</h4><Badge>{entry.postings.length}{_(/* i18n */ { id: 'web.forms.App.111', message: "개" })}</Badge></div><p className="form-help">{_(/* i18n */ { id: 'web.forms.App.112', message: "돈이 오간 항목과 금액을 한 줄씩 입력하세요. 빠져나간 금액은 음수, 들어온 금액은 양수로 적습니다. 가격을 반영한 자산별 합계가 0이 되어야 합니다." })}</p><p id="entry-asset-unit-help" className="form-help asset-unit-help">{_(/* i18n */ { id: 'web.forms.App.113', message: "KRW·USD 등 기본 통화를 검색하거나 BTC·AAPL·005930 같은 자산을 직접 입력할 수 있습니다. 검색에서 선택한 종목은 종목 ID로 저장하며, 직접 입력한 값은 그대로 저장합니다." })}</p>{entry.postings.map((posting, i) => <section className="app-posting" key={i} aria-label={_(/* i18n */ { id: 'web.forms.App.114', message: "내역 {v0}", values: { v0: i + 1 } })}><div className="app-posting-title"><strong>{_(/* i18n */ { id: 'web.forms.App.115', message: "내역 " })}{i + 1}</strong><Button variant="quiet" disabled={entry.postings.length <= 2} onClick={() => updateEntry((old) => ({ ...old, postings: old.postings.filter((_, index) => index !== i) }))} aria-label={_(/* i18n */ { id: 'web.forms.App.116', message: "내역 {v0} 삭제", values: { v0: i + 1 } })}>{_(/* i18n */ { id: 'web.forms.App.117', message: "삭제" })}</Button></div><div className="app-posting-fields"><Field id={`entry-postings[${i}].accountName`} error={entryErrors[`postings[${i}].accountName`] ? localMessage(entryErrors[`postings[${i}].accountName`]) : undefined} label={_(/* i18n */ { id: 'web.forms.App.118', message: "항목" })} list="ledger-account-options" value={posting.accountName} required onChange={(event) => updateEntry((old) => ({ ...old, postings: old.postings.map((p, index) => index === i ? { ...p, accountName: event.target.value } : p) }))} /><Field id={`entry-postings[${i}].amount.value`} error={entryErrors[`postings[${i}].amount.value`] ? localMessage(entryErrors[`postings[${i}].amount.value`]) : undefined} label={_(/* i18n */ { id: 'web.forms.App.119', message: "금액 / 수량" })} inputMode="decimal" autoComplete="off" spellCheck={false} value={posting.amount.value} required placeholder={_(/* i18n */ { id: 'web.forms.App.120', message: "예: -6500.00" })} onChange={(event) => updateEntry((old) => ({ ...old, postings: old.postings.map((p, index) => index === i ? { ...p, amount: { ...p.amount, value: event.target.value } } : p) }))} /><AssetUnitField requestContext={entry} customValues={assetUnits.values} onCommit={assetUnits.remember} aria-describedby="entry-asset-unit-help" id={`entry-postings[${i}].amount.commodity`} error={entryErrors[`postings[${i}].amount.commodity`] ? localMessage(entryErrors[`postings[${i}].amount.commodity`]) : undefined} label={_(/* i18n */ { id: 'web.forms.App.121', message: "자산" })} value={posting.amount.commodity} required onValueChange={(commodity) => updateEntry((old) => ({ ...old, postings: old.postings.map((p, index) => index === i ? { ...p, amount: { ...p.amount, commodity } } : p) }))} onChange={(event) => updateEntry((old) => ({ ...old, postings: old.postings.map((p, index) => index === i ? { ...p, amount: { ...p.amount, commodity: event.target.value } } : p) }))} /></div>{posting.cost && <div className="app-posting-fields"><label className="field">{_(/* i18n */ { id: 'web.forms.App.122', message: "가격 방식" })}<select value={posting.cost.type} onChange={(event) => updateEntry((old) => ({ ...old, postings: old.postings.map((p, index) => index === i ? { ...p, cost: { ...p.cost!, type: event.target.value as 'UNIT' | 'TOTAL' } } : p) }))}><option value="UNIT">{_(/* i18n */ { id: 'web.forms.App.123', message: "단가" })}</option><option value="TOTAL">{_(/* i18n */ { id: 'web.forms.App.124', message: "총액" })}</option></select></label><Field label={_(/* i18n */ { id: 'web.forms.App.125', message: "가격" })} value={posting.cost.amount.value} inputMode="decimal" onChange={(event) => updateEntry((old) => ({ ...old, postings: old.postings.map((p, index) => index === i ? { ...p, cost: { ...p.cost!, amount: { ...p.cost!.amount, value: event.target.value } } } : p) }))} /><AssetUnitField requestContext={entry} label={_(/* i18n */ { id: 'web.forms.App.126', message: "가격 통화" })} value={posting.cost.amount.commodity} customValues={assetUnits.values} onCommit={assetUnits.remember} onValueChange={(commodity) => updateEntry((old) => ({ ...old, postings: old.postings.map((p, index) => index === i ? { ...p, cost: { ...p.cost!, amount: { ...p.cost!.amount, commodity } } } : p) }))} onChange={(event) => updateEntry((old) => ({ ...old, postings: old.postings.map((p, index) => index === i ? { ...p, cost: { ...p.cost!, amount: { ...p.cost!.amount, commodity: event.target.value } } } : p) }))} /></div>}<Field id={`entry-postings[${i}].memo`} error={entryErrors[`postings[${i}].memo`] ? localMessage(entryErrors[`postings[${i}].memo`]) : undefined} label={_(/* i18n */ { id: 'web.forms.App.127', message: "내역 메모 (선택)" })} maxLength={1000} value={posting.memo} onChange={(event) => updateEntry((old) => ({ ...old, postings: old.postings.map((p, index) => index === i ? { ...p, memo: event.target.value } : p) }))} /></section>)}<Button variant="secondary" className="app-add" onClick={() => updateEntry((old) => ({ ...old, postings: [...old.postings, { accountName: '', memo: '', amount: { commodity: old.postings[0].amount.commodity, value: '' } }] }))}><Icon name="plus" />{_(/* i18n */ { id: 'web.forms.App.128', message: "내역 추가" })}</Button><div className={`balance-check ${balanced ? 'is-balanced' : ''}`} role="status"><Icon name={balanced ? 'check' : 'alert'} /><div>{balanced ? _(/* i18n */ { id: 'web.forms.App.129', message: "입력한 금액의 합계가 0입니다." }) : _(/* i18n */ { id: 'web.forms.App.130', message: "입력한 금액의 합계를 확인해 주세요." })}{[...entrySums].map(([unit, sum]) => <span className="app-balance-sum" key={unit}><Money commodity={unit || _(/* i18n */ { id: 'web.forms.App.131', message: "자산 미입력" })} value={sum} /></span>)}</div></div></>}<div className="form-divider"><h4>{_(/* i18n */ { id: 'web.forms.App.132', message: "태그" })}</h4><Button variant="quiet" onClick={() => updateEntry((old) => ({ ...old, tags: [...old.tags, { key: '', value: '' }] }))}><Icon name="plus" />{_(/* i18n */ { id: 'web.forms.App.133', message: "태그 추가" })}</Button></div>{entry.tags.map((tag, i) => <div className="app-tag-entry" key={i}><Field id={`entry-tags[${i}].key`} error={entryErrors[`tags[${i}].key`] ? localMessage(entryErrors[`tags[${i}].key`]) : undefined} label={_(/* i18n */ { id: 'web.forms.App.134', message: "태그 {v0} 키", values: { v0: i + 1 } })} value={tag.key} onChange={(event) => updateEntry((old) => ({ ...old, tags: old.tags.map((t, index) => index === i ? { ...t, key: event.target.value } : t) }))} /><Field id={`entry-tags[${i}].value`} error={entryErrors[`tags[${i}].value`] ? localMessage(entryErrors[`tags[${i}].value`]) : undefined} label={_(/* i18n */ { id: 'web.forms.App.135', message: "태그 {v0} 값", values: { v0: i + 1 } })} value={tag.value} onChange={(event) => updateEntry((old) => ({ ...old, tags: old.tags.map((t, index) => index === i ? { ...t, value: event.target.value } : t) }))} /><Button variant="quiet" aria-label={_(/* i18n */ { id: 'web.forms.App.136', message: "태그 {v0} 삭제", values: { v0: i + 1 } })} onClick={() => updateEntry((old) => ({ ...old, tags: old.tags.filter((_, index) => index !== i) }))}>{_(/* i18n */ { id: 'web.forms.App.137', message: "삭제" })}</Button></div>)}</fieldset><div className="form-footer"><p>{pending ? _(/* i18n */ { id: 'web.forms.App.138', message: "원래 요청의 저장 결과를 확인합니다." }) : _(/* i18n */ { id: 'web.forms.App.139', message: "연결된 원장에 실제로 기록합니다." })}<br /><span>{_(/* i18n */ { id: 'web.forms.App.140', message: "⌘ / Ctrl + Enter로 저장" })}</span></p><Button type="submit" disabled={saving || connecting}>{saving ? _(/* i18n */ { id: 'web.forms.App.141', message: "원장 확인 중…" }) : pending ? _(/* i18n */ { id: 'web.forms.App.142', message: "같은 요청으로 결과 확인" }) : _(/* i18n */ { id: 'web.forms.App.143', message: "거래 저장" })}<Icon name="arrow" /></Button></div></form>}
-      {screen === 'prices' && <><form className="app-filters app-price-filters" onSubmit={(event) => { event.preventDefault(); assetUnits.remember([commodity, quoteCommodity]); prices.restart(); }}><AssetUnitField customValues={assetUnits.values} onCommit={assetUnits.remember} aria-describedby="price-asset-unit-help" label={_(/* i18n */ { id: 'web.forms.App.144', message: "자산" })} value={commodity} placeholder={_(/* i18n */ { id: 'web.forms.App.145', message: "예: USD, BTC" })} onValueChange={setCommodity} onChange={(event) => setCommodity(event.target.value)} /><AssetUnitField customValues={assetUnits.values} onCommit={assetUnits.remember} aria-describedby="price-asset-unit-help" label={_(/* i18n */ { id: 'web.forms.App.146', message: "기준 자산" })} value={quoteCommodity} placeholder={_(/* i18n */ { id: 'web.forms.App.147', message: "예: KRW" })} onValueChange={setQuoteCommodity} onChange={(event) => setQuoteCommodity(event.target.value)} /><Button variant="quiet" onClick={() => { setCommodity(''); setQuoteCommodity(''); }}>{_(/* i18n */ { id: 'web.forms.App.148', message: "필터 지우기" })}</Button></form><p id="price-asset-unit-help" className="form-help asset-unit-help">{_(/* i18n */ { id: 'web.forms.App.149', message: "KRW·USD 등 기본 통화를 검색하거나 BTC·AAPL·005930 같은 자산을 직접 입력할 수 있습니다. 1 자산의 시세를 기준 자산으로 표시합니다." })}</p><RemoteStatus {...prices} count={prices.rows?.length ?? 0} />{(prices.rows ?? []).map((price, i) => <div className="price-row" key={`${price.date}-${price.commodity}-${i}`}><span className="row-copy price-asset-copy"><strong><AssetIdentity commodity={price.commodity} /><span className="muted"> / </span><AssetIdentity commodity={price.quoteCommodity} /></strong><span>{price.date} · {price.source ?? _(/* i18n */ { id: 'web.forms.App.150', message: "출처 미기록" })}</span></span><Money value={price.rate} commodity={price.quoteCommodity} /></div>)}{!prices.loading && !prices.error && !prices.rows?.length && <Empty title={_(/* i18n */ { id: 'web.forms.App.151', message: "기록된 시세가 없습니다" })} />}{moreButton(prices)}<p className="list-footnote">{_(/* i18n */ { id: 'web.forms.App.152', message: "1단위당 시세입니다. 잔액을 자동 환산하거나 서로 다른 자산을 합산하지 않습니다." })}</p></>}
+  function focusError(errors: Record<string, LocalMessage>) {
+    const path = Object.keys(errors).find((key) => key !== 'input');
+    requestAnimationFrame(() =>
+      document.getElementById(path ? `entry-${path}` : 'entry-error-summary')?.focus(),
+    );
+  }
+  const dateControls = (
+    <div className="app-date-controls">
+      <Field
+        label={_(/* i18n */ { id: 'web.forms.App.8', message: '시작일' })}
+        type="date"
+        value={from}
+        max={to || undefined}
+        onChange={(event) => setFrom(event.target.value)}
+      />
+      <Field
+        label={_(/* i18n */ { id: 'web.forms.App.9', message: '종료일' })}
+        type="date"
+        value={to}
+        min={from || undefined}
+        onChange={(event) => setTo(event.target.value)}
+      />
+    </div>
+  );
+  const moreButton = (data: { loading: boolean; stale?: boolean; page?: Page; more: () => void }) =>
+    data.page?.hasNextPage && (
+      <div className="app-more">
+        <Button variant="secondary" disabled={data.loading || data.stale} onClick={data.more}>
+          {data.loading
+            ? _(/* i18n */ { id: 'web.forms.App.10', message: '읽는 중…' })
+            : _(/* i18n */ { id: 'web.forms.App.11', message: '더 불러오기' })}
+        </Button>
+      </div>
+    );
+  return (
+    <AssetMetadataProvider client={client} revision={revision}>
+      <div className="ledger-app gallery-shell">
+        <a className="skip-link" href="#main">
+          {_(/* i18n */ { id: 'web.settings.6', message: '본문으로 이동' })}
+        </a>
+        <div className="main-shell">
+          <header className="topbar">
+            <a
+              className="brand"
+              href={import.meta.env.BASE_URL}
+              aria-label={_(/* i18n */ { id: 'web.settings.1', message: 'hledger 개인 원장' })}
+            >
+              <span className="brand-mark" aria-hidden="true">
+                <i />
+                <i />
+                <i />
+              </span>
+              <h1>
+                hledger
+                <span className="brand-caption">
+                  {_(/* i18n */ { id: 'web.settings.7', message: '개인 원장' })}
+                </span>
+              </h1>
+            </a>
+            <nav
+              className="gallery-nav"
+              aria-label={_(/* i18n */ { id: 'web.settings.2', message: '도구' })}
+            >
+              <a href={`${import.meta.env.BASE_URL}gallery/`}>
+                {_(/* i18n */ { id: 'web.nav.gallery', message: '디자인 갤러리' })}
+              </a>
+              <Button
+                data-testid="nav-settings"
+                id="app-settings-button"
+                variant="quiet"
+                aria-current={settings ? 'page' : undefined}
+                onClick={openSettings}
+              >
+                {_(/* i18n */ { id: 'nav.settings', message: '설정' })}
+              </Button>
+            </nav>
+          </header>
+          <main id="main">
+            {settings && (
+              <section className="app-settings" id="app-settings" aria-labelledby="settings-title">
+                <div className="app-settings-heading">
+                  <div>
+                    <h2 id="settings-title" tabIndex={-1}>
+                      {_(/* i18n */ { id: 'nav.settings', message: '설정' })}
+                    </h2>
+                    <p>
+                      {_(
+                        /* i18n */ {
+                          id: 'web.settings.11',
+                          message: '원장 연결 정보와 현재 상태를 확인합니다.',
+                        },
+                      )}
+                    </p>
+                  </div>
+                  <Button variant="secondary" data-testid="nav-back" onClick={closeSettings}>
+                    {_(/* i18n */ { id: 'web.nav.back', message: '돌아가기' })}
+                    <Icon name="arrow" />
+                  </Button>
+                </div>
+                <section aria-label={_(/* i18n */ { id: 'settings.language', message: '언어' })}>
+                  <h3>{_(/* i18n */ { id: 'settings.language', message: '언어' })}</h3>
+                  <Button
+                    data-testid="locale-ko"
+                    variant="secondary"
+                    aria-pressed={i18n.locale === 'ko'}
+                    onClick={() => selectLocale('ko')}
+                  >
+                    {_(/* i18n */ { id: 'web.forms.App.23', message: '한국어' })}
+                  </Button>{' '}
+                  <Button
+                    data-testid="locale-en"
+                    variant="secondary"
+                    aria-pressed={i18n.locale === 'en'}
+                    onClick={() => selectLocale('en')}
+                  >
+                    English
+                  </Button>
+                </section>
+                <section className="app-connection" aria-labelledby="connection-title">
+                  <div>
+                    <span className="eyebrow">
+                      {_(/* i18n */ { id: 'settings.localLedger', message: '로컬 원장' })}
+                    </span>
+                    <h2 id="connection-title">
+                      {config
+                        ? _(/* i18n */ { id: 'web.settings.27', message: '원장 연결 설정' })
+                        : _(/* i18n */ { id: 'web.settings.28', message: '내 원장과 연결하세요' })}
+                    </h2>
+                    <p>
+                      {_(
+                        /* i18n */ {
+                          id: 'web.settings.13',
+                          message: '실행 중인 원장 서버 주소와 접근 토큰을 입력하세요.',
+                        },
+                      )}
+                      <br />
+                      {_(
+                        /* i18n */ {
+                          id: 'web.settings.14',
+                          message: '토큰은 현재 창을 닫거나 새로고침하면 사라집니다.',
+                        },
+                      )}
+                    </p>
+                  </div>
+                  <form onSubmit={connect} className="app-connection-form">
+                    <Field
+                      id="connection-endpoint"
+                      label={_(/* i18n */ { id: 'web.settings.3', message: '서버 주소' })}
+                      type="url"
+                      value={endpoint}
+                      onChange={(event) => setEndpoint(event.target.value)}
+                      required
+                      disabled={connecting || saving || Boolean(pending)}
+                    />
+                    <Field
+                      id="connection-token"
+                      label={_(/* i18n */ { id: 'web.settings.4', message: '접근 토큰' })}
+                      type="password"
+                      autoComplete="off"
+                      value={token}
+                      onChange={(event) => setToken(event.target.value)}
+                      required
+                      disabled={connecting || saving}
+                    />
+                    {connectionError && (
+                      <Notice title={displayError(connectionError)} tone="danger" />
+                    )}
+                    <Button type="submit" disabled={connecting || saving}>
+                      {connecting
+                        ? _(/* i18n */ { id: 'web.settings.29', message: '연결 확인 중…' })
+                        : _(/* i18n */ { id: 'web.settings.30', message: '원장 연결' })}{' '}
+                      <Icon name="arrow" />
+                    </Button>
+                  </form>
+                </section>
+                {config && (
+                  <div className="sync-view">
+                    <div className="sync-summary">
+                      <span className="sync-icon">
+                        <Icon name="sync" />
+                      </span>
+                      <Badge
+                        tone={
+                          health?.connectionStatus === 'CONNECTED' && !healthError
+                            ? 'success'
+                            : 'warning'
+                        }
+                      >
+                        {healthBusy
+                          ? _(/* i18n */ { id: 'web.settings.31', message: '확인 중' })
+                          : health?.connectionStatus === 'CONNECTED' && !healthError
+                            ? _(/* i18n */ { id: 'web.settings.32', message: '원장 연결됨' })
+                            : _(/* i18n */ { id: 'web.settings.33', message: '연결 확인 필요' })}
+                      </Badge>
+                      <h4>
+                        {_(/* i18n */ { id: 'web.settings.15', message: '원장의 현재 연결 상태' })}
+                      </h4>
+                      <p>
+                        {_(
+                          /* i18n */ {
+                            id: 'web.settings.16',
+                            message: '연결 상태와 원장 자료 조회 권한은 각각 확인합니다.',
+                          },
+                        )}
+                      </p>
+                    </div>
+                    {healthError && (
+                      <Notice
+                        tone="danger"
+                        title={_(
+                          /* i18n */ {
+                            id: 'web.settings.5',
+                            message: '연결 상태를 읽지 못했습니다',
+                          },
+                        )}
+                      >
+                        {displayError(healthError)}
+                      </Notice>
+                    )}
+                    <dl className="sync-details">
+                      <div>
+                        <dt>{_(/* i18n */ { id: 'web.settings.17', message: '연결 대상' })}</dt>
+                        <dd>{config.endpoint}</dd>
+                      </div>
+                      <div>
+                        <dt>
+                          {_(/* i18n */ { id: 'web.settings.18', message: '마지막 성공 동기화' })}
+                        </dt>
+                        <dd>
+                          {health?.lastSuccessfulSyncAt
+                            ? new Date(health.lastSuccessfulSyncAt).toLocaleString(
+                                i18n.locale === 'en' ? 'en-US' : 'ko-KR',
+                              )
+                            : _(
+                                /* i18n */ {
+                                  id: 'web.settings.34',
+                                  message: '아직 성공한 원장 조회가 없습니다',
+                                },
+                              )}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt>
+                          {_(/* i18n */ { id: 'web.settings.19', message: '원장 반영 지연' })}
+                        </dt>
+                        <dd>
+                          {health?.indexerLagSeconds == null
+                            ? _(/* i18n */ { id: 'web.settings.35', message: '알 수 없음' })
+                            : _(
+                                /* i18n */ {
+                                  id: 'settings.lagSeconds',
+                                  message: '{seconds}초',
+                                  values: { seconds: health.indexerLagSeconds },
+                                },
+                              )}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt>
+                          {_(/* i18n */ { id: 'web.settings.20', message: '서버 버전 / 상태' })}
+                        </dt>
+                        <dd>
+                          {health
+                            ? `${health.version} / ${health.status}`
+                            : _(/* i18n */ { id: 'web.settings.36', message: '알 수 없음' })}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt>
+                          {_(/* i18n */ { id: 'web.settings.21', message: '저장 확인 대기' })}
+                        </dt>
+                        <dd>
+                          {pending
+                            ? _(
+                                /* i18n */ {
+                                  id: 'web.settings.37',
+                                  message: '1건 · 새 거래 화면에서 같은 요청으로 확인',
+                                },
+                              )
+                            : _(/* i18n */ { id: 'web.settings.38', message: '없음' })}
+                        </dd>
+                      </div>
+                    </dl>
+                    <Button
+                      variant="secondary"
+                      disabled={healthBusy}
+                      onClick={() => setRevision((n) => n + 1)}
+                    >
+                      {_(/* i18n */ { id: 'web.settings.22', message: '다시 읽기 ' })}
+                      <Icon name="sync" />
+                    </Button>
+                  </div>
+                )}
+              </section>
+            )}
+            {client && (
+              <BookModuleHost
+                key={client.identity}
+                client={client}
+                ledgerId={config!.ledgerId}
+                revision={revision}
+                settings={settings}
+                visible={screen === 'books'}
+                disabled={connecting}
+                onPendingChange={setBookPending}
+                onEnabled={setBooksEnabled}
+                onChanged={() => setRevision((n) => n + 1)}
+              />
+            )}
+            {!settings && !config && (
+              <section className="app-welcome" aria-labelledby="welcome-title">
+                <span className="eyebrow">
+                  {_(/* i18n */ { id: 'web.settings.23', message: '개인 원장' })}
+                </span>
+                <h2 id="welcome-title">
+                  {_(/* i18n */ { id: 'web.settings.24', message: '내 원장과 연결하세요' })}
+                </h2>
+                <p>
+                  {_(
+                    /* i18n */ {
+                      id: 'web.settings.25',
+                      message:
+                        '설정에서 서버 주소와 접근 토큰을 입력하면 항목과 거래를 볼 수 있습니다.',
+                    },
+                  )}
+                </p>
+                <Button onClick={openSettings}>
+                  {_(/* i18n */ { id: 'web.settings.26', message: '설정으로 이동 ' })}
+                  <Icon name="arrow" />
+                </Button>
+              </section>
+            )}
+            {config && (
+              <section
+                hidden={settings}
+                className="screen-preview app-workspace"
+                aria-label={_(/* i18n */ { id: 'web.forms.App.55', message: '원장' })}
+              >
+                <div
+                  className="screen-tabs"
+                  role="tablist"
+                  aria-label={_(/* i18n */ { id: 'web.forms.App.56', message: '원장 화면' })}
+                >
+                  {visibleTabs.map((tab, index) => (
+                    <button
+                      key={tab.id}
+                      role="tab"
+                      id={`app-tab-${tab.id}`}
+                      aria-selected={screen === tab.id}
+                      tabIndex={screen === tab.id ? 0 : -1}
+                      aria-controls="app-screen"
+                      onClick={() => navigate(tab.id)}
+                      onKeyDown={(event) => tabKey(event, index)}
+                    >
+                      <Icon name={tab.icon} />
+                      {_(tab.label)}
+                    </button>
+                  ))}
+                </div>
+                <div
+                  className="screen-body"
+                  role="tabpanel"
+                  id="app-screen"
+                  aria-labelledby={`app-tab-${screen}`}
+                >
+                  <div className="screen-heading">
+                    <div>
+                      <span className="eyebrow">
+                        {today()}
+                        {_(/* i18n */ { id: 'web.forms.App.57', message: ' · 개인 원장' })}
+                      </span>
+                      <h3>{_(copy[screen][0])}</h3>
+                      <p>{_(copy[screen][1])}</p>
+                    </div>
+                    {screen === 'accounts' ? (
+                      <Button onClick={() => navigate('entry')}>
+                        <Icon name="plus" />
+                        {_(/* i18n */ { id: 'web.forms.App.58', message: '거래 입력' })}
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="quiet"
+                        onClick={() => setRevision((n) => n + 1)}
+                        disabled={healthBusy}
+                      >
+                        <Icon name="sync" />
+                        {_(/* i18n */ { id: 'web.forms.App.59', message: '새로 읽기' })}
+                      </Button>
+                    )}
+                  </div>
+                  <div className="action-feedback" role="status">
+                    {localMessage(feedback)}
+                  </div>
+                  {(screen === 'accounts' || screen === 'transactions' || screen === 'prices') && (
+                    <>
+                      {dateControls}
+                      {invalidDates && (
+                        <Notice
+                          tone="danger"
+                          title={_(
+                            /* i18n */ {
+                              id: 'web.forms.App.60',
+                              message: '시작일이 종료일보다 늦습니다',
+                            },
+                          )}
+                        >
+                          {_(
+                            /* i18n */ {
+                              id: 'web.forms.App.61',
+                              message: '날짜 범위를 수정해 주세요.',
+                            },
+                          )}
+                        </Notice>
+                      )}
+                    </>
+                  )}
+                  {screen === 'accounts' && (
+                    <>
+                      <RemoteStatus {...accounts} count={visibleAccounts.length} />
+                      <div className="accounts-layout">
+                        <aside className="account-overview">
+                          {featured ? (
+                            <div className="balance-feature">
+                              <div className="balance-feature__top">
+                                <span>
+                                  <Icon name="accounts" />
+                                  {_(/* i18n */ { id: 'web.forms.App.62', message: '선택한 항목' })}
+                                </span>
+                                <span>
+                                  {to ||
+                                    _(/* i18n */ { id: 'web.forms.App.63', message: '전체 기간' })}
+                                </span>
+                              </div>
+                              <h4>{featured.name}</h4>
+                              <p className="feature-path">{featured.fullName}</p>
+                              <div className="feature-balances">
+                                <Amounts values={featured.balances} />
+                              </div>
+                              <div className="feature-meta">
+                                <span>
+                                  {_(/* i18n */ { id: 'web.forms.App.64', message: '최근 거래' })}
+                                </span>
+                                <strong>
+                                  {featured.lastPostedDate ??
+                                    _(/* i18n */ { id: 'web.forms.App.65', message: '아직 없음' })}
+                                </strong>
+                              </div>
+                              <Button
+                                className="feature-action"
+                                variant="secondary"
+                                onClick={() => {
+                                  setAccountId(featured.id);
+                                  setAccountQuery('');
+                                  setQuery('');
+                                  setScreen('transactions');
+                                }}
+                              >
+                                {_(
+                                  /* i18n */ { id: 'web.forms.App.66', message: '이 항목의 거래 ' },
+                                )}
+                                <Icon name="arrow" />
+                              </Button>
+                            </div>
+                          ) : (
+                            <div className="balance-feature">
+                              <span className="eyebrow">
+                                {_(/* i18n */ { id: 'web.forms.App.67', message: '자산별 잔액' })}
+                              </span>
+                              <h4>
+                                {_(
+                                  /* i18n */ {
+                                    id: 'web.forms.App.68',
+                                    message: '항목을 선택하세요',
+                                  },
+                                )}
+                              </h4>
+                              <p className="feature-path">
+                                {_(
+                                  /* i18n */ {
+                                    id: 'web.forms.App.69',
+                                    message: '원장에서 읽은 항목이 여기에 표시됩니다.',
+                                  },
+                                )}
+                              </p>
+                            </div>
+                          )}
+                          <p className="overview-note">
+                            <Icon name="info" />
+                            {_(
+                              /* i18n */ {
+                                id: 'web.forms.App.70',
+                                message: '잔액은 종료일까지의 누계입니다.',
+                              },
+                            )}
+                            <br />
+                            {_(
+                              /* i18n */ {
+                                id: 'web.forms.App.71',
+                                message: '다른 자산은 합산하지 않습니다.',
+                              },
+                            )}
+                          </p>
+                        </aside>
+                        <div className="accounts-ledger">
+                          <div className="accounts-ledger__heading">
+                            <h4>
+                              {_(/* i18n */ { id: 'web.forms.App.72', message: '전체 항목 ' })}
+                              <span>{visibleAccounts.length}</span>
+                            </h4>
+                            <label className="app-check">
+                              <input
+                                type="checkbox"
+                                checked={subaccounts}
+                                onChange={(event) => setSubaccounts(event.target.checked)}
+                              />
+                              {_(/* i18n */ { id: 'web.forms.App.73', message: '하위 항목 포함' })}
+                            </label>
+                          </div>
+                          <div className="list-toolbar account-search">
+                            <span className="search-glyph">
+                              <Icon name="search" />
+                            </span>
+                            <Field
+                              label={_(/* i18n */ { id: 'web.forms.App.74', message: '항목 검색' })}
+                              type="search"
+                              maxLength={200}
+                              placeholder={_(
+                                /* i18n */ {
+                                  id: 'web.forms.App.75',
+                                  message: '항목 이름이나 경로 검색',
+                                },
+                              )}
+                              value={accountQuery}
+                              onChange={(event) => setAccountQuery(event.target.value)}
+                            />
+                          </div>
+                          {[...groups].map(([name, group]) => (
+                            <section
+                              className="account-group"
+                              key={name}
+                              aria-label={`${name} ${accountGroupNoun(name)}`}
+                            >
+                              <div className="account-group__heading">
+                                <h5>{name}</h5>
+                                <span>
+                                  {group.length}
+                                  {_(/* i18n */ { id: 'web.forms.App.76', message: '개 ' })}
+                                  {accountGroupNoun(name)}
+                                </span>
+                              </div>
+                              {group.map((account) => (
+                                <div
+                                  key={account.id}
+                                  className="app-account-branch"
+                                  style={
+                                    {
+                                      '--account-indent': `${Math.min(account.depth - 1, 5) * 10}px`,
+                                    } as React.CSSProperties
+                                  }
+                                >
+                                  <AccountRow
+                                    name={account.name}
+                                    path={account.fullName}
+                                    balances={account.balances}
+                                    count={account.transactionCount}
+                                    selected={featured?.id === account.id}
+                                    onClick={() => setSelectedAccount(account.id)}
+                                  />
+                                </div>
+                              ))}
+                            </section>
+                          ))}
+                          {!accounts.loading && !accounts.error && !visibleAccounts.length && (
+                            <Empty
+                              title={_(
+                                /* i18n */ {
+                                  id: 'web.forms.App.77',
+                                  message: '찾는 항목이 없습니다',
+                                },
+                              )}
+                            />
+                          )}
+                          {moreButton(accounts)}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  {screen === 'transactions' && (
+                    <>
+                      <form
+                        className="app-filters"
+                        onSubmit={(event) => {
+                          event.preventDefault();
+                          transactions.restart();
+                        }}
+                      >
+                        <Field
+                          label={_(/* i18n */ { id: 'web.forms.App.78', message: '거래 검색' })}
+                          type="search"
+                          value={query}
+                          maxLength={200}
+                          placeholder={_(
+                            /* i18n */ { id: 'web.forms.App.79', message: '내용·항목·태그 검색' },
+                          )}
+                          onChange={(event) => setQuery(event.target.value)}
+                        />
+                        <label className="field">
+                          {_(/* i18n */ { id: 'web.forms.App.80', message: '항목' })}
+                          <select
+                            value={accountId}
+                            onChange={(event) => {
+                              setAccountId(event.target.value);
+                              setSelectedTransaction('');
+                            }}
+                          >
+                            <option value="">
+                              {_(/* i18n */ { id: 'web.forms.App.81', message: '전체 항목' })}
+                            </option>
+                            {visibleAccounts.map((account) => (
+                              <option key={account.id} value={account.id}>
+                                {account.fullName}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                        <Field
+                          label={_(/* i18n */ { id: 'web.forms.App.82', message: '태그 키' })}
+                          value={tagKey}
+                          onChange={(event) => setTagKey(event.target.value)}
+                          placeholder={_(
+                            /* i18n */ { id: 'web.forms.App.83', message: '예: project' },
+                          )}
+                        />
+                        <Field
+                          label={_(/* i18n */ { id: 'web.forms.App.84', message: '태그 값' })}
+                          value={tagValue}
+                          onChange={(event) => setTagValue(event.target.value)}
+                          placeholder={_(
+                            /* i18n */ { id: 'web.forms.App.85', message: '정확한 값' },
+                          )}
+                        />
+                        <label className="app-check">
+                          <input
+                            type="checkbox"
+                            checked={subaccounts}
+                            onChange={(event) => setSubaccounts(event.target.checked)}
+                          />
+                          {_(/* i18n */ { id: 'web.forms.App.86', message: '하위 항목 거래 포함' })}
+                        </label>
+                        <Button
+                          variant="quiet"
+                          onClick={() => {
+                            setQuery('');
+                            setAccountId('');
+                            setTagKey('');
+                            setTagValue('');
+                          }}
+                        >
+                          {_(/* i18n */ { id: 'web.forms.App.87', message: '필터 지우기' })}
+                        </Button>
+                      </form>
+                      {transactions.meta && (
+                        <PeriodBalances
+                          detail={transactions.meta}
+                          from={from}
+                          to={to}
+                          includeSubaccounts={subaccounts}
+                        />
+                      )}
+                      <RemoteStatus {...transactions} count={transactions.rows?.length ?? 0} />
+                      {(transactions.rows ?? []).map((transaction) => (
+                        <div key={transaction.id}>
+                          <TransactionRow
+                            date={transaction.date}
+                            description={transaction.description}
+                            account={transaction.postings
+                              .map((posting) => posting.accountName)
+                              .join(' → ')}
+                            amount={transaction.postings[0].amount}
+                            status={
+                              transaction.status.toLowerCase() as 'unmarked' | 'pending' | 'cleared'
+                            }
+                            selected={selectedTransaction === transaction.id}
+                            onClick={() =>
+                              setSelectedTransaction(
+                                selectedTransaction === transaction.id ? '' : transaction.id,
+                              )
+                            }
+                          />
+                          {selectedTransaction === transaction.id && (
+                            <div className="transaction-detail">
+                              <div className="app-detail-heading">
+                                <span className="eyebrow">
+                                  {_(
+                                    /* i18n */ {
+                                      id: 'web.forms.App.88',
+                                      message: '항목별 내역 · ',
+                                    },
+                                  )}
+                                  {transaction.postings.length}
+                                  {_(/* i18n */ { id: 'web.forms.App.89', message: '개' })}
+                                </span>
+                                <Button
+                                  variant="secondary"
+                                  disabled={saving || Boolean(pending)}
+                                  onClick={() => copyTransaction(transaction)}
+                                >
+                                  {_(/* i18n */ { id: 'web.forms.App.90', message: '거래 복사 ' })}
+                                  <Icon name="plus" />
+                                </Button>
+                              </div>
+                              {transaction.postings.map((posting, i) => (
+                                <div className="detail-posting" key={i}>
+                                  <span>
+                                    {posting.accountName}
+                                    {posting.memo && <small>{posting.memo}</small>}
+                                  </span>
+                                  <Money {...posting.amount} />
+                                </div>
+                              ))}
+                              <div className="detail-tags">
+                                {transaction.tags.map((tag) => (
+                                  <Badge key={tag.key}>
+                                    {tag.key}: {tag.value}
+                                  </Badge>
+                                ))}
+                                <span>
+                                  {_(/* i18n */ { id: 'web.forms.App.91', message: '출처: ' })}
+                                  {transaction.source}
+                                  {transaction.code
+                                    ? _(
+                                        /* i18n */ {
+                                          id: 'web.forms.App.92',
+                                          message: ' · 참고 번호: {v0}',
+                                          values: { v0: transaction.code },
+                                        },
+                                      )
+                                    : ''}
+                                  {transaction.createdAt
+                                    ? _(
+                                        /* i18n */ {
+                                          id: 'web.forms.App.93',
+                                          message: ' · 생성: {v0}',
+                                          values: { v0: transaction.createdAt },
+                                        },
+                                      )
+                                    : ''}
+                                </span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                      {!transactions.loading &&
+                        !transactions.error &&
+                        !transactions.rows?.length && <Empty />}
+                      {moreButton(transactions)}
+                      <p className="list-footnote">
+                        {_(
+                          /* i18n */ {
+                            id: 'web.forms.App.94',
+                            message:
+                              '목록 금액은 첫 번째 항목의 금액입니다. 거래를 선택하면 항목별 내역을 볼 수 있습니다.',
+                          },
+                        )}
+                      </p>
+                    </>
+                  )}
+                  {screen === 'entry' && (
+                    <form
+                      noValidate
+                      className="entry-form"
+                      onSubmit={submitEntry}
+                      onKeyDown={(event) => {
+                        if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+                          event.preventDefault();
+                          event.currentTarget.requestSubmit();
+                        }
+                      }}
+                    >
+                      <div id="entry-error-summary" tabIndex={-1}>
+                        {Object.keys(entryErrors).length > 0 && (
+                          <Notice
+                            tone="danger"
+                            title={_(
+                              /* i18n */ {
+                                id: 'web.forms.App.95',
+                                message: '수정이 필요한 항목이 있습니다',
+                              },
+                            )}
+                          >
+                            {Object.values(entryErrors).map(localMessage).join(' · ')}
+                          </Notice>
+                        )}
+                      </div>
+                      {saveMessage && (
+                        <Notice
+                          tone={saveSuccess ? 'success' : pending ? 'warning' : 'danger'}
+                          title={
+                            saveSuccess
+                              ? _(/* i18n */ { id: 'web.forms.App.96', message: '저장 완료' })
+                              : pending
+                                ? _(
+                                    /* i18n */ {
+                                      id: 'web.forms.App.97',
+                                      message: '저장 결과 확인 필요',
+                                    },
+                                  )
+                                : _(
+                                    /* i18n */ {
+                                      id: 'web.forms.App.98',
+                                      message: '저장하지 못했습니다',
+                                    },
+                                  )
+                          }
+                        >
+                          {localMessage(saveMessage)}
+                          {saveTransportError && <> {displayError(saveTransportError)}</>}
+                        </Notice>
+                      )}
+                      {pending && (
+                        <p className="form-help">
+                          {_(
+                            /* i18n */ {
+                              id: 'web.forms.App.99',
+                              message:
+                                '입력과 원장을 고정했습니다. 연결 설정에서 같은 원장의 토큰을 갱신할 수 있습니다. 아래 버튼은 같은 중복 방지 키로 원래 요청을 재시도합니다. 이 창을 닫으면 확인 정보가 사라집니다.',
+                            },
+                          )}
+                        </p>
+                      )}
+                      <fieldset disabled={saving || Boolean(pending)} className="app-fieldset">
+                        <div className="entry-basics">
+                          <Field
+                            id="entry-date"
+                            error={entryErrors.date ? localMessage(entryErrors.date) : undefined}
+                            label={_(/* i18n */ { id: 'web.forms.App.100', message: '날짜' })}
+                            type="date"
+                            value={entry.date}
+                            onChange={(event) =>
+                              updateEntry((old) => ({ ...old, date: event.target.value }))
+                            }
+                            required
+                          />
+                          <Field
+                            id="entry-description"
+                            error={
+                              entryErrors.description
+                                ? localMessage(entryErrors.description)
+                                : undefined
+                            }
+                            label={_(/* i18n */ { id: 'web.forms.App.101', message: '내용' })}
+                            value={entry.description}
+                            onChange={(event) =>
+                              updateEntry((old) => ({ ...old, description: event.target.value }))
+                            }
+                            maxLength={512}
+                            required
+                            placeholder={_(
+                              /* i18n */ { id: 'web.forms.App.102', message: '어떤 거래였나요?' },
+                            )}
+                          />
+                        </div>
+                        <div className="app-entry-extra">
+                          <Field
+                            id="entry-code"
+                            error={entryErrors.code ? localMessage(entryErrors.code) : undefined}
+                            label={_(
+                              /* i18n */ { id: 'web.forms.App.103', message: '참고 번호 (선택)' },
+                            )}
+                            hint={_(
+                              /* i18n */ {
+                                id: 'web.forms.App.104',
+                                message:
+                                  '영수증 번호나 주문 번호처럼 거래를 찾을 때 참고할 번호입니다. 없어도 됩니다.',
+                              },
+                            )}
+                            maxLength={64}
+                            value={entry.code}
+                            onChange={(event) =>
+                              updateEntry((old) => ({ ...old, code: event.target.value }))
+                            }
+                          />
+                          <Field
+                            id="entry-clientReference"
+                            error={
+                              entryErrors.clientReference
+                                ? localMessage(entryErrors.clientReference)
+                                : undefined
+                            }
+                            label={_(
+                              /* i18n */ {
+                                id: 'web.forms.App.105',
+                                message: '외부 서비스 참조 (선택)',
+                              },
+                            )}
+                            hint={_(
+                              /* i18n */ {
+                                id: 'web.forms.App.106',
+                                message:
+                                  '다른 서비스와 연결할 때 사용하는 별도 식별자입니다. 직접 입력하는 거래에서는 비워 두어도 됩니다.',
+                              },
+                            )}
+                            maxLength={128}
+                            value={entry.clientReference}
+                            onChange={(event) =>
+                              updateEntry((old) => ({
+                                ...old,
+                                clientReference: event.target.value,
+                              }))
+                            }
+                          />
+                        </div>
+                        <label className="field">
+                          {_(/* i18n */ { id: 'web.forms.App.107', message: '거래 종류' })}
+                          <select
+                            value={entryMode}
+                            onChange={(event) => {
+                              setEntryMode(event.target.value as 'normal' | 'trade');
+                              setEntryErrors({});
+                            }}
+                          >
+                            <option value="normal">
+                              {_(/* i18n */ { id: 'web.forms.App.108', message: '일반 거래' })}
+                            </option>
+                            <option value="trade">
+                              {_(/* i18n */ { id: 'web.forms.App.109', message: '주식 매매' })}
+                            </option>
+                          </select>
+                        </label>
+                        <datalist id="ledger-account-options">
+                          {visibleAccounts.map((account) => (
+                            <option value={account.fullName} key={account.id} />
+                          ))}
+                        </datalist>
+                        {entryMode === 'trade' ? (
+                          <TradeFields
+                            value={trade}
+                            onChange={(next) => {
+                              setTrade(next);
+                              setEntryErrors({});
+                              setSaveMessage('');
+                            }}
+                            customValues={assetUnits.values}
+                            onCommit={assetUnits.remember}
+                          />
+                        ) : (
+                          <>
+                            <div className="form-divider">
+                              <h4>
+                                {_(/* i18n */ { id: 'web.forms.App.110', message: '항목별 내역' })}
+                              </h4>
+                              <Badge>
+                                {entry.postings.length}
+                                {_(/* i18n */ { id: 'web.forms.App.111', message: '개' })}
+                              </Badge>
+                            </div>
+                            <p className="form-help">
+                              {_(
+                                /* i18n */ {
+                                  id: 'web.forms.App.112',
+                                  message:
+                                    '돈이 오간 항목과 금액을 한 줄씩 입력하세요. 빠져나간 금액은 음수, 들어온 금액은 양수로 적습니다. 가격을 반영한 자산별 합계가 0이 되어야 합니다.',
+                                },
+                              )}
+                            </p>
+                            <p id="entry-asset-unit-help" className="form-help asset-unit-help">
+                              {_(
+                                /* i18n */ {
+                                  id: 'web.forms.App.113',
+                                  message:
+                                    'KRW·USD 등 기본 통화를 검색하거나 BTC·AAPL·005930 같은 자산을 직접 입력할 수 있습니다. 검색에서 선택한 종목은 종목 ID로 저장하며, 직접 입력한 값은 그대로 저장합니다.',
+                                },
+                              )}
+                            </p>
+                            {entry.postings.map((posting, i) => (
+                              <section
+                                className="app-posting"
+                                key={i}
+                                aria-label={_(
+                                  /* i18n */ {
+                                    id: 'web.forms.App.114',
+                                    message: '내역 {v0}',
+                                    values: { v0: i + 1 },
+                                  },
+                                )}
+                              >
+                                <div className="app-posting-title">
+                                  <strong>
+                                    {_(/* i18n */ { id: 'web.forms.App.115', message: '내역 ' })}
+                                    {i + 1}
+                                  </strong>
+                                  <Button
+                                    variant="quiet"
+                                    disabled={entry.postings.length <= 2}
+                                    onClick={() =>
+                                      updateEntry((old) => ({
+                                        ...old,
+                                        postings: old.postings.filter((_, index) => index !== i),
+                                      }))
+                                    }
+                                    aria-label={_(
+                                      /* i18n */ {
+                                        id: 'web.forms.App.116',
+                                        message: '내역 {v0} 삭제',
+                                        values: { v0: i + 1 },
+                                      },
+                                    )}
+                                  >
+                                    {_(/* i18n */ { id: 'web.forms.App.117', message: '삭제' })}
+                                  </Button>
+                                </div>
+                                <div className="app-posting-fields">
+                                  <Field
+                                    id={`entry-postings[${i}].accountName`}
+                                    error={
+                                      entryErrors[`postings[${i}].accountName`]
+                                        ? localMessage(entryErrors[`postings[${i}].accountName`])
+                                        : undefined
+                                    }
+                                    label={_(
+                                      /* i18n */ { id: 'web.forms.App.118', message: '항목' },
+                                    )}
+                                    list="ledger-account-options"
+                                    value={posting.accountName}
+                                    required
+                                    onChange={(event) =>
+                                      updateEntry((old) => ({
+                                        ...old,
+                                        postings: old.postings.map((p, index) =>
+                                          index === i
+                                            ? { ...p, accountName: event.target.value }
+                                            : p,
+                                        ),
+                                      }))
+                                    }
+                                  />
+                                  <Field
+                                    id={`entry-postings[${i}].amount.value`}
+                                    error={
+                                      entryErrors[`postings[${i}].amount.value`]
+                                        ? localMessage(entryErrors[`postings[${i}].amount.value`])
+                                        : undefined
+                                    }
+                                    label={_(
+                                      /* i18n */ {
+                                        id: 'web.forms.App.119',
+                                        message: '금액 / 수량',
+                                      },
+                                    )}
+                                    inputMode="decimal"
+                                    autoComplete="off"
+                                    spellCheck={false}
+                                    value={posting.amount.value}
+                                    required
+                                    placeholder={_(
+                                      /* i18n */ {
+                                        id: 'web.forms.App.120',
+                                        message: '예: -6500.00',
+                                      },
+                                    )}
+                                    onChange={(event) =>
+                                      updateEntry((old) => ({
+                                        ...old,
+                                        postings: old.postings.map((p, index) =>
+                                          index === i
+                                            ? {
+                                                ...p,
+                                                amount: { ...p.amount, value: event.target.value },
+                                              }
+                                            : p,
+                                        ),
+                                      }))
+                                    }
+                                  />
+                                  <AssetUnitField
+                                    requestContext={entry}
+                                    customValues={assetUnits.values}
+                                    onCommit={assetUnits.remember}
+                                    aria-describedby="entry-asset-unit-help"
+                                    id={`entry-postings[${i}].amount.commodity`}
+                                    error={
+                                      entryErrors[`postings[${i}].amount.commodity`]
+                                        ? localMessage(
+                                            entryErrors[`postings[${i}].amount.commodity`],
+                                          )
+                                        : undefined
+                                    }
+                                    label={_(
+                                      /* i18n */ { id: 'web.forms.App.121', message: '자산' },
+                                    )}
+                                    value={posting.amount.commodity}
+                                    required
+                                    onValueChange={(commodity) =>
+                                      updateEntry((old) => ({
+                                        ...old,
+                                        postings: old.postings.map((p, index) =>
+                                          index === i
+                                            ? { ...p, amount: { ...p.amount, commodity } }
+                                            : p,
+                                        ),
+                                      }))
+                                    }
+                                    onChange={(event) =>
+                                      updateEntry((old) => ({
+                                        ...old,
+                                        postings: old.postings.map((p, index) =>
+                                          index === i
+                                            ? {
+                                                ...p,
+                                                amount: {
+                                                  ...p.amount,
+                                                  commodity: event.target.value,
+                                                },
+                                              }
+                                            : p,
+                                        ),
+                                      }))
+                                    }
+                                  />
+                                </div>
+                                {posting.cost && (
+                                  <div className="app-posting-fields">
+                                    <label className="field">
+                                      {_(
+                                        /* i18n */ {
+                                          id: 'web.forms.App.122',
+                                          message: '가격 방식',
+                                        },
+                                      )}
+                                      <select
+                                        value={posting.cost.type}
+                                        onChange={(event) =>
+                                          updateEntry((old) => ({
+                                            ...old,
+                                            postings: old.postings.map((p, index) =>
+                                              index === i
+                                                ? {
+                                                    ...p,
+                                                    cost: {
+                                                      ...p.cost!,
+                                                      type: event.target.value as 'UNIT' | 'TOTAL',
+                                                    },
+                                                  }
+                                                : p,
+                                            ),
+                                          }))
+                                        }
+                                      >
+                                        <option value="UNIT">
+                                          {_(
+                                            /* i18n */ { id: 'web.forms.App.123', message: '단가' },
+                                          )}
+                                        </option>
+                                        <option value="TOTAL">
+                                          {_(
+                                            /* i18n */ { id: 'web.forms.App.124', message: '총액' },
+                                          )}
+                                        </option>
+                                      </select>
+                                    </label>
+                                    <Field
+                                      label={_(
+                                        /* i18n */ { id: 'web.forms.App.125', message: '가격' },
+                                      )}
+                                      value={posting.cost.amount.value}
+                                      inputMode="decimal"
+                                      onChange={(event) =>
+                                        updateEntry((old) => ({
+                                          ...old,
+                                          postings: old.postings.map((p, index) =>
+                                            index === i
+                                              ? {
+                                                  ...p,
+                                                  cost: {
+                                                    ...p.cost!,
+                                                    amount: {
+                                                      ...p.cost!.amount,
+                                                      value: event.target.value,
+                                                    },
+                                                  },
+                                                }
+                                              : p,
+                                          ),
+                                        }))
+                                      }
+                                    />
+                                    <AssetUnitField
+                                      requestContext={entry}
+                                      label={_(
+                                        /* i18n */ {
+                                          id: 'web.forms.App.126',
+                                          message: '가격 통화',
+                                        },
+                                      )}
+                                      value={posting.cost.amount.commodity}
+                                      customValues={assetUnits.values}
+                                      onCommit={assetUnits.remember}
+                                      onValueChange={(commodity) =>
+                                        updateEntry((old) => ({
+                                          ...old,
+                                          postings: old.postings.map((p, index) =>
+                                            index === i
+                                              ? {
+                                                  ...p,
+                                                  cost: {
+                                                    ...p.cost!,
+                                                    amount: { ...p.cost!.amount, commodity },
+                                                  },
+                                                }
+                                              : p,
+                                          ),
+                                        }))
+                                      }
+                                      onChange={(event) =>
+                                        updateEntry((old) => ({
+                                          ...old,
+                                          postings: old.postings.map((p, index) =>
+                                            index === i
+                                              ? {
+                                                  ...p,
+                                                  cost: {
+                                                    ...p.cost!,
+                                                    amount: {
+                                                      ...p.cost!.amount,
+                                                      commodity: event.target.value,
+                                                    },
+                                                  },
+                                                }
+                                              : p,
+                                          ),
+                                        }))
+                                      }
+                                    />
+                                  </div>
+                                )}
+                                <Field
+                                  id={`entry-postings[${i}].memo`}
+                                  error={
+                                    entryErrors[`postings[${i}].memo`]
+                                      ? localMessage(entryErrors[`postings[${i}].memo`])
+                                      : undefined
+                                  }
+                                  label={_(
+                                    /* i18n */ {
+                                      id: 'web.forms.App.127',
+                                      message: '내역 메모 (선택)',
+                                    },
+                                  )}
+                                  maxLength={1000}
+                                  value={posting.memo}
+                                  onChange={(event) =>
+                                    updateEntry((old) => ({
+                                      ...old,
+                                      postings: old.postings.map((p, index) =>
+                                        index === i ? { ...p, memo: event.target.value } : p,
+                                      ),
+                                    }))
+                                  }
+                                />
+                              </section>
+                            ))}
+                            <Button
+                              variant="secondary"
+                              className="app-add"
+                              onClick={() =>
+                                updateEntry((old) => ({
+                                  ...old,
+                                  postings: [
+                                    ...old.postings,
+                                    {
+                                      accountName: '',
+                                      memo: '',
+                                      amount: {
+                                        commodity: old.postings[0].amount.commodity,
+                                        value: '',
+                                      },
+                                    },
+                                  ],
+                                }))
+                              }
+                            >
+                              <Icon name="plus" />
+                              {_(/* i18n */ { id: 'web.forms.App.128', message: '내역 추가' })}
+                            </Button>
+                            <div
+                              className={`balance-check ${balanced ? 'is-balanced' : ''}`}
+                              role="status"
+                            >
+                              <Icon name={balanced ? 'check' : 'alert'} />
+                              <div>
+                                {balanced
+                                  ? _(
+                                      /* i18n */ {
+                                        id: 'web.forms.App.129',
+                                        message: '입력한 금액의 합계가 0입니다.',
+                                      },
+                                    )
+                                  : _(
+                                      /* i18n */ {
+                                        id: 'web.forms.App.130',
+                                        message: '입력한 금액의 합계를 확인해 주세요.',
+                                      },
+                                    )}
+                                {[...entrySums].map(([unit, sum]) => (
+                                  <span className="app-balance-sum" key={unit}>
+                                    <Money
+                                      commodity={
+                                        unit ||
+                                        _(
+                                          /* i18n */ {
+                                            id: 'web.forms.App.131',
+                                            message: '자산 미입력',
+                                          },
+                                        )
+                                      }
+                                      value={sum}
+                                    />
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </>
+                        )}
+                        <div className="form-divider">
+                          <h4>{_(/* i18n */ { id: 'web.forms.App.132', message: '태그' })}</h4>
+                          <Button
+                            variant="quiet"
+                            onClick={() =>
+                              updateEntry((old) => ({
+                                ...old,
+                                tags: [...old.tags, { key: '', value: '' }],
+                              }))
+                            }
+                          >
+                            <Icon name="plus" />
+                            {_(/* i18n */ { id: 'web.forms.App.133', message: '태그 추가' })}
+                          </Button>
+                        </div>
+                        {entry.tags.map((tag, i) => (
+                          <div className="app-tag-entry" key={i}>
+                            <Field
+                              id={`entry-tags[${i}].key`}
+                              error={
+                                entryErrors[`tags[${i}].key`]
+                                  ? localMessage(entryErrors[`tags[${i}].key`])
+                                  : undefined
+                              }
+                              label={_(
+                                /* i18n */ {
+                                  id: 'web.forms.App.134',
+                                  message: '태그 {v0} 키',
+                                  values: { v0: i + 1 },
+                                },
+                              )}
+                              value={tag.key}
+                              onChange={(event) =>
+                                updateEntry((old) => ({
+                                  ...old,
+                                  tags: old.tags.map((t, index) =>
+                                    index === i ? { ...t, key: event.target.value } : t,
+                                  ),
+                                }))
+                              }
+                            />
+                            <Field
+                              id={`entry-tags[${i}].value`}
+                              error={
+                                entryErrors[`tags[${i}].value`]
+                                  ? localMessage(entryErrors[`tags[${i}].value`])
+                                  : undefined
+                              }
+                              label={_(
+                                /* i18n */ {
+                                  id: 'web.forms.App.135',
+                                  message: '태그 {v0} 값',
+                                  values: { v0: i + 1 },
+                                },
+                              )}
+                              value={tag.value}
+                              onChange={(event) =>
+                                updateEntry((old) => ({
+                                  ...old,
+                                  tags: old.tags.map((t, index) =>
+                                    index === i ? { ...t, value: event.target.value } : t,
+                                  ),
+                                }))
+                              }
+                            />
+                            <Button
+                              variant="quiet"
+                              aria-label={_(
+                                /* i18n */ {
+                                  id: 'web.forms.App.136',
+                                  message: '태그 {v0} 삭제',
+                                  values: { v0: i + 1 },
+                                },
+                              )}
+                              onClick={() =>
+                                updateEntry((old) => ({
+                                  ...old,
+                                  tags: old.tags.filter((_, index) => index !== i),
+                                }))
+                              }
+                            >
+                              {_(/* i18n */ { id: 'web.forms.App.137', message: '삭제' })}
+                            </Button>
+                          </div>
+                        ))}
+                      </fieldset>
+                      <div className="form-footer">
+                        <p>
+                          {pending
+                            ? _(
+                                /* i18n */ {
+                                  id: 'web.forms.App.138',
+                                  message: '원래 요청의 저장 결과를 확인합니다.',
+                                },
+                              )
+                            : _(
+                                /* i18n */ {
+                                  id: 'web.forms.App.139',
+                                  message: '연결된 원장에 실제로 기록합니다.',
+                                },
+                              )}
+                          <br />
+                          <span>
+                            {_(
+                              /* i18n */ {
+                                id: 'web.forms.App.140',
+                                message: '⌘ / Ctrl + Enter로 저장',
+                              },
+                            )}
+                          </span>
+                        </p>
+                        <Button type="submit" disabled={saving || connecting}>
+                          {saving
+                            ? _(/* i18n */ { id: 'web.forms.App.141', message: '원장 확인 중…' })
+                            : pending
+                              ? _(
+                                  /* i18n */ {
+                                    id: 'web.forms.App.142',
+                                    message: '같은 요청으로 결과 확인',
+                                  },
+                                )
+                              : _(/* i18n */ { id: 'web.forms.App.143', message: '거래 저장' })}
+                          <Icon name="arrow" />
+                        </Button>
+                      </div>
+                    </form>
+                  )}
+                  {screen === 'prices' && (
+                    <>
+                      <form
+                        className="app-filters app-price-filters"
+                        onSubmit={(event) => {
+                          event.preventDefault();
+                          assetUnits.remember([commodity, quoteCommodity]);
+                          prices.restart();
+                        }}
+                      >
+                        <AssetUnitField
+                          customValues={assetUnits.values}
+                          onCommit={assetUnits.remember}
+                          aria-describedby="price-asset-unit-help"
+                          label={_(/* i18n */ { id: 'web.forms.App.144', message: '자산' })}
+                          value={commodity}
+                          placeholder={_(
+                            /* i18n */ { id: 'web.forms.App.145', message: '예: USD, BTC' },
+                          )}
+                          onValueChange={setCommodity}
+                          onChange={(event) => setCommodity(event.target.value)}
+                        />
+                        <AssetUnitField
+                          customValues={assetUnits.values}
+                          onCommit={assetUnits.remember}
+                          aria-describedby="price-asset-unit-help"
+                          label={_(/* i18n */ { id: 'web.forms.App.146', message: '기준 자산' })}
+                          value={quoteCommodity}
+                          placeholder={_(
+                            /* i18n */ { id: 'web.forms.App.147', message: '예: KRW' },
+                          )}
+                          onValueChange={setQuoteCommodity}
+                          onChange={(event) => setQuoteCommodity(event.target.value)}
+                        />
+                        <Button
+                          variant="quiet"
+                          onClick={() => {
+                            setCommodity('');
+                            setQuoteCommodity('');
+                          }}
+                        >
+                          {_(/* i18n */ { id: 'web.forms.App.148', message: '필터 지우기' })}
+                        </Button>
+                      </form>
+                      <p id="price-asset-unit-help" className="form-help asset-unit-help">
+                        {_(
+                          /* i18n */ {
+                            id: 'web.forms.App.149',
+                            message:
+                              'KRW·USD 등 기본 통화를 검색하거나 BTC·AAPL·005930 같은 자산을 직접 입력할 수 있습니다. 1 자산의 시세를 기준 자산으로 표시합니다.',
+                          },
+                        )}
+                      </p>
+                      <RemoteStatus {...prices} count={prices.rows?.length ?? 0} />
+                      {(prices.rows ?? []).map((price, i) => (
+                        <div className="price-row" key={`${price.date}-${price.commodity}-${i}`}>
+                          <span className="row-copy price-asset-copy">
+                            <strong>
+                              <AssetIdentity commodity={price.commodity} />
+                              <span className="muted"> / </span>
+                              <AssetIdentity commodity={price.quoteCommodity} />
+                            </strong>
+                            <span>
+                              {price.date} ·{' '}
+                              {price.source ??
+                                _(/* i18n */ { id: 'web.forms.App.150', message: '출처 미기록' })}
+                            </span>
+                          </span>
+                          <Money value={price.rate} commodity={price.quoteCommodity} />
+                        </div>
+                      ))}
+                      {!prices.loading && !prices.error && !prices.rows?.length && (
+                        <Empty
+                          title={_(
+                            /* i18n */ {
+                              id: 'web.forms.App.151',
+                              message: '기록된 시세가 없습니다',
+                            },
+                          )}
+                        />
+                      )}
+                      {moreButton(prices)}
+                      <p className="list-footnote">
+                        {_(
+                          /* i18n */ {
+                            id: 'web.forms.App.152',
+                            message:
+                              '1단위당 시세입니다. 잔액을 자동 환산하거나 서로 다른 자산을 합산하지 않습니다.',
+                          },
+                        )}
+                      </p>
+                    </>
+                  )}
 
-      <div id="books-module-content" />
-      </div></section>}<footer className="app-footer"><span>{_(/* i18n */ { id: 'web.forms.App.153', message: "hledger · 내 기록을 차분하게" })}</span><a href="/gallery">{_(/* i18n */ { id: 'web.nav.gallery', message: "디자인 갤러리" })} <Icon name="arrow" /></a></footer></main></div></div></AssetMetadataProvider>;
+                  <div id="books-module-content" />
+                </div>
+              </section>
+            )}
+            <footer className="app-footer">
+              <span>
+                {_(/* i18n */ { id: 'web.forms.App.153', message: 'hledger · 내 기록을 차분하게' })}
+              </span>
+              <a href={`${import.meta.env.BASE_URL}gallery/`}>
+                {_(/* i18n */ { id: 'web.nav.gallery', message: '디자인 갤러리' })}{' '}
+                <Icon name="arrow" />
+              </a>
+            </footer>
+          </main>
+        </div>
+      </div>
+    </AssetMetadataProvider>
+  );
 }
-type Entry = { date: string; description: string; code: string; clientReference: string; postings: { accountName: string; memo: string; amount: { commodity: string; value: string }; cost?: { type: 'UNIT' | 'TOTAL'; amount: { commodity: string; value: string } } }[]; tags: { key: string; value: string }[] };
-function blankEntry(): Entry { return { date: today(), description: '', code: '', clientReference: '', postings: [{ accountName: '', memo: '', amount: { commodity: 'KRW', value: '' } }, { accountName: '', memo: '', amount: { commodity: 'KRW', value: '' } }], tags: [] }; }
-function PeriodBalances({ detail, from, to, includeSubaccounts }: { detail: AccountDetail; from: string; to: string; includeSubaccounts: boolean }) {
+type Entry = {
+  date: string;
+  description: string;
+  code: string;
+  clientReference: string;
+  postings: {
+    accountName: string;
+    memo: string;
+    amount: { commodity: string; value: string };
+    cost?: { type: 'UNIT' | 'TOTAL'; amount: { commodity: string; value: string } };
+  }[];
+  tags: { key: string; value: string }[];
+};
+function blankEntry(): Entry {
+  return {
+    date: today(),
+    description: '',
+    code: '',
+    clientReference: '',
+    postings: [
+      { accountName: '', memo: '', amount: { commodity: 'KRW', value: '' } },
+      { accountName: '', memo: '', amount: { commodity: 'KRW', value: '' } },
+    ],
+    tags: [],
+  };
+}
+function PeriodBalances({
+  detail,
+  from,
+  to,
+  includeSubaccounts,
+}: {
+  detail: AccountDetail;
+  from: string;
+  to: string;
+  includeSubaccounts: boolean;
+}) {
   const { _ } = useLingui();
   const zeroOpening = !from || from === '0001-01-01';
   const amounts = new Map<string, { opening: string; movement: string }>();
-  for (const amount of detail.opening) amounts.set(amount.commodity, { opening: zeroOpening ? '0' : amount.value, movement: '0' });
-  for (const amount of detail.movements) { const current = amounts.get(amount.commodity) ?? { opening: '0', movement: '0' }; current.movement = amount.value; amounts.set(amount.commodity, current); }
-  return <section className="app-period" aria-label={_(/* i18n */ { id: 'web.forms.App.155', message: "항목 기간 잔액" })}><div className="app-period-title"><strong>{detail.fullName}</strong><span>{from || _(/* i18n */ { id: 'web.forms.App.156', message: "원장 시작" })} ~ {to || _(/* i18n */ { id: 'web.forms.App.157', message: "전체 기간" })} · {includeSubaccounts ? _(/* i18n */ { id: 'web.forms.App.158', message: "하위 항목 포함" }) : _(/* i18n */ { id: 'web.forms.App.159', message: "항목 자체" })}{_(/* i18n */ { id: 'web.forms.App.160', message: " · 금액은 날짜·항목 범위 기준" })}</span></div>{[...amounts].map(([commodity, amount]) => <dl key={commodity}><div><dt>{_(/* i18n */ { id: 'web.forms.App.161', message: "기초" })}</dt><dd><Money commodity={commodity} value={amount.opening} /></dd></div><div><dt>{_(/* i18n */ { id: 'web.forms.App.162', message: "기간 증감" })}</dt><dd><Money commodity={commodity} value={amount.movement} /></dd></div><div><dt>{_(/* i18n */ { id: 'web.forms.App.163', message: "기말" })}</dt><dd><Money commodity={commodity} value={addDecimals(amount.opening, amount.movement)} /></dd></div></dl>)}</section>;
+  for (const amount of detail.opening)
+    amounts.set(amount.commodity, { opening: zeroOpening ? '0' : amount.value, movement: '0' });
+  for (const amount of detail.movements) {
+    const current = amounts.get(amount.commodity) ?? { opening: '0', movement: '0' };
+    current.movement = amount.value;
+    amounts.set(amount.commodity, current);
+  }
+  return (
+    <section
+      className="app-period"
+      aria-label={_(/* i18n */ { id: 'web.forms.App.155', message: '항목 기간 잔액' })}
+    >
+      <div className="app-period-title">
+        <strong>{detail.fullName}</strong>
+        <span>
+          {from || _(/* i18n */ { id: 'web.forms.App.156', message: '원장 시작' })} ~{' '}
+          {to || _(/* i18n */ { id: 'web.forms.App.157', message: '전체 기간' })} ·{' '}
+          {includeSubaccounts
+            ? _(/* i18n */ { id: 'web.forms.App.158', message: '하위 항목 포함' })
+            : _(/* i18n */ { id: 'web.forms.App.159', message: '항목 자체' })}
+          {_(/* i18n */ { id: 'web.forms.App.160', message: ' · 금액은 날짜·항목 범위 기준' })}
+        </span>
+      </div>
+      {[...amounts].map(([commodity, amount]) => (
+        <dl key={commodity}>
+          <div>
+            <dt>{_(/* i18n */ { id: 'web.forms.App.161', message: '기초' })}</dt>
+            <dd>
+              <Money commodity={commodity} value={amount.opening} />
+            </dd>
+          </div>
+          <div>
+            <dt>{_(/* i18n */ { id: 'web.forms.App.162', message: '기간 증감' })}</dt>
+            <dd>
+              <Money commodity={commodity} value={amount.movement} />
+            </dd>
+          </div>
+          <div>
+            <dt>{_(/* i18n */ { id: 'web.forms.App.163', message: '기말' })}</dt>
+            <dd>
+              <Money commodity={commodity} value={addDecimals(amount.opening, amount.movement)} />
+            </dd>
+          </div>
+        </dl>
+      ))}
+    </section>
+  );
 }

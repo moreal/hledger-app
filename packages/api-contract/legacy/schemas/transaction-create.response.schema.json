@@ -4,10 +4,7 @@
   "title": "POST /v1/transactions response",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "transaction",
-    "idempotency"
-  ],
+  "required": ["transaction", "idempotency"],
   "properties": {
     "transaction": {
       "$ref": "./transaction.schema.json"

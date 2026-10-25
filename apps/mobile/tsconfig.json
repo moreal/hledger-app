@@ -2,5 +2,9 @@
   "extends": ["../../tsconfig.json", "expo/tsconfig.base"],
   "compilerOptions": { "strict": true, "noEmit": true, "types": ["react", "node"] },
   "include": ["**/*.ts", "**/*.tsx", "../../packages/**/*.ts", "../../packages/**/*.tsx"],
-  "exclude": ["../../node_modules", "../../packages/api-contract/legacy", "../../packages/**/*.test.ts"]
+  "exclude": [
+    "../../node_modules",
+    "../../packages/api-contract/legacy",
+    "../../packages/**/*.test.ts"
+  ]
 }

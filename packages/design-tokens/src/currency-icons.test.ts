@@ -5,9 +5,12 @@ import { iso4217Units } from '../../domain/src/asset-units';
 import { currencyIcons, currencyIconSizes, getCurrencyIcon } from './currency-icons';
 
 test('every snapshot currency has one stable icon and a distinct identifying code', () => {
-  const codes = iso4217Units.filter(unit => unit.kind === 'currency').map(unit => unit.code);
-  assert.deepEqual(currencyIcons.map(icon => icon.code), codes);
-  assert.equal(new Set(currencyIcons.map(icon => icon.code)).size, codes.length);
+  const codes = iso4217Units.filter((unit) => unit.kind === 'currency').map((unit) => unit.code);
+  assert.deepEqual(
+    currencyIcons.map((icon) => icon.code),
+    codes,
+  );
+  assert.equal(new Set(currencyIcons.map((icon) => icon.code)).size, codes.length);
   for (const icon of currencyIcons) {
     assert.equal(getCurrencyIcon(icon.code), icon);
     assert.equal(icon.kind, 'currency');
@@ -28,7 +31,19 @@ test('ambiguous symbols retain the identifying ISO code', () => {
 });
 
 test('custom commodities preserve exact spelling and never become currencies implicitly', () => {
-  for (const code of ['usd', 'Usd', ' USD', 'USD ', 'BTC', '005930', 'XAU', 'XXX', '', '한글 단위', '__proto__']) {
+  for (const code of [
+    'usd',
+    'Usd',
+    ' USD',
+    'USD ',
+    'BTC',
+    '005930',
+    'XAU',
+    'XXX',
+    '',
+    '한글 단위',
+    '__proto__',
+  ]) {
     const icon = getCurrencyIcon(code);
     assert.equal(icon.kind, 'custom');
     assert.equal(icon.code, code);

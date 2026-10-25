@@ -38,9 +38,7 @@
   "paths": {
     "/v1/health": {
       "get": {
-        "tags": [
-          "system"
-        ],
+        "tags": ["system"],
         "summary": "API 상태 확인",
         "operationId": "getHealth",
         "security": [],
@@ -70,9 +68,7 @@
     },
     "/v1/accounts": {
       "get": {
-        "tags": [
-          "accounts"
-        ],
+        "tags": ["accounts"],
         "summary": "계정 목록 조회",
         "operationId": "listAccounts",
         "parameters": [
@@ -128,10 +124,7 @@
     },
     "/v1/accounts/{accountId}/transactions": {
       "get": {
-        "tags": [
-          "accounts",
-          "transactions"
-        ],
+        "tags": ["accounts", "transactions"],
         "summary": "특정 계정의 거래 목록 조회",
         "operationId": "listAccountTransactions",
         "parameters": [
@@ -204,9 +197,7 @@
     },
     "/v1/transactions": {
       "get": {
-        "tags": [
-          "transactions"
-        ],
+        "tags": ["transactions"],
         "summary": "거래 목록 조회",
         "operationId": "listTransactions",
         "parameters": [
@@ -260,9 +251,7 @@
         }
       },
       "post": {
-        "tags": [
-          "transactions"
-        ],
+        "tags": ["transactions"],
         "summary": "신규 거래 생성",
         "operationId": "createTransaction",
         "parameters": [
@@ -334,9 +323,7 @@
     },
     "/v1/prices": {
       "get": {
-        "tags": [
-          "prices"
-        ],
+        "tags": ["prices"],
         "summary": "시세 목록 조회",
         "operationId": "listPrices",
         "parameters": [
@@ -500,19 +487,11 @@
       "HealthResponse": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "status",
-          "timestamp",
-          "version",
-          "indexer_lag_seconds"
-        ],
+        "required": ["status", "timestamp", "version", "indexer_lag_seconds"],
         "properties": {
           "status": {
             "type": "string",
-            "enum": [
-              "ok",
-              "degraded"
-            ]
+            "enum": ["ok", "degraded"]
           },
           "timestamp": {
             "type": "string",
@@ -535,12 +514,7 @@
       "ApiError": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "code",
-          "message",
-          "request_id",
-          "timestamp"
-        ],
+        "required": ["code", "message", "request_id", "timestamp"],
         "properties": {
           "code": {
             "type": "string",
@@ -570,10 +544,7 @@
       "MoneyAmount": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "commodity",
-          "value"
-        ],
+        "required": ["commodity", "value"],
         "properties": {
           "commodity": {
             "type": "string",
@@ -589,17 +560,10 @@
       "CursorPage": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "next_cursor",
-          "has_more",
-          "limit"
-        ],
+        "required": ["next_cursor", "has_more", "limit"],
         "properties": {
           "next_cursor": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           },
           "has_more": {
             "type": "boolean"
@@ -610,10 +574,7 @@
             "maximum": 200
           },
           "total_estimate": {
-            "type": [
-              "integer",
-              "null"
-            ],
+            "type": ["integer", "null"],
             "minimum": 0
           }
         }
@@ -627,14 +588,7 @@
       "AccountSummary": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "id",
-          "name",
-          "full_name",
-          "depth",
-          "balances",
-          "transaction_count"
-        ],
+        "required": ["id", "name", "full_name", "depth", "balances", "transaction_count"],
         "properties": {
           "id": {
             "type": "string",
@@ -654,10 +608,7 @@
             "maximum": 20
           },
           "parent_id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           },
           "balances": {
             "type": "array",
@@ -671,10 +622,7 @@
             "minimum": 0
           },
           "last_posted_date": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "format": "date"
           },
           "tags": {
@@ -685,10 +633,7 @@
       "AccountListResponse": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "data",
-          "page"
-        ],
+        "required": ["data", "page"],
         "properties": {
           "data": {
             "type": "array",
@@ -704,16 +649,10 @@
       "Posting": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "account_name",
-          "amount"
-        ],
+        "required": ["account_name", "amount"],
         "properties": {
           "account_id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           },
           "account_name": {
             "type": "string",
@@ -723,10 +662,7 @@
             "$ref": "#/components/schemas/MoneyAmount"
           },
           "memo": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "maxLength": 1000
           }
         }
@@ -760,19 +696,12 @@
             "maxLength": 512
           },
           "code": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "maxLength": 64
           },
           "status": {
             "type": "string",
-            "enum": [
-              "unmarked",
-              "pending",
-              "cleared"
-            ]
+            "enum": ["unmarked", "pending", "cleared"]
           },
           "postings": {
             "type": "array",
@@ -790,20 +719,14 @@
           },
           "source": {
             "type": "string",
-            "enum": [
-              "hledger",
-              "app"
-            ]
+            "enum": ["hledger", "app"]
           }
         }
       },
       "TransactionListResponse": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "data",
-          "page"
-        ],
+        "required": ["data", "page"],
         "properties": {
           "data": {
             "type": "array",
@@ -819,10 +742,7 @@
       "PostingInput": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "account_name",
-          "amount"
-        ],
+        "required": ["account_name", "amount"],
         "properties": {
           "account_name": {
             "type": "string",
@@ -832,10 +752,7 @@
             "$ref": "#/components/schemas/MoneyAmount"
           },
           "memo": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "maxLength": 1000
           }
         }
@@ -843,11 +760,7 @@
       "TransactionCreateRequest": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "date",
-          "description",
-          "postings"
-        ],
+        "required": ["date", "description", "postings"],
         "properties": {
           "date": {
             "type": "string",
@@ -859,10 +772,7 @@
             "maxLength": 512
           },
           "code": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "maxLength": 64
           },
           "postings": {
@@ -876,10 +786,7 @@
             "$ref": "#/components/schemas/TagMap"
           },
           "client_reference": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "maxLength": 128
           }
         }
@@ -887,10 +794,7 @@
       "IdempotencyInfo": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "key",
-          "replayed"
-        ],
+        "required": ["key", "replayed"],
         "properties": {
           "key": {
             "type": "string",
@@ -905,10 +809,7 @@
       "TransactionCreateResponse": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "transaction",
-          "idempotency"
-        ],
+        "required": ["transaction", "idempotency"],
         "properties": {
           "transaction": {
             "$ref": "#/components/schemas/Transaction"
@@ -921,12 +822,7 @@
       "PriceQuote": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "commodity",
-          "quote_commodity",
-          "date",
-          "rate"
-        ],
+        "required": ["commodity", "quote_commodity", "date", "rate"],
         "properties": {
           "commodity": {
             "type": "string",
@@ -947,10 +843,7 @@
             "pattern": "^-?[0-9]+(\\.[0-9]+)?$"
           },
           "source": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "maxLength": 64
           }
         }
@@ -958,10 +851,7 @@
       "PriceListResponse": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "data",
-          "page"
-        ],
+        "required": ["data", "page"],
         "properties": {
           "data": {
             "type": "array",

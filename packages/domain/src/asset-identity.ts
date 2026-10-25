@@ -10,11 +10,12 @@ export function ledgerCommodity(
   if (asset.kind !== 'STOCK') return asset.symbol;
 
   const exchange = asset.exchange?.toUpperCase();
-  const market = exchange && ['KOSPI', 'KOSDAQ', 'KONEX'].includes(exchange)
-    ? 'krx'
-    : exchange && ['NASDAQ', 'NYSE', 'AMEX'].includes(exchange)
-      ? exchange.toLowerCase()
-      : null;
+  const market =
+    exchange && ['KOSPI', 'KOSDAQ', 'KONEX'].includes(exchange)
+      ? 'krx'
+      : exchange && ['NASDAQ', 'NYSE', 'AMEX'].includes(exchange)
+        ? exchange.toLowerCase()
+        : null;
   if (!market) return asset.symbol;
 
   const commodity = `asset:stock:${market}:${asset.symbol}`;
