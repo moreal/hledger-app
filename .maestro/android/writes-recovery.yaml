@@ -1,0 +1,48 @@
+appId: com.hledger.app
+name: Android fixture-only offline recovery
+# Requires a valid balanced draft belonging to the dedicated fixture.
+# Does not clear or retry unrelated outbox records.
+---
+# Fail closed before any fixture-only save control.
+- scrollUntilVisible:
+    element: hledger
+    direction: UP
+    timeout: 120000
+    speed: 60
+- tapOn: 설정
+- scrollUntilVisible:
+    element: '현재 사용 중인 주소: http://127.0.0.1:4203/graphql'
+    direction: DOWN
+    timeout: 120000
+    speed: 60
+- assertVisible: '현재 사용 중인 주소: http://127.0.0.1:4203/graphql'
+- scrollUntilVisible:
+    element: '.*${QA_LEDGER_ID}.*이 실행에서 인증 확인.*'
+    direction: DOWN
+    timeout: 120000
+    speed: 60
+- scrollUntilVisible:
+    element: hledger
+    direction: UP
+    timeout: 120000
+    speed: 60
+- tapOn: 뒤로
+- scrollUntilVisible:
+    element: hledger
+    direction: UP
+    timeout: 120000
+    speed: 60
+- tapOn: 입력
+- scrollUntilVisible:
+    element: 오프라인 임시 저장 · 전송하지 않음
+    direction: DOWN
+    timeout: 120000
+    speed: 60
+- tapOn: 오프라인 임시 저장 · 전송하지 않음
+- takeScreenshot: offline-preserved
+- stopApp
+- launchApp:
+    clearState: false
+- tapOn: 동기화
+- assertVisible: 기기에 저장한 거래
+- takeScreenshot: offline-recovered-without-token

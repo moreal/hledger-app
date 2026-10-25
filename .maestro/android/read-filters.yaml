@@ -1,0 +1,47 @@
+appId: com.hledger.app
+name: Android account search and transaction empty result
+---
+- scrollUntilVisible:
+    element: hledger
+    direction: UP
+    timeout: 120000
+    speed: 60
+- tapOn: 항목
+- scrollUntilVisible:
+    element: 기간·항목 필터 열기
+    direction: DOWN
+    timeout: 120000
+    speed: 60
+- tapOn: 기간·항목 필터 열기
+- tapOn: 항목 검색
+- inputText: QA
+- hideKeyboard
+- scrollUntilVisible:
+    element: 항목·기준일 적용
+    direction: DOWN
+    timeout: 120000
+    speed: 60
+- tapOn: 항목·기준일 적용
+- takeScreenshot: account-search
+- scrollUntilVisible:
+    element: hledger
+    direction: UP
+    timeout: 120000
+    speed: 60
+- tapOn: 거래
+- tapOn: 거래 필터 열기
+- tapOn: 거래 검색
+- inputText: no-such-full-qa-transaction
+- hideKeyboard
+- scrollUntilVisible:
+    element: 필터 적용·새로고침
+    direction: DOWN
+    timeout: 120000
+    speed: 60
+- tapOn: 필터 적용·새로고침
+- scrollUntilVisible:
+    element: 조건에 맞는 거래가 없습니다.
+    direction: DOWN
+    timeout: 120000
+    speed: 60
+- takeScreenshot: transaction-empty

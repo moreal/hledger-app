@@ -1,0 +1,1862 @@
+appId: com.hledger.app
+name: iOS isolated ledger writes and staged recovery
+---
+# DRAFT: expanded end-to-end stages have not passed as a suite on iOS26.5.
+# Fresh per-ID results live outside the repository; never infer PASS from these templates.
+# Duplicate label/input indexes proved unreliable; use inspected input bounds for live QA.
+# Maestro deduplicates nested label Text nodes; target input index 1 and tap its right edge.
+# Requires an approved disposable fixture and runtime QA_ENDPOINT, QA_TOKEN, QA_RUN_ID.
+# Run auth-navigation.yaml with runtime credentials first; never clear app data between stages.
+# QA_WRITE_STAGE: general (default), core, buy, sell, books, prepare, retry, response-loss, response-retry, cleanup, template.
+# QA_CASE defaults to offline. Use a new QA_CASE for the response-loss preparation.
+# Stage barriers let the runner audit the ledger and arm an exact visible request key.
+# UI screenshots alone do not prove transaction counts, same-key reuse, or no duplicates.
+# No physical network outage is simulated: prepare uses the explicit no-send product action.
+# W01.2 automatic stock realized gain is product unsupported (N/A), never PASS.
+# W01.8: template stage creates/deletes pending requests; cleanup deletes completed ones.
+- assertTrue: ${typeof QA_ENDPOINT !== 'undefined' && typeof QA_TOKEN !== 'undefined' && typeof QA_RUN_ID !== 'undefined'}
+- evalScript: "${output.stage = typeof QA_WRITE_STAGE === 'undefined' ? 'general' : QA_WRITE_STAGE}"
+- evalScript: "${output.caseName = typeof QA_CASE === 'undefined' ? 'offline' : QA_CASE}"
+- assertTrue: ${['core','general','buy','sell','books','prepare','retry','response-loss','response-retry','cleanup','template'].indexOf(output.stage) >= 0}
+# Every independent write stage verifies the native active connection, not only API preflight.
+- assertTrue: ${typeof QA_LEDGER_ID !== 'undefined'}
+- repeat:
+    times: 12
+    commands:
+      - swipe:
+          direction: DOWN
+          duration: 150
+- tapOn: 설정
+- scrollUntilVisible:
+    element: '.*현재 사용 중인 주소: ${QA_ENDPOINT}.*'
+    direction: DOWN
+    visibilityPercentage: 10
+    centerElement: true
+    timeout: 20000
+- assertVisible: '.*현재 사용 중인 주소: ${QA_ENDPOINT}.*'
+- assertVisible: '.*원장 식별자 ${QA_LEDGER_ID}.*이 실행에서 인증 확인.*'
+- assertVisible: '.*CONNECTED.*'
+- repeat:
+    times: 6
+    commands:
+      - swipe:
+          direction: DOWN
+          duration: 150
+- tapOn: 뒤로
+- runFlow:
+    when:
+      true: ${['core','general'].indexOf(output.stage) >= 0}
+    commands:
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "입력"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "빈 새 거래"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "빈 새 거래"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "거래 입력"
+          direction: UP
+          timeout: 20000
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "거래일"
+            index: 1
+          direction: UP
+          timeout: 20000
+      - tapOn:
+          text: "거래일"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "2026-10-25"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내용"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "내용"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "${QA_RUN_ID}-general"
+      - hideKeyboard
+      - scrollUntilVisible: {"element": {"text": "^참고\\ 번호\\ \\(선택\\)$", "index": 1}, "direction": "DOWN", "timeout": 20000, "visibilityPercentage": 10, "centerElement": true}
+      - tapOn: {"text": "^참고\\ 번호\\ \\(선택\\)$", "index": 1, "point": "95%,50%"}
+      - eraseText: 500
+      - inputText: "QA-IOS-REF-001"
+      - hideKeyboard
+      - assertVisible: "QA\\-IOS\\-REF\\-001"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내역 1 항목 경로"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "내역 1 항목 경로"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "expenses:qa"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내역 1 금액/수량 \\(부호 포함\\)"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "내역 1 금액/수량 \\(부호 포함\\)"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "137"
+      - hideKeyboard
+      - scrollUntilVisible: {"element": {"text": "^내역\\ 1\\ 메모\\ \\(선택\\)$", "index": 1}, "direction": "DOWN", "timeout": 20000, "visibilityPercentage": 10, "centerElement": true}
+      - tapOn: {"text": "^내역\\ 1\\ 메모\\ \\(선택\\)$", "index": 1, "point": "95%,50%"}
+      - eraseText: 500
+      - inputText: "QA iOS nonempty memo"
+      - hideKeyboard
+      - assertVisible: "QA\\ iOS\\ nonempty\\ memo"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내역 2 항목 경로"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "내역 2 항목 경로"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "assets:cash"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내역 2 금액/수량 \\(부호 포함\\)"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "내역 2 금액/수량 \\(부호 포함\\)"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "-137"
+      - hideKeyboard
+      - scrollUntilVisible: {"element":"태그 추가","direction":"DOWN","visibilityPercentage":10,"centerElement":true}
+      - tapOn: 태그 추가
+      - scrollUntilVisible: {"element": {"text": "^태그\\ 1\\ 키$", "index": 1}, "direction": "DOWN", "timeout": 20000, "visibilityPercentage": 10, "centerElement": true}
+      - tapOn: {"text": "^태그\\ 1\\ 키$", "index": 1, "point": "95%,50%"}
+      - eraseText: 500
+      - inputText: "qa"
+      - hideKeyboard
+      - assertVisible: "qa"
+      - scrollUntilVisible: {"element": {"text": "^태그\\ 1\\ 값$", "index": 1}, "direction": "DOWN", "timeout": 20000, "visibilityPercentage": 10, "centerElement": true}
+      - tapOn: {"text": "^태그\\ 1\\ 값$", "index": 1, "point": "95%,50%"}
+      - eraseText: 500
+      - inputText: "native-ios"
+      - hideKeyboard
+      - assertVisible: "native\\-ios"
+      - takeScreenshot: W01.1-general-memo-tag-reference-inputs
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "기기에 보관하고 원장에 저장"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "기기에 보관하고 원장에 저장"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "원장 저장 확인"
+          direction: UP
+          timeout: 20000
+      - assertVisible: "원장 저장 확인"
+      - takeScreenshot: W01.1-general-saved
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "동기화"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "기기 기록 지우기"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "기기 기록 지우기"
+      - takeScreenshot: W01.8-completed-device-record-deleted
+- runFlow:
+    when:
+      true: ${["core", "buy"].indexOf(output.stage) >= 0}
+    commands:
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "입력"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "빈 새 거래"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "빈 새 거래"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "거래 입력"
+          direction: UP
+          timeout: 20000
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "입력 방식: 일반 거래 · 누르면 변경"
+          direction: UP
+          timeout: 20000
+      - tapOn: "입력 방식: 일반 거래 · 누르면 변경"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "주식 자산"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "주식 자산"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "QA_STOCK"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "수량 \\(양수\\)"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "수량 \\(양수\\)"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "2"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "1주당 가격"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "1주당 가격"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "100"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "주식 보유 항목 경로"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "주식 보유 항목 경로"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "assets:stock"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "현금 항목 경로"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "현금 항목 경로"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "assets:cash"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "수수료 \\(결제 자산, 0 이상\\)"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "수수료 \\(결제 자산, 0 이상\\)"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "2"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "수수료 비용 항목 경로"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "수수료 비용 항목 경로"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "expenses:fees"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "매매 내용을 아래 내역에 적용"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "매매 내용을 아래 내역에 적용"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "거래일"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "거래일"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "2026-10-25"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내용"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "내용"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "${QA_RUN_ID}-stock-buy"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "보존된 원가: 단가 100 KRW"
+          direction: DOWN
+          timeout: 20000
+      - assertVisible: "보존된 원가: 단가 100 KRW"
+      - takeScreenshot: W01.2-buy-cost
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "기기에 보관하고 원장에 저장"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "기기에 보관하고 원장에 저장"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "원장 저장 확인"
+          direction: UP
+          timeout: 20000
+      - assertVisible: "원장 저장 확인"
+      - takeScreenshot: W01.2-buy-saved
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "동기화"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "기기 기록 지우기"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "기기 기록 지우기"
+      - takeScreenshot: W01.8-completed-device-record-deleted
+- runFlow:
+    when:
+      true: ${["core", "sell"].indexOf(output.stage) >= 0}
+    commands:
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "입력"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "빈 새 거래"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "빈 새 거래"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "거래 입력"
+          direction: UP
+          timeout: 20000
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "입력 방식: 일반 거래 · 누르면 변경"
+          direction: UP
+          timeout: 20000
+      - tapOn: "입력 방식: 일반 거래 · 누르면 변경"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "거래 방향: 매수 · 누르면 변경"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "거래 방향: 매수 · 누르면 변경"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "주식 자산"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "주식 자산"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "QA_STOCK"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "수량 \\(양수\\)"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "수량 \\(양수\\)"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "1"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "1주당 가격"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "1주당 가격"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "120"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "주식 보유 항목 경로"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "주식 보유 항목 경로"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "assets:stock"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "현금 항목 경로"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "현금 항목 경로"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "assets:cash"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "수수료 \\(결제 자산, 0 이상\\)"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "수수료 \\(결제 자산, 0 이상\\)"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "2"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "수수료 비용 항목 경로"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "수수료 비용 항목 경로"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "expenses:fees"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "매매 내용을 아래 내역에 적용"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "매매 내용을 아래 내역에 적용"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "거래일"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "거래일"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "2026-10-25"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내용"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "내용"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "${QA_RUN_ID}-stock-sell"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "보존된 원가: 단가 120 KRW"
+          direction: DOWN
+          timeout: 20000
+      - assertVisible: "보존된 원가: 단가 120 KRW"
+      - takeScreenshot: W01.2-sell-cost
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "기기에 보관하고 원장에 저장"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "기기에 보관하고 원장에 저장"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "원장 저장 확인"
+          direction: UP
+          timeout: 20000
+      - assertVisible: "원장 저장 확인"
+      - takeScreenshot: W01.2-sell-saved
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "동기화"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "기기 기록 지우기"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "기기 기록 지우기"
+      - takeScreenshot: W01.8-completed-device-record-deleted
+- runFlow:
+    when:
+      true: ${["core", "books"].indexOf(output.stage) >= 0}
+    commands:
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "책"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "ISBN"
+            index: 1
+          direction: UP
+          timeout: 20000
+      - tapOn:
+          text: "ISBN"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "9788936434595"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "ISBN 정보 다시 조회"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "ISBN 정보 다시 조회"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "책 제목"
+            index: 1
+          direction: UP
+          timeout: 20000
+      - extendedWaitUntil:
+          visible: "채식주의자"
+          timeout: 20000
+      - assertVisible: "한강"
+      - takeScreenshot: W01.3-auto-metadata
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "거래일"
+            index: 1
+          direction: UP
+          timeout: 20000
+      - tapOn:
+          text: "거래일"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "2026-10-25"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "구매 금액"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "구매 금액"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "12500"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "책 항목"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "책 항목"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "assets:books"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "통화"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "통화"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "KRW"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "현금 항목"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "현금 항목"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "assets:cash"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "이 실물 책 구매 기록"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "이 실물 책 구매 기록"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "책과 원장 거래를 저장했습니다."
+          direction: UP
+          timeout: 20000
+      - assertVisible: "책과 원장 거래를 저장했습니다."
+      - takeScreenshot: W01.3-auto-purchased
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "ISBN"
+            index: 1
+          direction: UP
+          timeout: 20000
+      - tapOn:
+          text: "ISBN"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "9780000000002"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "ISBN 정보 다시 조회"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "ISBN 정보 다시 조회"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: ".*책 정보를 찾지 못.*"
+          direction: UP
+          timeout: 20000
+      - assertVisible: ".*책 정보를 찾지 못.*"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "책 제목"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "책 제목"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "${QA_RUN_ID}-manual-book"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "저자 \\(선택 · 한 줄에 한 명\\)"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "저자 \\(선택 · 한 줄에 한 명\\)"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "QA Author"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "거래일"
+            index: 1
+          direction: UP
+          timeout: 20000
+      - tapOn:
+          text: "거래일"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "2026-10-25"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "구매 금액"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "구매 금액"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "15000"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "책 항목"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "책 항목"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "assets:books"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "통화"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "통화"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "KRW"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "현금 항목"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "현금 항목"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "assets:cash"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "이 실물 책 구매 기록"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "이 실물 책 구매 기록"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "책과 원장 거래를 저장했습니다."
+          direction: UP
+          timeout: 20000
+      - assertVisible: "책과 원장 거래를 저장했습니다."
+      - takeScreenshot: W01.3-manual-purchased
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "${QA_RUN_ID}-manual-book"
+          direction: DOWN
+          timeout: 20000
+      - assertVisible: ${QA_RUN_ID}-manual-book
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "이 책 판매·폐기"
+            below: ${QA_RUN_ID}-manual-book
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "이 책 판매·폐기"
+          below: ${QA_RUN_ID}-manual-book
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "거래일"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "거래일"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "2026-10-25"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "현금 항목"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "현금 항목"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "assets:cash"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "손실 항목"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "손실 항목"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "expenses:bookloss"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "판매 대금 \\(수수료 차감 전\\)"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "판매 대금 \\(수수료 차감 전\\)"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "17000"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "수수료"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "수수료"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "500"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "이익 항목"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "이익 항목"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "income:bookgain"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "수수료 항목"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "수수료 항목"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "expenses:fees"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "판매와 실현 손익 기록"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "판매와 실현 손익 기록"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "책과 원장 거래를 저장했습니다."
+          direction: UP
+          timeout: 20000
+      - assertVisible: "책과 원장 거래를 저장했습니다."
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "${QA_RUN_ID}-manual-book"
+          direction: DOWN
+          timeout: 20000
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "판매 완료"
+          direction: DOWN
+          timeout: 20000
+      - assertVisible: "판매 완료"
+      - takeScreenshot: W01.4-sold-fee-gain
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "채식주의자"
+          direction: UP
+          timeout: 20000
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "이 책 판매·폐기"
+            below: "채식주의자"
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "이 책 판매·폐기"
+          below: "채식주의자"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "폐기"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "폐기"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "손실 항목"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "손실 항목"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "expenses:bookloss"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "폐기와 손실 기록"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "폐기와 손실 기록"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "책과 원장 거래를 저장했습니다."
+          direction: UP
+          timeout: 20000
+      - assertVisible: "책과 원장 거래를 저장했습니다."
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "채식주의자"
+          direction: DOWN
+          timeout: 20000
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "폐기 완료"
+          direction: DOWN
+          timeout: 20000
+      - assertVisible: "폐기 완료"
+      - takeScreenshot: W01.4-discarded-loss
+- runFlow:
+    when:
+      true: ${output.stage === "prepare"}
+    commands:
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "입력"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "빈 새 거래"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "빈 새 거래"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "거래 입력"
+          direction: UP
+          timeout: 20000
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "거래일"
+            index: 1
+          direction: UP
+          timeout: 20000
+      - tapOn:
+          text: "거래일"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "2026-10-25"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내용"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "내용"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "${QA_RUN_ID}-${output.caseName}"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내역 1 항목 경로"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "내역 1 항목 경로"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "expenses:qa"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내역 1 금액/수량 \\(부호 포함\\)"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "내역 1 금액/수량 \\(부호 포함\\)"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "137"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내역 2 항목 경로"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "내역 2 항목 경로"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "assets:cash"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내역 2 금액/수량 \\(부호 포함\\)"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "내역 2 금액/수량 \\(부호 포함\\)"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "-137"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "오프라인 임시 저장 · 전송하지 않음"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "오프라인 임시 저장 · 전송하지 않음"
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "동기화"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "${QA_RUN_ID}-${output.caseName}"
+          direction: DOWN
+          timeout: 20000
+      - assertVisible: ${QA_RUN_ID}-${output.caseName}
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "기기에 저장 · 전송 대기"
+          direction: DOWN
+          timeout: 20000
+      - assertVisible: "기기에 저장 · 전송 대기"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "요청 키 .*"
+          direction: DOWN
+          timeout: 20000
+      - takeScreenshot: W01.5-queued-key-before-relaunch
+      - stopApp
+      - launchApp
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "동기화"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "${QA_RUN_ID}-${output.caseName}"
+          direction: DOWN
+          timeout: 20000
+      - assertVisible: ${QA_RUN_ID}-${output.caseName}
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "기기에 저장 · 전송 대기"
+          direction: DOWN
+          timeout: 20000
+      - assertVisible: "기기에 저장 · 전송 대기"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "요청 키 .*"
+          direction: DOWN
+          timeout: 20000
+      - takeScreenshot: W01.5-restored-same-key-runner-audit-required
+- runFlow:
+    when:
+      true: ${output.stage === "retry"}
+    commands:
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "동기화"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "${QA_RUN_ID}-${output.caseName}"
+          direction: DOWN
+          timeout: 20000
+      - assertVisible: ${QA_RUN_ID}-${output.caseName}
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "요청 키 .*"
+          direction: DOWN
+          timeout: 20000
+      - takeScreenshot: W01-key-before-retry
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "같은 요청 키로 확인·재시도"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "같은 요청 키로 확인·재시도"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "원장 저장 확인"
+          direction: UP
+          timeout: 20000
+      - assertVisible: "원장 저장 확인"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "요청 키 .*"
+          direction: DOWN
+          timeout: 20000
+      - takeScreenshot: W01.6-retry-same-key-audit-required
+- runFlow:
+    when:
+      true: ${output.stage === "response-loss"}
+    commands:
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "동기화"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "${QA_RUN_ID}-${output.caseName}"
+          direction: DOWN
+          timeout: 20000
+      - assertVisible: ${QA_RUN_ID}-${output.caseName}
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "요청 키 .*"
+          direction: DOWN
+          timeout: 20000
+      - takeScreenshot: W01-key-before-response-loss
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "같은 요청 키로 확인·재시도"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "같은 요청 키로 확인·재시도"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "확인 필요 · 저장 결과 불명확"
+          direction: UP
+          timeout: 20000
+      - assertVisible: "확인 필요 · 저장 결과 불명확"
+      - takeScreenshot: W01.7-indeterminate-locked
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내용을 새 거래로 복사"
+          direction: DOWN
+          timeout: 20000
+      - assertVisible:
+          text: "내용을 새 거래로 복사"
+          enabled: false
+      - assertNotVisible: "대기 요청 지우기"
+      - stopApp
+      - launchApp
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "동기화"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "확인 필요 · 저장 결과 불명확"
+          direction: DOWN
+          timeout: 20000
+      - assertVisible: "확인 필요 · 저장 결과 불명확"
+      - takeScreenshot: W01.7-indeterminate-relaunch
+- runFlow:
+    when:
+      true: ${output.stage === "response-retry"}
+    commands:
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "동기화"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "${QA_RUN_ID}-${output.caseName}"
+          direction: DOWN
+          timeout: 20000
+      - assertVisible: ${QA_RUN_ID}-${output.caseName}
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "요청 키 .*"
+          direction: DOWN
+          timeout: 20000
+      - takeScreenshot: W01-key-before-response-retry
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "같은 요청 키로 확인·재시도"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "같은 요청 키로 확인·재시도"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "원장 저장 확인"
+          direction: UP
+          timeout: 20000
+      - assertVisible: "원장 저장 확인"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "요청 키 .*"
+          direction: DOWN
+          timeout: 20000
+      - takeScreenshot: W01.6-response-retry-same-key-audit-required
+- runFlow:
+    when:
+      true: ${output.stage === "cleanup"}
+    commands:
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "동기화"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "${QA_RUN_ID}-${output.caseName}"
+          direction: DOWN
+          timeout: 20000
+      - assertVisible: ${QA_RUN_ID}-${output.caseName}
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "기기 기록 지우기"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "기기 기록 지우기"
+      - assertNotVisible: ${QA_RUN_ID}-${output.caseName}
+      - takeScreenshot: W01.8-completed-cleanup
+- runFlow:
+    when:
+      true: ${output.stage === "template"}
+    commands:
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "입력"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "빈 새 거래"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "빈 새 거래"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "거래 입력"
+          direction: UP
+          timeout: 20000
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "거래일"
+            index: 1
+          direction: UP
+          timeout: 20000
+      - tapOn:
+          text: "거래일"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "2026-10-25"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내용"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "내용"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "${QA_RUN_ID}-template-source"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내역 1 항목 경로"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "내역 1 항목 경로"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "expenses:qa"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내역 1 금액/수량 \\(부호 포함\\)"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "내역 1 금액/수량 \\(부호 포함\\)"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "137"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내역 2 항목 경로"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "내역 2 항목 경로"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "assets:cash"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내역 2 금액/수량 \\(부호 포함\\)"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "내역 2 금액/수량 \\(부호 포함\\)"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "-137"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "템플릿 이름"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "템플릿 이름"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "${QA_RUN_ID}-template"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "입력을 템플릿으로 저장"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "입력을 템플릿으로 저장"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "오프라인 임시 저장 · 전송하지 않음"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "오프라인 임시 저장 · 전송하지 않음"
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "동기화"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "${QA_RUN_ID}-template-source"
+          direction: DOWN
+          timeout: 20000
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "요청 키 .*"
+          direction: DOWN
+          timeout: 20000
+      - takeScreenshot: W01.8-template-source-key
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "대기 요청 지우기"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "대기 요청 지우기"
+      - assertNotVisible: ${QA_RUN_ID}-template-source
+      - takeScreenshot: W01.8-pending-deleted
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "입력"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "빈 새 거래"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "빈 새 거래"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "거래 입력"
+          direction: UP
+          timeout: 20000
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "${QA_RUN_ID}-template"
+          direction: UP
+          timeout: 20000
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "템플릿으로 새 거래"
+            below: ${QA_RUN_ID}-template
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "템플릿으로 새 거래"
+          below: ${QA_RUN_ID}-template
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내용"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - assertVisible: ${QA_RUN_ID}-template-source
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "내용"
+            index: 1
+          direction: DOWN
+          timeout: 20000
+      - tapOn:
+          text: "내용"
+          index: 1
+          point: "95%,50%"
+      - eraseText: 500
+      - inputText: "${QA_RUN_ID}-template-reused"
+      - hideKeyboard
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "오프라인 임시 저장 · 전송하지 않음"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "오프라인 임시 저장 · 전송하지 않음"
+      - repeat:
+          times: 12
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 150
+      - tapOn: "동기화"
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "${QA_RUN_ID}-template-reused"
+          direction: DOWN
+          timeout: 20000
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "요청 키 .*"
+          direction: DOWN
+          timeout: 20000
+      - takeScreenshot: W01.8-template-reused-distinct-key-runner-audit-required
+      - scrollUntilVisible:
+          visibilityPercentage: 10
+          centerElement: true
+          element:
+            text: "대기 요청 지우기"
+          direction: DOWN
+          timeout: 20000
+      - tapOn: "대기 요청 지우기"
+      - assertNotVisible: ${QA_RUN_ID}-template-reused

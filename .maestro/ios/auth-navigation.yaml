@@ -1,0 +1,37 @@
+appId: com.hledger.app
+name: iOS verified active fixture connection guard
+---
+# Executed through persistent Maestro MCP on iPhone17 / iOS26.5, CI40165612461.
+# Preconditions: app already authenticated to the isolated fixture; any native tab may be open.
+# This flow does not enter credentials. Duplicate accessibility labels made automatic
+# credential input unsafe on this build; authenticate using freshly inspected input bounds.
+# Exact exercised sequence: /private/tmp/hledger-qa-full/ios/prewrite-native-guard/reply.json.
+# No launch/restart here: runtime authentication intentionally does not survive process restart.
+- assertTrue: ${typeof QA_ENDPOINT !== 'undefined' && typeof QA_LEDGER_ID !== 'undefined'}
+- repeat:
+    times: 7
+    commands:
+      - swipe:
+          direction: DOWN
+          duration: 100
+- tapOn:
+    text: 설정
+    waitToSettleTimeoutMs: 300
+- scrollUntilVisible:
+    element: '.*현재 사용 중인 주소: ${QA_ENDPOINT}.*'
+    direction: DOWN
+    visibilityPercentage: 10
+    centerElement: true
+    timeout: 15000
+- assertVisible: '.*현재 사용 중인 주소: ${QA_ENDPOINT}.*'
+- assertVisible: '.*원장 식별자 ${QA_LEDGER_ID}.*이 실행에서 인증 확인.*'
+- assertVisible: '.*CONNECTED.*'
+- repeat:
+    times: 3
+    commands:
+      - swipe:
+          direction: DOWN
+          duration: 100
+- tapOn:
+    text: 뒤로
+    waitToSettleTimeoutMs: 300

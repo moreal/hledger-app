@@ -1,0 +1,43 @@
+appId: com.hledger.app
+name: Android authentication and six tabs
+---
+- launchApp:
+    clearState: false
+- assertVisible: hledger
+- tapOn: 설정
+- assertVisible: GraphQL 주소
+- tapOn: GraphQL 주소
+- eraseText
+- inputText: ${QA_ENDPOINT}
+- tapOn: 인증 토큰
+- eraseText
+- inputText: ${QA_TOKEN}
+- hideKeyboard
+- takeScreenshot: auth-masked
+- tapOn: 연결 적용 · 주소 기억
+- assertVisible: 연결 상태
+- scrollUntilVisible:
+    element: '.*이 실행에서 인증 확인.*'
+    direction: DOWN
+    timeout: 120000
+    speed: 60
+- takeScreenshot: auth-connected
+- scrollUntilVisible:
+    element: hledger
+    direction: UP
+    timeout: 120000
+    speed: 60
+- tapOn: 뒤로
+- tapOn: 항목
+- assertVisible: 기간·항목 필터 열기
+- tapOn: 거래
+- assertVisible: 거래 필터 열기
+- tapOn: 입력
+- assertVisible: 최근 거래에서 시작
+- tapOn: 시세
+- assertVisible: 자산 \(선택\)
+- tapOn: 책
+- assertVisible: 내 책
+- tapOn: 동기화
+- assertVisible: 기기에 저장한 거래
+- takeScreenshot: navigation-complete

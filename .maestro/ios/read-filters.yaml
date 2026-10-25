@@ -1,0 +1,60 @@
+appId: com.hledger.app
+name: iOS exercised transaction search and pagination
+---
+# Verified native building blocks, not aggregate checklist certification.
+# Preconditions: authenticated isolated fixture, iPhone17 402x874 logical viewport.
+# search: transaction tab, filter OPEN, scrolled to top (input bounds[33,343][369,392]).
+# pagination: QA search first page, scrolled to bottom with QA041 and '거래 더 보기'.
+# These explicit preconditions prevent tapping ambiguous duplicate label indexes.
+# QA_READ_CASE=search (default)|pagination. QA_READ_QUERY defaults QA.
+# QA_READ_EMPTY=true expects no results; false expects a QA transaction row.
+- evalScript: "${output.readCase = typeof QA_READ_CASE === 'undefined' ? 'search' : QA_READ_CASE}"
+- evalScript: "${output.readQuery = typeof QA_READ_QUERY === 'undefined' ? 'QA' : QA_READ_QUERY}"
+- assertTrue: ${['search','pagination'].indexOf(output.readCase) >= 0}
+- runFlow:
+    when:
+      true: ${output.readCase === 'search'}
+    commands:
+      - assertVisible: 거래 필터 접기
+      - tapOn:
+          point: "90%,42%"
+          waitToSettleTimeoutMs: 300
+      - eraseText: 100
+      - inputText: ${output.readQuery}
+      - scrollUntilVisible:
+          element: 필터 적용·새로고침
+          direction: DOWN
+          visibilityPercentage: 10
+          centerElement: true
+          timeout: 15000
+      - tapOn:
+          text: 필터 적용·새로고침
+          waitToSettleTimeoutMs: 300
+      - runFlow:
+          when:
+            true: ${typeof QA_READ_EMPTY !== 'undefined' && QA_READ_EMPTY === 'true'}
+          commands:
+            - extendedWaitUntil:
+                visible: 조건에 맞는 거래가 없습니다.
+                timeout: 15000
+      - runFlow:
+          when:
+            true: ${typeof QA_READ_EMPTY === 'undefined' || QA_READ_EMPTY !== 'true'}
+          commands:
+            - extendedWaitUntil:
+                visible: '.*QA.*거래 상세 보기.*'
+                timeout: 15000
+- runFlow:
+    when:
+      true: ${output.readCase === 'pagination'}
+    commands:
+      - assertVisible: '.*QA 가상 거래 041.*'
+      - assertVisible: 거래 더 보기
+      - tapOn:
+          text: 거래 더 보기
+          waitToSettleTimeoutMs: 300
+      - swipe:
+          direction: UP
+          duration: 250
+      - assertVisible: '.*QA 가상 거래 018.*'
+      - assertVisible: '.*QA 가상 거래 032.*'

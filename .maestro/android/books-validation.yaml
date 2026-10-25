@@ -1,0 +1,68 @@
+appId: com.hledger.app
+name: Android book metadata and blank amount validation
+---
+# Fail closed before any fixture-only save control.
+- scrollUntilVisible:
+    element: hledger
+    direction: UP
+    timeout: 120000
+    speed: 60
+- tapOn: 설정
+- scrollUntilVisible:
+    element: '현재 사용 중인 주소: http://127.0.0.1:4203/graphql'
+    direction: DOWN
+    timeout: 120000
+    speed: 60
+- assertVisible: '현재 사용 중인 주소: http://127.0.0.1:4203/graphql'
+- scrollUntilVisible:
+    element: '.*${QA_LEDGER_ID}.*이 실행에서 인증 확인.*'
+    direction: DOWN
+    timeout: 120000
+    speed: 60
+- scrollUntilVisible:
+    element: hledger
+    direction: UP
+    timeout: 120000
+    speed: 60
+- tapOn: 뒤로
+- scrollUntilVisible:
+    element: hledger
+    direction: UP
+    timeout: 120000
+    speed: 60
+- tapOn: 책
+- scrollUntilVisible:
+    element: ISBN
+    direction: DOWN
+    timeout: 120000
+    speed: 60
+- tapOn: ISBN
+- eraseText
+- inputText: '9788936434595'
+- hideKeyboard
+- scrollUntilVisible:
+    element: '표지 제공:.*'
+    direction: DOWN
+    timeout: 120000
+    speed: 60
+- takeScreenshot: live-book-cover
+- scrollUntilVisible:
+    element: 구매 금액
+    direction: DOWN
+    timeout: 120000
+    speed: 60
+- tapOn: 구매 금액
+- eraseText
+- hideKeyboard
+- scrollUntilVisible:
+    element: 이 실물 책 구매 기록
+    direction: DOWN
+    timeout: 120000
+    speed: 60
+- tapOn: 이 실물 책 구매 기록
+- scrollUntilVisible:
+    element: 책 기록 안내
+    direction: UP
+    timeout: 120000
+    speed: 60
+- takeScreenshot: blank-purchase-validation
