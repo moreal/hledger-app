@@ -487,7 +487,7 @@ export default function LedgerApp({ onOpenGallery }: { onOpenGallery?: () => voi
 
         {screen === 'accounts' && <>
           {(selectedAccount ?? accounts?.edges[0]?.node) && <View style={styles.feature}><Text style={styles.featureLabel}>{(selectedAccount ?? accounts?.edges[0]?.node)?.fullName}</Text><Text style={styles.featureMuted}>{accountScope.asOf} 기준 · {accountScope.includeSubaccounts ? '하위 항목 포함' : '항목 자체 잔액'}</Text>
-            {(selectedAccount ?? accounts?.edges[0]?.node)?.balances.map(amount => <Money key={amount.commodity} value={amount.value} commodity={amount.commodity} />)}
+            {(selectedAccount ?? accounts?.edges[0]?.node)?.balances.map(amount => <Money key={amount.commodity} value={amount.value} commodity={amount.commodity} surface="feature" prominent />)}
           </View>}
           <Panel style={styles.filterPanel}>
             <View style={styles.filterSummary}><Text style={textStyles.caption}>{from} ~ {accountScope.asOf ?? to}</Text><Button variant="quiet" expanded={accountFiltersOpen} onPress={() => setAccountFiltersOpen(!accountFiltersOpen)}>기간·항목 필터 {accountFiltersOpen ? '접기' : '열기'}</Button></View>

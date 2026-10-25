@@ -33,12 +33,15 @@ test('staging includes source and excludes native output, dependencies and cache
     const root = path.join(tmp, 'source'); mkdirSync(path.join(root, 'apps/mobile/android'), { recursive: true });
     mkdirSync(path.join(root, 'node_modules')); writeFileSync(path.join(root, 'node_modules/secret'), 'dependency');
     writeFileSync(path.join(root, 'apps/mobile/android/stale'), 'generated'); writeFileSync(path.join(root, 'apps/mobile/App.tsx'), 'source');
+    mkdirSync(path.join(root, 'apps/mobile/plugins'));
+    for (const file of ['plugins/with-loopback-network-security.cjs', 'plugins/with-loopback-network-security.test.cjs', 'book-validation.ts', 'book-validation.test.ts']) writeFileSync(path.join(root, 'apps/mobile', file), 'regression source');
     mkdirSync(path.join(root, '.hledger-app')); writeFileSync(path.join(root, '.hledger-app/token'), 'secret');
     writeFileSync(path.join(root, 'apps/mobile/.env.local'), 'TOKEN=secret');
     writeFileSync(path.join(tmp, 'outside-secret'), 'secret');
     symlinkSync(path.join(tmp, 'outside-secret'), path.join(root, 'apps/mobile/linked-secret'));
     const dest = path.join(tmp, 'stage'); stageSource(root, dest);
     assert.ok(existsSync(path.join(dest, 'apps/mobile/App.tsx')));
+    for (const file of ['plugins/with-loopback-network-security.cjs', 'plugins/with-loopback-network-security.test.cjs', 'book-validation.ts', 'book-validation.test.ts']) assert.ok(existsSync(path.join(dest, 'apps/mobile', file)));
     assert.ok(!existsSync(path.join(dest, 'apps/mobile/linked-secret')));
     assert.ok(!existsSync(path.join(dest, '.hledger-app/token')));
     assert.ok(!existsSync(path.join(dest, 'apps/mobile/.env.local')));

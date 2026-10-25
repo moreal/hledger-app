@@ -2,17 +2,16 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Image, Linking, Text, View } from 'react-native';
 import { randomUUID } from 'expo-crypto';
 import { createLedgerClient, newIdempotencyKey, type PurchaseBookInput, type DisposeBookInput, type BooksQuery } from '../../packages/client';
-import { parseDate, parseDecimal } from '../../packages/api-contract/validation';
 import { normalizeBookCoverUrl } from '../../packages/domain/src/book-cover-url';
 import { normalizeIsbn } from '../../packages/domain/src/books';
 import { Badge, Button, Field, Heading, Money, Notice, Panel, nativeStyles as styles } from '../../packages/ui-native/src';
 import { createDurableStorage } from './storage';
+import { bookDate as parseDate, bookDecimal as decimal, bookIsbn } from './book-validation';
 
 type Client = ReturnType<typeof createLedgerClient>;
 type Pending = { identity: string } & ({ kind: 'purchase'; input: PurchaseBookInput } | { kind: 'dispose'; input: DisposeBookInput });
 const today = () => { const date = new Date(); return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`; };
 const errorText = (error: unknown) => error instanceof Error ? error.message : '요청을 확인하지 못했습니다.';
-const decimal = (value: string, positive = false) => { parseDecimal(value); if (value.startsWith('-') || (positive && !/[1-9]/.test(value))) throw new Error('금액은 정확한 양수로 입력해 주세요.'); return value; };
 
 export function Books({ client, verified, active }: { client: Client; verified: boolean; active: boolean }) {
   const storage = useMemo(() => createDurableStorage('books-pending-v1'), []);
@@ -102,7 +101,7 @@ export function Books({ client, verified, active }: { client: Client; verified: 
       const authorNames = authors.split('\n').map(author => author.trim()).filter(Boolean);
       if (!selected && (authorNames.length > 20 || authorNames.some(author => author.length > 200))) throw new Error('저자는 최대 20명, 한 명당 200자까지 입력할 수 있습니다.');
       const idempotencyKey = newIdempotencyKey(randomUUID);
-      if (!selected) { if (!title.trim() || title.length > 200) throw new Error('책 제목을 1~200자로 입력해 주세요.'); if (!currency.trim() || currency.length > 32) throw new Error('통화를 1~32자로 입력해 주세요.'); void send({ identity: client.identity, kind: 'purchase', input: { idempotencyKey, date, isbn: normalizeIsbn(isbn), title: title.trim(), authors: authorNames, ...(metadata ? { coverUrl: metadata.coverUrl ?? null } : {}), purchasePrice: { commodity: currency.trim(), value: decimal(price, true) }, assetAccount: assetAccount.trim(), cashAccount: cashAccount.trim() } }); }
+      if (!selected) { if (!title.trim() || title.length > 200) throw new Error('책 제목을 1~200자로 입력해 주세요.'); if (!currency.trim() || currency.length > 32) throw new Error('통화를 1~32자로 입력해 주세요.'); void send({ identity: client.identity, kind: 'purchase', input: { idempotencyKey, date, isbn: bookIsbn(isbn), title: title.trim(), authors: authorNames, ...(metadata ? { coverUrl: metadata.coverUrl ?? null } : {}), purchasePrice: { commodity: currency.trim(), value: decimal(price, true) }, assetAccount: assetAccount.trim(), cashAccount: cashAccount.trim() } }); }
       else { if (!lossAccount.trim() || (kind === 'SELL' && (!gainAccount.trim() || !feeAccount.trim()))) throw new Error('손익과 수수료 항목을 입력해 주세요.'); void send({ identity: client.identity, kind: 'dispose', input: { idempotencyKey, date, copyId: selected, kind, lossAccount: lossAccount.trim(), ...(kind === 'SELL' ? { cashAccount: cashAccount.trim(), saleProceeds: { commodity: currency.trim(), value: decimal(proceeds) }, fee: decimal(fee), gainAccount: gainAccount.trim(), feeAccount: feeAccount.trim() } : {}) } }); }
     } catch (error) { setMessage(errorText(error)); }
   }

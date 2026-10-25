@@ -77,14 +77,14 @@ export function Field({ label, error, hint, ...props }: TextInputProps & { label
   </View>;
 }
 
-export function Money({ value, commodity, prominent = false }: { value: string; commodity: string; prominent?: boolean }) {
+export function Money({ value, commodity, prominent = false, surface = 'default' }: { value: string; commodity: string; prominent?: boolean; surface?: 'default' | 'feature' }) {
   const { asset, name } = useAssetIdentity(commodity);
   return <View style={styles.moneyGroup}>
     <View style={styles.moneyLine}><AssetIcon commodity={commodity} asset={asset} size={20} />
       <Text selectable accessibilityLabel={`${formatAssetQuantity(value, commodity, asset)}${name ? `, ${name}` : ''}`}
-        style={[styles.money, prominent && styles.prominentMoney]}>{formatAssetQuantity(value, commodity, asset)}</Text>
+        style={[styles.money, prominent && styles.prominentMoney, surface === 'feature' && { color: tokens.colors.featureText }]}>{formatAssetQuantity(value, commodity, asset)}</Text>
     </View>
-    {name ? <Text style={[styles.caption, { textAlign: 'right' }]}>{name}</Text> : null}
+    {name ? <Text style={[styles.caption, { textAlign: 'right' }, surface === 'feature' && { color: tokens.colors.featureMuted }]}>{name}</Text> : null}
   </View>;
 }
 

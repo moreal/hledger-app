@@ -5,7 +5,17 @@
     "version": "0.1.0",
     "orientation": "default",
     "userInterfaceStyle": "light",
-    "platforms": ["ios", "android", "web"],
-    "web": { "bundler": "metro", "output": "single" }
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": [
+      "./plugins/with-loopback-network-security.cjs"
+    ]
   }
 }
