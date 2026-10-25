@@ -1,5 +1,6 @@
-import { lookupBookMetadata } from './seoji.ts';
-import { booksFromTransactions, purchaseBook, disposeBook, type PurchaseBookInput, type DisposeBookInput } from './books.ts';
+import { disabledBooksFeature, FeatureSettingsError, type FeatureSettingsStore } from './feature-settings.ts';
+import { lookupBookMetadata } from './book-metadata.ts';
+import { proveBookRequest, booksFromTransactions, purchaseBook, disposeBook, type PurchaseBookInput, type DisposeBookInput } from './books.ts';
 import { createHmac, randomBytes, randomUUID, timingSafeEqual } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { buildSchema, graphql, GraphQLError, GraphQLScalarType, Kind, valueFromASTUntyped, type ExecutionResult } from 'graphql';
@@ -22,6 +23,7 @@ export interface LedgerRequest {
   ledgerId?: string;
   assetCatalog?: AssetCatalog;
   assetBindings?: AssetBindingStore;
+  featureSettings?: FeatureSettingsStore;
 }
 const schema = buildSchema(readFileSync(new URL('../../packages/api-contract/schema.graphql', import.meta.url), 'utf8'));
 const cursorSecret = randomBytes(32);
@@ -171,19 +173,47 @@ export async function executeLedgerRequest(options: LedgerRequest): Promise<Exec
   const bookMutation = async (run: () => Promise<unknown>) => {
     authorize();
     try { return await run(); } catch (error) {
-      const code = (error as { code?: string }).code;
-      if (code && ['INVALID_INPUT', 'NOT_FOUND', 'IDEMPOTENCY_CONFLICT', 'UNBALANCED', 'MIXED_COMMODITY', 'DUPLICATE_TAG'].includes(code)) return { book: null, idempotency: null, errors: [{ code, path: (error as {path?:string}).path ?? 'input', message: (error as Error).message, requestId, timestamp }] };
+      const code = (error as { code?: string; extensions?: {code?: string} }).code ?? (error as {extensions?:{code?:string}}).extensions?.code;
+      if (code && ['INVALID_INPUT', 'NOT_FOUND', 'IDEMPOTENCY_CONFLICT', 'UNBALANCED', 'MIXED_COMMODITY', 'DUPLICATE_TAG', 'FEATURE_DISABLED', 'FEATURE_SETTINGS_UNAVAILABLE'].includes(code)) return { book: null, idempotency: null, errors: [{ code, path: (error as {path?:string}).path ?? 'input', message: (error as Error).message, requestId, timestamp }] };
       throw error;
     }
   };
-  const rootValue = {
+  const withBooks = <T>(run: () => Promise<T>): Promise<T> => {
+    authorize();
+    if (!options.featureSettings) fail('FEATURE_DISABLED', 'Books is disabled for this ledger.');
+    return options.featureSettings.withBooksEnabled(run).catch(error => {
+      if (error instanceof FeatureSettingsError) fail(error.code, error.message);
+      throw error;
+    });
+  };
+  // First-party module registration keeps optional book operations behind one capability boundary.
+  const bookModule = { id: 'books', version: 1, resolvers: {
     bookMetadata: async ({isbn}: {isbn: string}) => {
       authorize();
-      try { return await lookupBookMetadata(isbn); } catch { return fail('INVALID_INPUT', 'Enter a valid ISBN-10 or ISBN-13.'); }
+      return withBooks(async () => { try { return await lookupBookMetadata(isbn); } catch { return fail('INVALID_INPUT', 'Enter a valid ISBN-10 or ISBN-13.'); } });
     },
-    books: async () => booksFromTransactions((await protectedRead()).transactions),
-    purchaseBook: ({input}: {input: PurchaseBookInput}) => bookMutation(() => purchaseBook(options.adapter,input)),
-    disposeBook: ({input}: {input: DisposeBookInput}) => bookMutation(() => disposeBook(options.adapter,input)),
+    books: async () => withBooks(async () => booksFromTransactions((await protectedRead()).transactions)),
+    purchaseBook: ({input}: {input: PurchaseBookInput}) => bookMutation(() => withBooks(() => purchaseBook(options.adapter,input))),
+    disposeBook: ({input}: {input: DisposeBookInput}) => bookMutation(() => withBooks(() => disposeBook(options.adapter,input))),
+  } };
+  const rootValue = {
+    ledgerFeatures: async () => { authorize(); return { ledgerId: options.ledgerId ?? '', books: options.featureSettings ? await options.featureSettings.read() : disabledBooksFeature() }; },
+    setBooksEnabled: async ({enabled,expectedVersion,hasPending=false}: {enabled:boolean;expectedVersion:number;hasPending?:boolean}) => {
+      authorize();
+      try {
+        if (!options.featureSettings) throw new FeatureSettingsError('FEATURE_SETTINGS_UNAVAILABLE', 'Feature settings are unavailable.');
+        return { feature: await options.featureSettings.setEnabled(enabled,expectedVersion,hasPending), errors: [] };
+      } catch (error) {
+        if (!(error instanceof FeatureSettingsError)) throw error;
+        return { feature: null, errors: [{ code: error.code, path: 'expectedVersion', message: error.message, requestId, timestamp }] };
+      }
+    },
+    bookRequestStatus: async ({input}: {input:{purchase?:PurchaseBookInput;disposal?:DisposeBookInput}}) => {
+      authorize();
+      if (Boolean(input.purchase) === Boolean(input.disposal)) fail('INVALID_INPUT', 'Exactly one original book request is required.');
+      return proveBookRequest(options.adapter, input.purchase ? {kind:'purchase',input:input.purchase} : {kind:'dispose',input:input.disposal!});
+    },
+    ...bookModule.resolvers,
     health: async () => {
       let connected = false;
       try { await read(); connected = true; } catch { /* Public status never exposes upstream paths or output. */ }
@@ -280,7 +310,7 @@ export async function executeLedgerRequest(options: LedgerRequest): Promise<Exec
         return { transaction: result.transaction, idempotency: { key: input.idempotencyKey, replayed: result.replayed }, errors: [] };
       } catch (error) {
         const code = (error as { code?: string })?.code;
-        if (code && ['IDEMPOTENCY_CONFLICT', 'INVALID_INPUT', 'UNBALANCED', 'MIXED_COMMODITY', 'DUPLICATE_TAG'].includes(code)) {
+        if (code && ['IDEMPOTENCY_CONFLICT', 'INVALID_INPUT', 'UNBALANCED', 'MIXED_COMMODITY', 'DUPLICATE_TAG', 'FEATURE_DISABLED', 'FEATURE_SETTINGS_UNAVAILABLE'].includes(code)) {
           const path = (error as { path?: string }).path ?? 'input';
           return fieldErrors([{ code, path, message: code === 'IDEMPOTENCY_CONFLICT' ? 'This key was already used with different transaction input.' : 'The transaction input is invalid.' }]);
         }
@@ -291,8 +321,8 @@ export async function executeLedgerRequest(options: LedgerRequest): Promise<Exec
   const result = await graphql({ schema, source: options.query, rootValue, variableValues: options.variables, operationName: options.operationName });
   if (!result.errors) return result;
   return { ...result, errors: result.errors.map(error => {
-    const code = typeof error.extensions.code === 'string' ? error.extensions.code : error.path ? 'UPSTREAM_ERROR' : 'INVALID_INPUT';
-    const safe = ['UNAUTHENTICATED', 'INVALID_INPUT', 'INVALID_CURSOR', 'UNDEFINED_COMMODITY', 'ASSET_METADATA_UNAVAILABLE'].includes(code) && typeof error.extensions.code === 'string';
+    const code = typeof error.extensions.code === 'string' ? error.extensions.code : error.originalError instanceof FeatureSettingsError ? error.originalError.code : error.path ? 'UPSTREAM_ERROR' : 'INVALID_INPUT';
+    const safe = ['UNAUTHENTICATED', 'INVALID_INPUT', 'INVALID_CURSOR', 'UNDEFINED_COMMODITY', 'ASSET_METADATA_UNAVAILABLE', 'FEATURE_DISABLED', 'FEATURE_SETTINGS_UNAVAILABLE', 'FEATURE_VERSION_CONFLICT'].includes(code) && (typeof error.extensions.code === 'string' || error.originalError instanceof FeatureSettingsError);
     return new GraphQLError(safe ? error.message : error.path ? 'The ledger operation could not be completed.' : 'The GraphQL request is invalid.', {
       path: error.path, extensions: { code, requestId, timestamp, ...(safe && error.extensions.details ? { details: error.extensions.details } : {}) },
     });

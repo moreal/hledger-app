@@ -383,6 +383,20 @@ export function createHledgerAdapter(options: { journalPath: string; hledgerPath
   }
 
   return {
+    inspectReadOnly: async () => {
+      // A pending append may be incomplete. Leave every recovery byte untouched.
+      const requireNoPending = async () => {
+        try { await lstat(pendingPath); }
+        catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') return; throw error; }
+        throw new LedgerError('WRITE_RECOVERY_REQUIRED', 'Pending writes cannot be inspected as completed requests');
+      };
+      await requireNoPending();
+      const initialRevision = await fileRevision();
+      const loaded = await load();
+      await requireNoPending();
+      if (await fileRevision() !== initialRevision) throw new LedgerError('LEDGER_CHANGED', 'Journal changed during read-only inspection');
+      return loaded.snapshot;
+    },
     read: async () => withLock(async () => { await recoverPending(); return (await load()).snapshot; }),
     create: async input => {
       validate(input);

@@ -78,6 +78,22 @@ msgid "story.transactionCount"
 msgstr "{count, plural, one {거래 #개} other {거래 #개}}"
 
 #. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.accounts.transactionSummary"
+msgstr "{count}건 · {date}"
+
+#. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.transactions.dateAndStatus"
+msgstr "{date} · {status}"
+
+#. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.transactions.accessibleRow"
+msgstr "{date}, {description}, {status}, {amount}, 거래 상세 보기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/book-module.tsx
 #: apps/mobile/Books.tsx
 msgid "books.retryPreserved"
 msgstr "{detail}\n"
@@ -89,6 +105,11 @@ msgid "outbox.message.retryUncertain"
 msgstr "{detail} 이전 저장 결과는 여전히 알 수 없습니다."
 
 #. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.field.accessibleErrorLabel"
+msgstr "{label}, 오류"
+
+#. js-lingui-explicit-id
 #: apps/web/src/AssetUnitField.tsx
 msgid "asset.binding.useAndLink"
 msgstr "{name} 사용 + 이름 연결"
@@ -97,6 +118,11 @@ msgstr "{name} 사용 + 이름 연결"
 #: apps/web/src/AssetUnitField.tsx
 msgid "asset.search.enterChoice"
 msgstr "{name} 입력"
+
+#. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.accounts.accessibleRow"
+msgstr "{path}, 잔액 {balances}, 거래 {count}건, 항목 상세 보기"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -345,6 +371,11 @@ msgid "native.ledgerapp.sync.retry"
 msgstr "같은 요청 키로 확인·재시도"
 
 #. js-lingui-explicit-id
+#: apps/web/src/book-module.tsx
+msgid "books.recovery.retained"
+msgstr "같은 요청과 키를 보관했습니다. 결과가 불명확하면 책 기능을 켠 뒤 명시적으로 다시 보내세요."
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.forms.App.142"
 msgstr "같은 요청으로 결과 확인"
@@ -355,9 +386,9 @@ msgid "web.books.26"
 msgstr "같은 요청으로 결과 확인"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
-msgid "native.books.23"
-msgstr "같은 요청으로 확인·재시도"
+#: apps/mobile/book-module.tsx
+msgid "native.books.recovery.retry"
+msgstr "같은 요청으로 재시도"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -406,6 +437,11 @@ msgstr "갱신 지연"
 #: apps/web/src/I18n.stories.tsx
 msgid "nav.transactions"
 msgstr "거래"
+
+#. js-lingui-explicit-id
+#: packages/ui-web/src/index.tsx
+msgid "ui.accounts.transactionCount"
+msgstr "거래 {count}건"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -463,6 +499,11 @@ msgid "web.forms.App.90"
 msgstr "거래 복사 "
 
 #. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.accounts.noTransactions"
+msgstr "거래 이력 없음"
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.forms.App.58"
 msgstr "거래 입력"
@@ -513,7 +554,7 @@ msgid "native.ledgerapp.validation.date"
 msgstr "거래일: 실제 날짜를 YYYY-MM-DD 형식으로 입력해 주세요."
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.11"
 msgstr "거부된 요청의 확인 정보를 지우지 못했습니다. 브라우저 저장소를 복구해 주세요."
 
@@ -789,6 +830,16 @@ msgstr "기기에 저장한 거래가 없습니다."
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
+msgid "native.books.settings.refresh"
+msgstr "기능 설정 새로고침"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.books.settings.unavailable"
+msgstr "기능 설정을 확인하지 못했습니다. 연결과 설정을 새로고침해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
 msgid "native.ledgerapp.prices.noSource"
 msgstr "기록 없음"
 
@@ -838,7 +889,7 @@ msgid "web.connection.error.6"
 msgstr "기존 요청의 원장과 다릅니다. 원래 원장에 다시 연결해야 저장 결과를 확인할 수 있습니다."
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-recovery.ts
 msgid "web.books.1"
 msgstr "기존 책 요청의 확인 정보를 읽을 수 없습니다. 브라우저 저장소를 확인하기 전에는 새 요청을 보낼 수 없습니다."
 
@@ -935,6 +986,16 @@ msgid "web.forms.App.115"
 msgstr "내역 "
 
 #. js-lingui-explicit-id
+#: packages/ui-web/src/index.tsx
+msgid "ui.postings.amountLabel"
+msgstr "내역 {index} 금액 / 수량 ({commodity})"
+
+#. js-lingui-explicit-id
+#: packages/ui-web/src/index.tsx
+msgid "ui.postings.accountLabel"
+msgstr "내역 {index} 항목"
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.forms.App.114"
 msgstr "내역 {v0}"
@@ -1000,6 +1061,11 @@ msgid "web.forms.App.127"
 msgstr "내역 메모 (선택)"
 
 #. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.transactions.noPostings"
+msgstr "내역 없음"
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.forms.App.128"
 msgstr "내역 추가"
@@ -1058,6 +1124,11 @@ msgstr "다른 앱과 연동할 때 쓰는 식별자입니다. 참고 번호와 
 #: packages/i18n/src/index.ts
 msgid "outbox.message.endpointMismatch"
 msgstr "다른 원장 서버의 요청입니다. 재시도하려면 원래 서버에 다시 연결해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.draft.preserved"
+msgstr "다른 원장에 입력을 전송하지 않도록 잠갔습니다. 입력은 그대로 보관합니다."
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -1261,14 +1332,29 @@ msgid "web.forms.AssetUnitField.20"
 msgstr "미설정"
 
 #. js-lingui-explicit-id
+#: packages/ui-web/src/index.tsx
+msgid "ui.transactions.status.unmarked"
+msgstr "미표시"
+
+#. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.native.transactions.status.unmarked"
+msgstr "미확인"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "native.ledgerapp.transaction.unmarked"
 msgstr "미확인"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
-msgid "native.books.7"
-msgstr "보관된 책 요청을 확인하지 못했습니다."
+#: apps/mobile/book-module.tsx
+msgid "native.books.recovery.storageCorrupt"
+msgstr "보관된 책 요청을 읽지 못했습니다. 원본을 보존하고 새 요청과 비활성화를 잠급니다."
+
+#. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.native.transactions.status.pending"
+msgstr "보류"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -1452,6 +1538,11 @@ msgid "web.books.39"
 msgstr "서지 정보 출처"
 
 #. js-lingui-explicit-id
+#: apps/web/src/book-module.tsx
+msgid "books.module.optional"
+msgstr "선택 기능 · 책"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "native.ledgerapp.transactions.subaccounts"
 msgstr "선택 항목의 하위 항목 포함"
@@ -1529,6 +1620,11 @@ msgstr "설정으로 이동 "
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
+msgid "native.books.settings.closed"
+msgstr "설정을 확인할 때까지 책 기능을 잠급니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
 msgid "native.settings.26"
 msgstr "성공 이력 없음·확인되지 않음"
 
@@ -1538,7 +1634,7 @@ msgid "native.books.48"
 msgstr "손실 항목"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.16"
 msgstr "손익과 수수료 항목을 입력해 주세요."
 
@@ -1963,6 +2059,11 @@ msgid "web.forms.App.120"
 msgstr "예: -6500.00"
 
 #. js-lingui-explicit-id
+#: packages/ui-web/src/index.tsx
+msgid "ui.postings.amountHint"
+msgstr "예: 6500 또는 -6500.00"
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.forms.App.147"
 msgstr "예: KRW"
@@ -1983,6 +2084,11 @@ msgid "web.forms.AssetUnitField.9"
 msgstr "예: 삼성전자, AAPL, Apple"
 
 #. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.field.errorMessage"
+msgstr "오류 · {error}"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "native.ledgerapp.entry.saveOffline"
 msgstr "오프라인 임시 저장 · 전송하지 않음"
@@ -1998,11 +2104,6 @@ msgid "outbox.message.interrupted"
 msgstr "요청 도중 앱이 종료되었습니다. 원장을 확인하거나 같은 키로 직접 재시도해 주세요."
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
-msgid "native.books.22"
-msgstr "요청 키"
-
-#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "native.ledgerapp.sync.requestKey.sentence"
 msgstr "요청 키{value0}"
@@ -2013,7 +2114,7 @@ msgid "common.requestFailed"
 msgstr "요청을 완료하지 못했어요"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.1"
 msgstr "요청을 확인하지 못했습니다."
 
@@ -2158,6 +2259,11 @@ msgid "native.ledgerapp.sync.confirmed"
 msgstr "원장에서 거래 저장을 확인했습니다."
 
 #. js-lingui-explicit-id
+#: apps/mobile/book-module.tsx
+msgid "native.books.recovery.confirmed"
+msgstr "원장에서 원래 책 요청의 저장을 확인했습니다."
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.forms.App.69"
 msgstr "원장에서 읽은 항목이 여기에 표시됩니다."
@@ -2188,7 +2294,7 @@ msgid "outbox.message.rejected"
 msgstr "원장이 이 요청을 거부했습니다."
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.13"
 msgstr "유효한 ISBN-10 또는 ISBN-13을 입력해 주세요."
 
@@ -2241,6 +2347,11 @@ msgstr "이 실행에서 인증 확인"
 #: apps/mobile/LedgerApp.tsx
 msgid "native.settings.30"
 msgstr "이 실행의 인증 토큰을 지웠습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.books.settings.description"
+msgstr "이 원장에서 책 구매·판매·폐기와 ISBN 조회를 사용합니다. 꺼도 기존 원장 기록과 입력은 보관합니다."
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -2373,6 +2484,11 @@ msgid "web.forms.AssetUnitField.14"
 msgstr "일치하는 종목이 없습니다. {unavailable, select, yes {일부 출처를 사용할 수 없습니다. } other {}}자산을 직접 입력할 수 있습니다."
 
 #. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.field.readOnly"
+msgstr "읽기 전용"
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.forms.App.10"
 msgstr "읽는 중…"
@@ -2423,6 +2539,11 @@ msgstr "입력을 템플릿으로 저장"
 #: apps/mobile/LedgerApp.tsx
 msgid "native.ledgerapp.entry.validationTitle"
 msgstr "입력을 확인해 주세요"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.draft.originalLedger"
+msgstr "입력의 원래 원장으로 연결해 주세요."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -2570,12 +2691,12 @@ msgid "web.books.31"
 msgstr "저자 (선택)"
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.15"
 msgstr "저자는 20명까지, 각 이름은 200자까지 입력해 주세요."
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.13"
 msgstr "저자는 최대 20명, 한 명당 200자까지 입력할 수 있습니다."
 
@@ -2600,7 +2721,7 @@ msgid "web.forms.App.state.17"
 msgstr "저장 결과가 불명확합니다. 같은 요청으로 결과를 확인해 주세요."
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.10"
 msgstr "저장 결과가 불명확합니다. 같은 요청으로 확인해 주세요."
 
@@ -2610,9 +2731,14 @@ msgid "native.ledgerapp.entry.uncertainHint"
 msgstr "저장 결과가 불명확합니다. 동기화 화면에서 원래 요청 키로 확인·재시도해 주세요."
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.12"
 msgstr "저장 결과가 불명확합니다. 입력과 요청 키를 보관했습니다. 같은 요청으로 결과를 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/book-module.tsx
+msgid "native.books.recovery.unknown"
+msgstr "저장 결과가 아직 불명확합니다. 요청을 보관합니다. 전송하려면 책 기능을 켜고 원래 요청으로 재시도해 주세요."
 
 #. js-lingui-explicit-id
 #: packages/i18n/src/index.ts
@@ -2630,14 +2756,19 @@ msgid "web.forms.App.state.15"
 msgstr "저장 결과를 확인하지 못했습니다. 입력을 고정해 두었습니다. 같은 요청으로 결과를 확인해 주세요.{v0}"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
-msgid "native.books.21"
-msgstr "저장 결과를 확인할 때까지 다른 책 기록을 잠급니다. 원래 연결에서 같은 요청으로 재시도해 주세요."
+#: apps/mobile/book-module.tsx
+msgid "native.books.recovery.preserved"
+msgstr "저장 결과를 확인할 때까지 원래 요청과 입력을 보관합니다."
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.unconfirmed"
 msgstr "저장 결과를 확인해야 합니다. 같은 요청으로 다시 확인해 주세요.{detail}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/book-module.tsx
+msgid "books.recovery.inspect"
+msgstr "저장 결과만 확인"
 
 #. js-lingui-explicit-id
 #: packages/i18n/src/index.ts
@@ -2665,7 +2796,7 @@ msgid "error.outboxCorruption"
 msgstr "저장된 전송 대기함이 올바르지 않습니다. 초기화하기 전에 복구할 수 있도록 데이터를 보존해 주세요."
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.9"
 msgstr "저장은 확인했지만 재시도 정보를 지우지 못했습니다. 브라우저 저장소를 복구해 주세요."
 
@@ -2693,6 +2824,11 @@ msgstr "적용하면 아래 항목별 내역을 교체합니다. 날짜·내용�
 #: packages/i18n/src/index.ts
 msgid "error.outboxPersistence"
 msgstr "전송 대기함을 저장하지 못했습니다. 마지막으로 저장된 상태를 유지합니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/book-module.tsx
+msgid "native.books.recovery.inspect"
+msgstr "전송 없이 저장 결과 확인"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -2770,7 +2906,7 @@ msgid "web.forms.App.85"
 msgstr "정확한 값"
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.14"
 msgstr "제목, 날짜, 양수인 구입 금액, 통화와 계좌를 입력해 주세요."
 
@@ -2795,7 +2931,7 @@ msgid "web.forms.AssetUnitField.19"
 msgstr "조회 불가"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.5"
 msgstr "조회된 ISBN이 다릅니다. 직접 입력해 주세요."
 
@@ -2972,6 +3108,36 @@ msgid "web.books.27"
 msgstr "책 구입 기록"
 
 #. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.books.settings.title"
+msgstr "책 기능"
+
+#. js-lingui-explicit-id
+#: apps/web/src/book-module.tsx
+msgid "books.module.disable"
+msgstr "책 기능 끄기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.books.settings.disable"
+msgstr "책 기능 끄기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/book-module.tsx
+msgid "books.module.capabilityError"
+msgstr "책 기능 상태를 확인하지 못했습니다. 다시 연결해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/book-module.tsx
+msgid "books.module.enable"
+msgstr "책 기능 켜기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.books.settings.enable"
+msgstr "책 기능 켜기"
+
+#. js-lingui-explicit-id
 #: apps/web/src/Books.tsx
 msgid "web.books.20"
 msgstr "책 기록 안내"
@@ -2982,7 +3148,7 @@ msgid "native.books.19"
 msgstr "책 기록 안내"
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.10"
 msgstr "책 기록을 원장에 저장했습니다."
 
@@ -2992,12 +3158,12 @@ msgid "web.books.count"
 msgstr "책 목록 · {count}권"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.8"
 msgstr "책 목록 응답이 없습니다."
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.9"
 msgstr "책 목록 응답이 없습니다."
 
@@ -3007,14 +3173,24 @@ msgid "web.books.54"
 msgstr "책 목록을 읽지 못했습니다"
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.7"
 msgstr "책 목록을 읽지 못했습니다. 연결 상태를 확인해 주세요."
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.6"
 msgstr "책 목록을 확인하지 못했습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/book-module.tsx
+msgid "books.recovery.required"
+msgstr "책 요청 결과 확인 필요"
+
+#. js-lingui-explicit-id
+#: apps/mobile/book-module.tsx
+msgid "native.books.recovery.title"
+msgstr "책 요청 확인"
 
 #. js-lingui-explicit-id
 #: apps/web/src/Books.tsx
@@ -3047,7 +3223,7 @@ msgid "web.books.41"
 msgstr "책 정보 조회가 잠시 어렵습니다. 제목과 저자를 직접 입력해 기록할 수 있습니다."
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.3"
 msgstr "책 정보를 가져오지 못했습니다. 직접 입력할 수 있습니다."
 
@@ -3057,17 +3233,17 @@ msgid "web.books.38"
 msgstr "책 정보를 불러왔습니다. 제목과 저자를 확인하고 수정해 주세요."
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.2"
 msgstr "책 정보를 찾고 있습니다…"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.4"
 msgstr "책 정보를 찾지 못했습니다. 제목과 저자를 직접 입력해 주세요."
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.6"
 msgstr "책 정보를 채웠습니다. 내용을 확인해 주세요."
 
@@ -3082,7 +3258,7 @@ msgid "native.books.41"
 msgstr "책 제목"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.14"
 msgstr "책 제목을 1~200자로 입력해 주세요."
 
@@ -3107,12 +3283,12 @@ msgid "native.books.45"
 msgstr "책 항목"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.12"
 msgstr "책 항목과 현금 항목을 입력해 주세요."
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.11"
 msgstr "책과 원장 거래를 저장했습니다."
 
@@ -3147,7 +3323,7 @@ msgid "web.books.71"
 msgstr "처분 날짜"
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.16"
 msgstr "처분 날짜와 손실 비용 항목, 판매 금액과 필요한 계좌를 확인해 주세요."
 
@@ -3352,7 +3528,7 @@ msgid "native.assetunitfield.search.open"
 msgstr "통화·종목 찾기"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.15"
 msgstr "통화를 1~32자로 입력해 주세요."
 
@@ -3770,9 +3946,14 @@ msgid "native.assetunitfield.binding.currentAsset.sentence"
 msgstr "현재 자산 {value0}에 연결"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
-msgid "native.books.20"
-msgstr "확인 대기 중"
+#: packages/ui-web/src/index.tsx
+msgid "ui.transactions.status.pending"
+msgstr "확인 대기"
+
+#. js-lingui-explicit-id
+#: packages/ui-web/src/index.tsx
+msgid "ui.transactions.status.cleared"
+msgstr "확인 완료"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -3785,7 +3966,7 @@ msgid "native.settings.27"
 msgstr "확인 전"
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.8"
 msgstr "확인 정보를 브라우저에 보관하지 못해 요청을 보내지 않았습니다. 저장소 접근을 복구한 뒤 다시 열어 주세요."
 
@@ -3803,6 +3984,11 @@ msgstr "확인 중인 요청:"
 #: apps/mobile/LedgerApp.tsx
 msgid "native.ledgerapp.queue.needsReview"
 msgstr "확인 필요 · 저장 결과 불명확"
+
+#. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.native.transactions.status.cleared"
+msgstr "확인됨"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx

@@ -78,6 +78,22 @@ msgid "story.transactionCount"
 msgstr "{count, plural, one {# transaction} other {# transactions}}"
 
 #. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.accounts.transactionSummary"
+msgstr "{count} transactions \u00b7 {date}"
+
+#. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.transactions.dateAndStatus"
+msgstr "{date} \u00b7 {status}"
+
+#. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.transactions.accessibleRow"
+msgstr "{date}, {description}, {status}, {amount}, view transaction details"
+
+#. js-lingui-explicit-id
+#: apps/mobile/book-module.tsx
 #: apps/mobile/Books.tsx
 msgid "books.retryPreserved"
 msgstr "{detail}\n"
@@ -89,6 +105,11 @@ msgid "outbox.message.retryUncertain"
 msgstr "{detail} The earlier write outcome is still unknown."
 
 #. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.field.accessibleErrorLabel"
+msgstr "{label}, error"
+
+#. js-lingui-explicit-id
 #: apps/web/src/AssetUnitField.tsx
 msgid "asset.binding.useAndLink"
 msgstr "Use {name} and link its name"
@@ -97,6 +118,11 @@ msgstr "Use {name} and link its name"
 #: apps/web/src/AssetUnitField.tsx
 msgid "asset.search.enterChoice"
 msgstr "Enter {name}"
+
+#. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.accounts.accessibleRow"
+msgstr "{path}, balance {balances}, {count} transactions, view account details"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -345,6 +371,11 @@ msgid "native.ledgerapp.sync.retry"
 msgstr "Check and retry with the same request key"
 
 #. js-lingui-explicit-id
+#: apps/web/src/book-module.tsx
+msgid "books.recovery.retained"
+msgstr "The original request and key have been preserved. If the result is unclear, enable Books and explicitly resend the request."
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.forms.App.142"
 msgstr "Check result using the same request"
@@ -355,9 +386,9 @@ msgid "web.books.26"
 msgstr "Check result with the same request"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
-msgid "native.books.23"
-msgstr "Check or retry the same request"
+#: apps/mobile/book-module.tsx
+msgid "native.books.recovery.retry"
+msgstr "Retry the original request"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -406,6 +437,11 @@ msgstr "Update delayed"
 #: apps/web/src/I18n.stories.tsx
 msgid "nav.transactions"
 msgstr "Transactions"
+
+#. js-lingui-explicit-id
+#: packages/ui-web/src/index.tsx
+msgid "ui.accounts.transactionCount"
+msgstr "{count} transactions"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -463,6 +499,11 @@ msgid "web.forms.App.90"
 msgstr "Copy transaction "
 
 #. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.accounts.noTransactions"
+msgstr "No transaction history"
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.forms.App.58"
 msgstr "Enter transaction"
@@ -513,7 +554,7 @@ msgid "native.ledgerapp.validation.date"
 msgstr "Transaction date: Enter a valid date in YYYY-MM-DD format."
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.11"
 msgstr "Could not clear the confirmation details for the rejected request. Restore access to browser storage."
 
@@ -789,6 +830,16 @@ msgstr "No transactions are saved on this device."
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
+msgid "native.books.settings.refresh"
+msgstr "Refresh feature settings"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.books.settings.unavailable"
+msgstr "Could not check feature settings. Refresh the connection and settings."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
 msgid "native.ledgerapp.prices.noSource"
 msgstr "No record"
 
@@ -838,7 +889,7 @@ msgid "web.connection.error.6"
 msgstr "This ledger differs from the one used for the original request. Reconnect to the original ledger to check whether it was saved."
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-recovery.ts
 msgid "web.books.1"
 msgstr "Could not read the confirmation details for an earlier book request. New requests are blocked until you check browser storage."
 
@@ -935,6 +986,16 @@ msgid "web.forms.App.115"
 msgstr "Posting "
 
 #. js-lingui-explicit-id
+#: packages/ui-web/src/index.tsx
+msgid "ui.postings.amountLabel"
+msgstr "Posting {index} amount / quantity ({commodity})"
+
+#. js-lingui-explicit-id
+#: packages/ui-web/src/index.tsx
+msgid "ui.postings.accountLabel"
+msgstr "Posting {index} account"
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.forms.App.114"
 msgstr "Posting {v0}"
@@ -1000,6 +1061,11 @@ msgid "web.forms.App.127"
 msgstr "Posting note (optional)"
 
 #. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.transactions.noPostings"
+msgstr "No postings"
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.forms.App.128"
 msgstr "Add posting"
@@ -1058,6 +1124,11 @@ msgstr "An identifier for integration with other apps. It is separate from the r
 #: packages/i18n/src/index.ts
 msgid "outbox.message.endpointMismatch"
 msgstr "This request belongs to another ledger endpoint. Reconnect to its original endpoint to retry."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.draft.preserved"
+msgstr "This input is locked to prevent sending it to a different ledger. Your input has been preserved."
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -1261,14 +1332,29 @@ msgid "web.forms.AssetUnitField.20"
 msgstr "Not configured"
 
 #. js-lingui-explicit-id
+#: packages/ui-web/src/index.tsx
+msgid "ui.transactions.status.unmarked"
+msgstr "Unmarked"
+
+#. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.native.transactions.status.unmarked"
+msgstr "Unmarked"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "native.ledgerapp.transaction.unmarked"
 msgstr "Unmarked"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
-msgid "native.books.7"
-msgstr "Could not verify the saved book request."
+#: apps/mobile/book-module.tsx
+msgid "native.books.recovery.storageCorrupt"
+msgstr "Could not read the saved book request. The original data has been preserved. New requests and disabling Books are blocked."
+
+#. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.native.transactions.status.pending"
+msgstr "Pending"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -1452,6 +1538,11 @@ msgid "web.books.39"
 msgstr "Bibliographic source"
 
 #. js-lingui-explicit-id
+#: apps/web/src/book-module.tsx
+msgid "books.module.optional"
+msgstr "Optional feature · Books"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "native.ledgerapp.transactions.subaccounts"
 msgstr "Include subaccounts of the selected account"
@@ -1529,6 +1620,11 @@ msgstr "Go to settings "
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
+msgid "native.books.settings.closed"
+msgstr "Books is locked until its settings can be checked."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
 msgid "native.settings.26"
 msgstr "No successful sync recorded · Unverified"
 
@@ -1538,7 +1634,7 @@ msgid "native.books.48"
 msgstr "Loss account"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.16"
 msgstr "Enter the gain, loss, and fee accounts."
 
@@ -1963,6 +2059,11 @@ msgid "web.forms.App.120"
 msgstr "e.g. -6500.00"
 
 #. js-lingui-explicit-id
+#: packages/ui-web/src/index.tsx
+msgid "ui.postings.amountHint"
+msgstr "Example: 6500 or -6500.00"
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.forms.App.147"
 msgstr "e.g. KRW"
@@ -1983,6 +2084,11 @@ msgid "web.forms.AssetUnitField.9"
 msgstr "e.g. Samsung Electronics, AAPL, Apple"
 
 #. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.field.errorMessage"
+msgstr "Error \u00b7 {error}"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "native.ledgerapp.entry.saveOffline"
 msgstr "Save offline draft · Do not send"
@@ -1998,11 +2104,6 @@ msgid "outbox.message.interrupted"
 msgstr "The app stopped during a request. Check the ledger or explicitly retry with the same key."
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
-msgid "native.books.22"
-msgstr "Request key"
-
-#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "native.ledgerapp.sync.requestKey.sentence"
 msgstr "Request key{value0}"
@@ -2013,7 +2114,7 @@ msgid "common.requestFailed"
 msgstr "Could not complete the request"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.1"
 msgstr "Could not verify the request."
 
@@ -2158,6 +2259,11 @@ msgid "native.ledgerapp.sync.confirmed"
 msgstr "The ledger confirmed that the transaction was saved."
 
 #. js-lingui-explicit-id
+#: apps/mobile/book-module.tsx
+msgid "native.books.recovery.confirmed"
+msgstr "Confirmed that the original book request was saved in the ledger."
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.forms.App.69"
 msgstr "Accounts read from the ledger appear here."
@@ -2188,7 +2294,7 @@ msgid "outbox.message.rejected"
 msgstr "The ledger rejected this request."
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.13"
 msgstr "Enter a valid ISBN-10 or ISBN-13."
 
@@ -2241,6 +2347,11 @@ msgstr "Authentication verified for this session"
 #: apps/mobile/LedgerApp.tsx
 msgid "native.settings.30"
 msgstr "The authentication token for this session was cleared."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.books.settings.description"
+msgstr "Enable book purchases, sales, disposals, and ISBN lookup for this ledger. Existing ledger entries and input are preserved when Books is disabled."
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -2373,6 +2484,11 @@ msgid "web.forms.AssetUnitField.14"
 msgstr "No matching securities. {unavailable, select, yes {Some sources are unavailable. } other {}}You can enter an asset manually."
 
 #. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.field.readOnly"
+msgstr "Read only"
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.forms.App.10"
 msgstr "Loading…"
@@ -2423,6 +2539,11 @@ msgstr "Save entry as template"
 #: apps/mobile/LedgerApp.tsx
 msgid "native.ledgerapp.entry.validationTitle"
 msgstr "Check your entry"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.draft.originalLedger"
+msgstr "Connect to the original ledger for this input."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -2570,12 +2691,12 @@ msgid "web.books.31"
 msgstr "Authors (optional)"
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.15"
 msgstr "Enter up to 20 authors, with up to 200 characters per name."
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.13"
 msgstr "You can enter up to 20 authors, with up to 200 characters per name."
 
@@ -2600,7 +2721,7 @@ msgid "web.forms.App.state.17"
 msgstr "The save result is unknown. Check the result using the same request."
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.10"
 msgstr "The save result is uncertain. Check using the same request."
 
@@ -2610,9 +2731,14 @@ msgid "native.ledgerapp.entry.uncertainHint"
 msgstr "The save result is unknown. Check and retry with the original request key on the Sync screen."
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.12"
 msgstr "The save result is uncertain. Your input and request key have been preserved. Check the result using the same request."
+
+#. js-lingui-explicit-id
+#: apps/mobile/book-module.tsx
+msgid "native.books.recovery.unknown"
+msgstr "The save result is still unclear. The original request has been preserved. To send it, enable Books and retry the original request."
 
 #. js-lingui-explicit-id
 #: packages/i18n/src/index.ts
@@ -2630,14 +2756,19 @@ msgid "web.forms.App.state.15"
 msgstr "Could not confirm the save result. Your input has been locked. Check the result using the same request.{v0}"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
-msgid "native.books.21"
-msgstr "Other book entries are locked until the save result is confirmed. Retry the same request using the original connection."
+#: apps/mobile/book-module.tsx
+msgid "native.books.recovery.preserved"
+msgstr "The original request and input will be preserved until the save result is confirmed."
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.unconfirmed"
 msgstr "The save result needs confirmation. Check again using the same request.{detail}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/book-module.tsx
+msgid "books.recovery.inspect"
+msgstr "Check save result only"
 
 #. js-lingui-explicit-id
 #: packages/i18n/src/index.ts
@@ -2665,7 +2796,7 @@ msgid "error.outboxCorruption"
 msgstr "The saved outbox is invalid. Preserve its data for recovery before clearing it."
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.9"
 msgstr "The save was confirmed, but retry details could not be cleared. Restore access to browser storage."
 
@@ -2693,6 +2824,11 @@ msgstr "Applying replaces the postings below. Check the date, description, and c
 #: packages/i18n/src/index.ts
 msgid "error.outboxPersistence"
 msgstr "Could not save the outbox. The last saved state has been retained."
+
+#. js-lingui-explicit-id
+#: apps/mobile/book-module.tsx
+msgid "native.books.recovery.inspect"
+msgstr "Check save result without sending"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -2770,7 +2906,7 @@ msgid "web.forms.App.85"
 msgstr "Exact value"
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.14"
 msgstr "Enter the title, date, a positive purchase amount, currency, and accounts."
 
@@ -2795,7 +2931,7 @@ msgid "web.forms.AssetUnitField.19"
 msgstr "Unavailable"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.5"
 msgstr "The returned ISBN does not match. Enter the details manually."
 
@@ -2972,6 +3108,36 @@ msgid "web.books.27"
 msgstr "Record book purchase"
 
 #. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.books.settings.title"
+msgstr "Books"
+
+#. js-lingui-explicit-id
+#: apps/web/src/book-module.tsx
+msgid "books.module.disable"
+msgstr "Disable Books"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.books.settings.disable"
+msgstr "Disable Books"
+
+#. js-lingui-explicit-id
+#: apps/web/src/book-module.tsx
+msgid "books.module.capabilityError"
+msgstr "Could not check the Books feature status. Please reconnect."
+
+#. js-lingui-explicit-id
+#: apps/web/src/book-module.tsx
+msgid "books.module.enable"
+msgstr "Enable Books"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.books.settings.enable"
+msgstr "Enable Books"
+
+#. js-lingui-explicit-id
 #: apps/web/src/Books.tsx
 msgid "web.books.20"
 msgstr "About book records"
@@ -2982,7 +3148,7 @@ msgid "native.books.19"
 msgstr "About book records"
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.10"
 msgstr "Book entry saved to the ledger."
 
@@ -2992,12 +3158,12 @@ msgid "web.books.count"
 msgstr "Book list · {count, plural, one {# copy} other {# copies}}"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.8"
 msgstr "No response received for the book list."
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.9"
 msgstr "No response received for the book list."
 
@@ -3007,14 +3173,24 @@ msgid "web.books.54"
 msgstr "Could not load book list"
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.7"
 msgstr "Could not load the book list. Check your connection."
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.6"
 msgstr "Could not check the book list."
+
+#. js-lingui-explicit-id
+#: apps/web/src/book-module.tsx
+msgid "books.recovery.required"
+msgstr "Book request result needs checking"
+
+#. js-lingui-explicit-id
+#: apps/mobile/book-module.tsx
+msgid "native.books.recovery.title"
+msgstr "Check book request"
 
 #. js-lingui-explicit-id
 #: apps/web/src/Books.tsx
@@ -3047,7 +3223,7 @@ msgid "web.books.41"
 msgstr "Book lookup is temporarily unavailable. You can enter the title and authors manually to record the book."
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.3"
 msgstr "Could not retrieve book details. You can enter them manually."
 
@@ -3057,17 +3233,17 @@ msgid "web.books.38"
 msgstr "Book details loaded. Review and edit the title and authors."
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.2"
 msgstr "Looking up book details…"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.4"
 msgstr "No book details found. Enter the title and authors manually."
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.6"
 msgstr "Book details filled in. Review them before continuing."
 
@@ -3082,7 +3258,7 @@ msgid "native.books.41"
 msgstr "Book title"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.14"
 msgstr "Enter a book title of 1–200 characters."
 
@@ -3107,12 +3283,12 @@ msgid "native.books.45"
 msgstr "Book account"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.12"
 msgstr "Enter the book and cash accounts."
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.11"
 msgstr "Book and ledger transaction saved."
 
@@ -3147,7 +3323,7 @@ msgid "web.books.71"
 msgstr "Disposal date"
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.16"
 msgstr "Check the disposal date, loss expense account, sale proceeds, and required accounts."
 
@@ -3352,7 +3528,7 @@ msgid "native.assetunitfield.search.open"
 msgstr "Find currencies and securities"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
+#: apps/mobile/book-module.tsx
 msgid "native.books.15"
 msgstr "Enter a currency of 1–32 characters."
 
@@ -3770,9 +3946,14 @@ msgid "native.assetunitfield.binding.currentAsset.sentence"
 msgstr "Link to current asset {value0}"
 
 #. js-lingui-explicit-id
-#: apps/mobile/Books.tsx
-msgid "native.books.20"
-msgstr "Awaiting confirmation"
+#: packages/ui-web/src/index.tsx
+msgid "ui.transactions.status.pending"
+msgstr "Pending"
+
+#. js-lingui-explicit-id
+#: packages/ui-web/src/index.tsx
+msgid "ui.transactions.status.cleared"
+msgstr "Cleared"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -3785,7 +3966,7 @@ msgid "native.settings.27"
 msgstr "Not yet verified"
 
 #. js-lingui-explicit-id
-#: apps/web/src/Books.tsx
+#: apps/web/src/book-module.tsx
 msgid "web.books.8"
 msgstr "The request was not sent because its confirmation details could not be saved in the browser. Restore access to storage, then reopen this screen."
 
@@ -3803,6 +3984,11 @@ msgstr "Request being checked:"
 #: apps/mobile/LedgerApp.tsx
 msgid "native.ledgerapp.queue.needsReview"
 msgstr "Review needed · Save result unknown"
+
+#. js-lingui-explicit-id
+#: packages/ui-native/src/index.tsx
+msgid "ui.native.transactions.status.cleared"
+msgstr "Cleared"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx

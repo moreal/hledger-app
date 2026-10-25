@@ -1,3 +1,5 @@
+import { createFeatureSettingsStore, type FeatureSettingsStore } from './feature-settings.ts';
+import { booksFromTransactions } from './books.ts';
 import { createServer, type IncomingMessage, type Server } from 'node:http';
 import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
@@ -22,6 +24,7 @@ export interface ServerOptions {
   ledgerId?: string;
   assetCatalog?: AssetCatalog;
   assetBindings?: AssetBindingStore;
+  featureSettings?: FeatureSettingsStore;
 }
 function matchesToken(header: string | undefined, token: string): boolean {
   const expected = Buffer.from(`Bearer ${token}`);
@@ -96,7 +99,7 @@ export async function startServer(options: ServerOptions): Promise<Server> {
       if (typeof query !== 'string' || !query.trim() || (variables != null && (typeof variables !== 'object' || Array.isArray(variables))) || (operationName != null && typeof operationName !== 'string')) return failure(400, 'INVALID_REQUEST', 'Invalid GraphQL request shape.');
       const result = await executeLedgerRequest({ adapter: options.adapter, query, variables: variables as Record<string, unknown> | undefined,
         operationName: operationName as string | undefined, authorized: matchesToken(request.headers.authorization, options.token), requestId, defaultCommodity: options.defaultCommodity, ledgerId,
-        assetCatalog, assetBindings: options.assetBindings });
+        assetCatalog, assetBindings: options.assetBindings, featureSettings: options.featureSettings });
       send(200, result);
     } catch { failure(500, 'INTERNAL_ERROR', 'The request could not be completed.'); }
   });
@@ -119,7 +122,10 @@ if (process.argv[1] && pathToFileURL(resolve(process.argv[1])).href === import.m
     try {
       const canonicalJournal = realpathSync(journalPath);
       const ledgerId = createHash('sha256').update(canonicalJournal).digest('hex');
-      const server = await startServer({ adapter: createHledgerAdapter({ journalPath, hledgerPath: process.env.HLEDGER_BIN }), token,
+      const adapter = createHledgerAdapter({ journalPath: canonicalJournal, hledgerPath: process.env.HLEDGER_BIN });
+      const featureSettings = createFeatureSettingsStore({ path: `${canonicalJournal}.features.json`, ledgerId,
+        inspectExisting: async () => adapter.inspectReadOnly ? booksFromTransactions((await adapter.inspectReadOnly()).transactions).length > 0 : false });
+      const server = await startServer({ adapter, token, featureSettings,
         host: process.env.HLEDGER_HOST, port: process.env.HLEDGER_PORT ? Number(process.env.HLEDGER_PORT) : undefined,
         allowedOrigins: process.env.HLEDGER_ALLOWED_ORIGINS?.split(',').map(value => value.trim()).filter(Boolean), defaultCommodity: process.env.HLEDGER_DEFAULT_COMMODITY, ledgerId,
         assetCatalog: createAssetCatalog({ snapshotPath: defaultAssetCatalogPath(), brandfetchClientId: process.env.HLEDGER_BRANDFETCH_CLIENT_ID }),

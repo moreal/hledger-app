@@ -18,6 +18,8 @@ scalar DateTime
 scalar JSONObject
 
 type Query {
+  ledgerFeatures: LedgerFeatures!
+  bookRequestStatus(input: BookRequestStatusInput!): BookRequestStatus!
   bookMetadata(isbn: String!): BookMetadataLookup
   books: [BookCopy!]
   health: Health
@@ -36,6 +38,7 @@ type Query {
 }
 
 type Mutation {
+  setBooksEnabled(enabled: Boolean!, expectedVersion: Int!, hasPending: Boolean = false): BooksFeaturePayload!
   purchaseBook(input: PurchaseBookInput!): BookPayload
   disposeBook(input: DisposeBookInput!): BookPayload
   """
@@ -353,3 +356,23 @@ input DisposeBookInput {
   feeAccount: String
 }
 type BookPayload { book: BookCopy idempotency: IdempotencyInfo errors: [FieldError!]! }
+
+"""Ledger-scoped built-in module capabilities, available regardless of module state."""
+type LedgerFeatures { ledgerId: ID! books: BooksFeature! }
+type BooksFeature {
+  moduleId: String!
+  version: Int!
+  migrationVersion: Int!
+  enabled: Boolean!
+  migratedExistingData: Boolean!
+  canRead: Boolean!
+  canWrite: Boolean!
+  canLookupMetadata: Boolean!
+  canRecover: Boolean!
+}
+type BooksFeaturePayload { feature: BooksFeature errors: [FieldError!]! }
+enum BookRequestStatusKind { CONFIRMED UNKNOWN }
+"""Exactly one full original purchase or disposal input is required. Inspection never writes."""
+input BookRequestStatusInput { purchase: PurchaseBookInput disposal: DisposeBookInput }
+"""CONFIRMED requires a complete book and same-key idempotency proof; UNKNOWN never proves absence."""
+type BookRequestStatus { status: BookRequestStatusKind! book: BookCopy idempotency: IdempotencyInfo }

@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { lookupBookMetadata, safeBookCoverUrl } from './seoji.ts';
 import { executeLedgerRequest } from './schema.ts';
+import { createMemoryFeatureSettingsStore } from './feature-settings.ts';
 const data = { isbn13: '9788936434267', title: '아몬드', contributors: [{ name: '손원평', role: 'author' }, {name: '편집자', role: 'editor'}], cover_url: null, attribution: '국립중앙도서관' };
 const mock = (body: unknown, status = 200): typeof fetch => async () => new Response(JSON.stringify(body), {status});
 test('Seoji lookup normalizes ISBN and maps a partial result without inventing cover art', async () => {
@@ -28,7 +29,8 @@ test('metadata query requires authorization before lookup and invalid ISBN repor
  const adapter = {read:async()=>{throw new Error('unexpected read');},create:async()=>{throw new Error('unexpected write');}};
  const query = '{ bookMetadata(isbn:"invalid") { status } }';
  assert.equal((await executeLedgerRequest({adapter,query,authorized:false})).errors?.[0]?.extensions.code,'UNAUTHENTICATED');
- assert.equal((await executeLedgerRequest({adapter,query,authorized:true})).errors?.[0]?.extensions.code,'INVALID_INPUT');
+ assert.equal((await executeLedgerRequest({adapter,query,authorized:true})).errors?.[0]?.extensions.code,'FEATURE_DISABLED');
+ assert.equal((await executeLedgerRequest({adapter,query,authorized:true,featureSettings:createMemoryFeatureSettingsStore({enabled:true})})).errors?.[0]?.extensions.code,'INVALID_INPUT');
 });
 
 test('lookup rejects metadata beyond purchase limits without truncating bibliography', async () => {

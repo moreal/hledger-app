@@ -1,7 +1,8 @@
 import type { TypedDocumentNode } from '@graphql-typed-document-node/core';
+import { normalizeIsbn } from '../domain/src/books.ts';
 import { print } from 'graphql';
 import { parseDate, parseDateTime, parseDecimal, validateTags } from '../api-contract/validation.ts';
-import { BookMetadataDocument, BooksDocument, PurchaseBookDocument, DisposeBookDocument, HealthDocument, AccountsDocument, AccountTransactionsDocument, TransactionsDocument, PricesDocument, CreateTransactionDocument, AssetsDocument, AssetBindingsDocument, SetAssetBindingDocument } from '../api-contract/generated/client/graphql.ts';
+import { LedgerFeaturesDocument, SetBooksEnabledDocument, BookRequestStatusDocument, BookMetadataDocument, BooksDocument, PurchaseBookDocument, DisposeBookDocument, HealthDocument, AccountsDocument, AccountTransactionsDocument, TransactionsDocument, PricesDocument, CreateTransactionDocument, AssetsDocument, AssetBindingsDocument, SetAssetBindingDocument } from '../api-contract/generated/client/graphql.ts';
 import type { PurchaseBookInput, DisposeBookInput, AccountsQueryVariables, AccountTransactionsQueryVariables, TransactionsQueryVariables, PricesQueryVariables, CreateTransactionInput, AssetsQueryVariables } from '../api-contract/generated/client/graphql.ts';
 export type * from '../api-contract/generated/client/graphql.ts';
 
@@ -47,9 +48,13 @@ export function isValidCreateConfirmation(value: unknown, key: string): boolean 
 export function isValidBookConfirmation(value: unknown, key: string): boolean {
   if (!isRecord(value) || !Array.isArray(value.errors) || value.errors.length || !isRecord(value.idempotency) || value.idempotency.key !== key || typeof value.idempotency.replayed !== 'boolean' || !isRecord(value.book)) return false;
   const book = value.book;
+  if (!Array.isArray(book.authors) || book.authors.length > 20 || book.authors.some(author => !text(author, 1, 200)) || !nullableText(book.coverUrl) || !Object.hasOwn(book,'disposalDate') || !Object.hasOwn(book,'saleProceeds') || !Object.hasOwn(book,'realizedGain')) return false;
   if (!text(book.id, 20, 20) || !/^[a-f0-9]{20}$/.test(book.id) || book.commodity !== `asset:book:${book.id}` || !text(book.isbn, 13, 13) || !text(book.title, 1, 200) || !text(book.assetAccount, 1) || !['HELD','SOLD','DISCARDED'].includes(String(book.status))) return false;
   try {
+    if (normalizeIsbn(book.isbn as string) !== book.isbn) return false;
     parseDate(book.purchaseDate);
+    if (book.status === 'HELD' && (book.disposalDate !== null || book.saleProceeds !== null || book.realizedGain !== null)) return false;
+    if (book.status !== 'HELD' && (book.disposalDate == null || book.realizedGain == null || book.saleProceeds == null)) return false;
     if (book.disposalDate != null) parseDate(book.disposalDate);
     for (const field of ['purchasePrice','saleProceeds','realizedGain']) {
       const amount = book[field];
@@ -58,6 +63,29 @@ export function isValidBookConfirmation(value: unknown, key: string): boolean {
       parseDecimal(amount.value);
     }
     return true;
+  } catch { return false; }
+}
+
+export type BookRequest = { kind: 'purchase'; input: PurchaseBookInput } | { kind: 'dispose'; input: DisposeBookInput };
+/** Read-only confirmation must describe the original request, never merely the same key. */
+export function isValidBookRequestConfirmation(value: unknown, request: BookRequest): boolean {
+  if (!isRecord(value) || value.status !== 'CONFIRMED' || !isRecord(value.idempotency) || value.idempotency.replayed !== true || !isValidBookConfirmation({ ...value, errors: [] }, request.input.idempotencyKey) || !isRecord(value.book)) return false;
+  const book = value.book;
+  try {
+    if (request.kind === 'purchase') {
+      const purchase = request.input;
+      return book.isbn === normalizeIsbn(purchase.isbn) && book.title === purchase.title.trim() && book.purchaseDate === purchase.date &&
+        book.assetAccount === purchase.assetAccount &&
+        JSON.stringify(book.authors) === JSON.stringify((purchase.authors ?? []).map(author => author.trim())) &&
+        book.coverUrl === (purchase.coverUrl ?? null) && isRecord(book.purchasePrice) &&
+        book.purchasePrice.commodity === purchase.purchasePrice.commodity && subtractDecimals(String(book.purchasePrice.value), purchase.purchasePrice.value) === '0';
+    }
+    const disposal = request.input;
+    if (book.id !== disposal.copyId || book.disposalDate !== disposal.date || book.status !== (disposal.kind === 'SELL' ? 'SOLD' : 'DISCARDED')) return false;
+    if (!isRecord(book.saleProceeds) || !isRecord(book.purchasePrice) || !isRecord(book.realizedGain)) return false;
+    const proceeds = disposal.kind === 'SELL' ? disposal.saleProceeds : {commodity:book.purchasePrice.commodity,value:'0'};
+    return !!proceeds && book.saleProceeds.commodity === proceeds.commodity && subtractDecimals(String(book.saleProceeds.value), proceeds.value) === '0' &&
+      book.realizedGain.commodity === book.purchasePrice.commodity && subtractDecimals(String(book.realizedGain.value), subtractDecimals(subtractDecimals(proceeds.value, disposal.fee ?? '0'), String(book.purchasePrice.value))) === '0';
   } catch { return false; }
 }
 
@@ -98,17 +126,32 @@ export function createLedgerClient(options: { endpoint: string; token?: string; 
     identity,
     health: () => execute(HealthDocument, {}),
     books: () => execute(BooksDocument, {}),
+    ledgerFeatures: () => execute(LedgerFeaturesDocument, {}),
+    setBooksEnabled: (enabled: boolean, expectedVersion: number, hasPending = false) => execute(SetBooksEnabledDocument, { enabled, expectedVersion, hasPending }),
+    bookRequestStatus: async (request: BookRequest) => {
+      const input = request.kind === 'purchase' ? { purchase: request.input } : { disposal: request.input };
+      const result = await execute(BookRequestStatusDocument, { input });
+      if (!result.errors?.length) {
+        const status = result.data?.bookRequestStatus;
+        if (!status || !['CONFIRMED','UNKNOWN'].includes(status.status) ||
+          (status.status === 'CONFIRMED' && !isValidBookRequestConfirmation(status, request)) ||
+          (status.status === 'UNKNOWN' && (status.book !== null || status.idempotency !== null))) {
+          throw new LedgerTransportError('Book request outcome is unconfirmed.', 'protocol');
+        }
+      }
+      return result;
+    },
     bookMetadata: (isbn: string) => execute(BookMetadataDocument, { isbn }),
     purchaseBook: async (input: PurchaseBookInput) => {
       const result = await execute(PurchaseBookDocument, { input });
       const payload = result.data?.purchaseBook;
-      if (payload && !result.errors?.length && !payload.errors?.length && !isValidBookConfirmation(payload, input.idempotencyKey)) throw new LedgerTransportError('Book purchase outcome is unconfirmed.', 'protocol');
+      if (!result.errors?.length && !payload?.errors?.length && !isValidBookConfirmation(payload, input.idempotencyKey)) throw new LedgerTransportError('Book purchase outcome is unconfirmed.', 'protocol');
       return result;
     },
     disposeBook: async (input: DisposeBookInput) => {
       const result = await execute(DisposeBookDocument, { input });
       const payload = result.data?.disposeBook;
-      if (payload && !result.errors?.length && !payload.errors?.length && (!isValidBookConfirmation(payload, input.idempotencyKey) || payload.book?.id !== input.copyId)) throw new LedgerTransportError('Book disposal outcome is unconfirmed.', 'protocol');
+      if (!result.errors?.length && !payload?.errors?.length && (!isValidBookConfirmation(payload, input.idempotencyKey) || payload?.book?.id !== input.copyId)) throw new LedgerTransportError('Book disposal outcome is unconfirmed.', 'protocol');
       return result;
     },
     assets: (variables: AssetsQueryVariables) => execute(AssetsDocument, variables),

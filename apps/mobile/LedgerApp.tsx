@@ -22,7 +22,7 @@ import { createDurableStorage } from './storage';
 import { arePostingsBalanced } from '../../packages/domain/src/trade';
 import { TradeFields, newTradeInput } from './TradeFields';
 import { AssetUnitField } from './AssetUnitField';
-import { Books } from './Books';
+import { BookModuleView, BookRecovery, useBookController, useBooksFeature } from './book-module';
 
 
 type TabScreen = 'accounts' | 'transactions' | 'entry' | 'prices' | 'books' | 'sync';
@@ -123,6 +123,8 @@ export default function LedgerApp({ onOpenGallery, localePreference }: { onOpenG
   const assetUnitHydration = useRef<Promise<void>>(Promise.resolve());
   const [rememberedAssetUnits, setRememberedAssetUnits] = useState<Record<string, string[]>>({});
   const client = useMemo(() => createLedgerClient(connection), [connection]);
+  const booksCapability = useBooksFeature(client, connection.verified, connection.ledgerId);
+  const bookController = useBookController({ client, verified: connection.verified, active: screen === 'books' && booksCapability.feature?.enabled === true, feature: booksCapability.feature, refreshFeature: booksCapability.refresh });
   const [assetMetadata, setAssetMetadata] = useState<{ identity: string; bindings: AssetBinding[] }>({ identity: '', bindings: [] });
   const [assetMetadataError, setAssetMetadataError] = useState<LocalMessage>('');
   const [assetMetadataReload, setAssetMetadataReload] = useState(0);
@@ -416,6 +418,7 @@ export default function LedgerApp({ onOpenGallery, localePreference }: { onOpenG
     });
   }
   async function loadHealth() {
+    void booksCapability.refresh();
     const id = ++healthRequest.current;
     setHealthError('');
     try {
@@ -495,7 +498,7 @@ export default function LedgerApp({ onOpenGallery, localePreference }: { onOpenG
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView ref={scrollView} contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag">
         <View style={styles.header}><Text accessibilityRole="header" style={[styles.brand, styles.flex]}>hledger</Text><Badge tone={pendingCount ? 'warning' : 'neutral'}>{pendingCount ? _(/* i18n */ { id: 'native.ledgerapp.queue.pendingCount', message: "대기 {value0}건", values: { value0: pendingCount } }) : _(/* i18n */ { id: 'native.ledgerapp.connection.live', message: "실제 원장" })}</Badge>{onOpenGallery && <Button variant="quiet" disabled={busy} onPress={onOpenGallery}>{_(/* i18n */ { id: 'nav.gallery', message: '갤러리' })}</Button>}<View testID={screen === 'settings' ? 'nav-back' : 'nav-settings'}><Button variant="quiet" disabled={busy} onPress={screen === 'settings' ? closeSettings : openSettings}>{screen === 'settings' ? _(/* i18n */ { id: 'nav.back', message: '뒤로' }) : _(/* i18n */ { id: 'nav.settings', message: '설정' })}</Button></View></View>
-        {screen !== 'settings' && <View style={styles.navigation}>{tabs.map(([tab, label]) => <Button key={tab} selected={screen === tab} disabled={busy} onPress={() => { setSelectedAccount(null); setAccountDetail(null); setSelectedTransaction(null); setScreen(tab); }}>{label}</Button>)}</View>}
+        {screen !== 'settings' && <View style={styles.navigation}>{tabs.filter(([tab]) => tab !== 'books' || booksCapability.feature?.enabled).map(([tab, label]) => <Button key={tab} selected={screen === tab} disabled={busy} onPress={() => { setSelectedAccount(null); setAccountDetail(null); setSelectedTransaction(null); setScreen(tab); }}>{label}</Button>)}</View>}
         <Heading>{titles[screen]}</Heading>
         {!connection.verified && screen !== 'settings' && <Notice title={_(/* i18n */ { id: 'connection.required', message: '설정에서 원장을 연결해 주세요' })} tone="accent" action={{ label: _(/* i18n */ { id: 'connection.openSettings', message: '설정 열기' }), onPress: openSettings }}>{_(/* i18n */ { id: 'connection.guidance', message: '주소와 인증 토큰을 적용하면 원장을 확인하고 조회·전송을 시작합니다. 이전 연결이 있다면 오프라인 임시 저장은 가능합니다.' })}</Notice>}
         {loading && <Notice title={_(/* i18n */ { id: 'common.loading', message: '불러오는 중' })}>{_(/* i18n */ { id: 'common.requesting', message: '원장에 요청하고 있습니다.' })}</Notice>}
@@ -607,7 +610,8 @@ export default function LedgerApp({ onOpenGallery, localePreference }: { onOpenG
           </Panel>
         </View>}
 
-        <View style={screen === 'books' ? undefined : { display: 'none' }}><Books client={client} verified={connection.verified} active={screen === 'books'} /></View>
+        <BookRecovery controller={bookController} client={client} verified={connection.verified} feature={booksCapability.feature} />
+        {screen === 'books' && <BookModuleView controller={bookController} verified={connection.verified} feature={booksCapability.feature} />}
 
         {<View style={screen === 'prices' ? undefined : { display: 'none' }}><Panel><AssetUnitField label={_(/* i18n */ { id: 'native.ledgerapp.prices.commodity', message: "자산 (선택)" })} value={priceCommodity} onChangeText={setPriceCommodity} customValues={assetUnitValues} onComplete={rememberAssetUnit} editable={!busy} catalogClient={connection.verified ? client : undefined} onBind={bindAsset} /><AssetUnitField label={_(/* i18n */ { id: 'native.ledgerapp.prices.quoteCommodity', message: "기준 자산 (선택)" })} value={quoteCommodity} onChangeText={setQuoteCommodity} customValues={assetUnitValues} onComplete={rememberAssetUnit} editable={!busy} catalogClient={connection.verified ? client : undefined} onBind={bindAsset} />
           <Field label={_(/* i18n */ { id: 'native.ledgerapp.prices.from', message: "시세 시작일 (선택)" })} value={priceFrom} onChangeText={setPriceFrom} placeholder="YYYY-MM-DD" /><Field label={_(/* i18n */ { id: 'native.ledgerapp.prices.to', message: "시세 종료일 (선택)" })} value={priceTo} onChangeText={setPriceTo} placeholder="YYYY-MM-DD" /><Button variant="primary" disabled={loading} onPress={() => void loadPrices()}>{_(/* i18n */ { id: 'native.ledgerapp.prices.load', message: "시세 조회" })}</Button></Panel>
@@ -616,6 +620,12 @@ export default function LedgerApp({ onOpenGallery, localePreference }: { onOpenG
           </Panel></View>}
 
         {screen === 'settings' && <>
+          <Panel><Heading>{_(/* i18n */ { id: 'native.books.settings.title', message: '책 기능' })}</Heading>
+            <Text style={textStyles.muted}>{_(/* i18n */ { id: 'native.books.settings.description', message: '이 원장에서 책 구매·판매·폐기와 ISBN 조회를 사용합니다. 꺼도 기존 원장 기록과 입력은 보관합니다.' })}</Text>
+            <Button disabled={!booksCapability.feature || booksCapability.working || !bookController.ready || bookController.busy || (!!booksCapability.feature.enabled && !!bookController.pending)} onPress={() => void booksCapability.toggle(!booksCapability.feature?.enabled, bookController)}>{booksCapability.feature?.enabled ? _(/* i18n */ { id: 'native.books.settings.disable', message: '책 기능 끄기' }) : _(/* i18n */ { id: 'native.books.settings.enable', message: '책 기능 켜기' })}</Button>
+            <Button disabled={!connection.verified || booksCapability.working} onPress={() => void booksCapability.refresh()}>{_(/* i18n */ { id: 'native.books.settings.refresh', message: '기능 설정 새로고침' })}</Button>
+            {booksCapability.failed && <Notice tone="warning" title={_(/* i18n */ { id: 'native.books.settings.unavailable', message: '기능 설정을 확인하지 못했습니다. 연결과 설정을 새로고침해 주세요.' })}>{_(/* i18n */ { id: 'native.books.settings.closed', message: '설정을 확인할 때까지 책 기능을 잠급니다.' })}</Notice>}
+          </Panel>
           <Panel><Heading>{_(/* i18n */ { id: 'settings.language', message: '언어' })}</Heading>
             <View style={styles.wrap}>{(['ko', 'en'] as const).map(locale => <Pressable key={locale} testID={`locale-${locale}`} accessibilityRole="button" accessibilityState={{ selected: i18n.locale === locale }} accessibilityLabel={locale === 'ko' ? '한국어' : 'English'} onPress={() => selectLocale(locale)} style={styles.posting}><Text style={textStyles.strong}>{locale === 'ko' ? '한국어' : 'English'}</Text></Pressable>)}</View>
             {localeError && <Notice tone="warning" title={_(/* i18n */ { id: 'settings.languageSaveFailed', message: '언어 설정을 저장하지 못했습니다. 다시 선택해 주세요.' })}>{_(/* i18n */ { id: 'settings.languageSaveHint', message: '현재 언어를 유지합니다. 앱을 다시 열기 전에 언어를 다시 선택해 주세요.' })}</Notice>}

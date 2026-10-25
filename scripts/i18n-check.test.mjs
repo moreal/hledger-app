@@ -82,3 +82,38 @@ test('rejects blank and fuzzy English even though strict compile accepts Korean 
     assert.deepEqual(await snapshot(options.cwd), before);
   }
 });
+
+test('project extraction includes native and web UI packages and production interpolates transaction labels', async (t) => {
+  const { getConfig } = await import('@lingui/conf');
+  const { parsePoFile } = await import('@lingui/format-po');
+  const repository = path.resolve(fileURLToPath(new URL('..', import.meta.url)));
+  const project = getConfig({ cwd: repository });
+  const cwd = await mkdtemp(path.join(tmpdir(), 'lingui-ui-production-test-'));
+  t.after(() => rm(cwd, { recursive: true, force: true }));
+  for (const directory of ['apps', 'packages/ui-native/src', 'packages/ui-web/src', 'packages/i18n/src']) await mkdir(path.join(cwd, directory), { recursive: true });
+  await writeFile(path.join(cwd, 'packages/ui-native/src/index.tsx'), `
+const date = /* i18n */ {id:'ui.transactions.dateAndStatus',message:'{date} · {status}'};
+const row = /* i18n */ {id:'ui.transactions.accessibleRow',message:'{date}, {description}, {status}, {amount}, 거래 상세 보기'};
+`);
+  await writeFile(path.join(cwd, 'packages/ui-web/src/index.tsx'), `const label = /* i18n */ {id:'web.ui.coverage',message:'웹 UI'};\n`);
+  const catalogs = project.catalogs.map(catalog => ({ ...catalog, path: '<rootDir>/locales/{locale}/messages', include: catalog.include.map(include => include.replace(project.rootDir, '<rootDir>')) }));
+  const configPath = path.join(cwd, 'lingui.config.mjs');
+  await writeFile(configPath, `import {formatter} from ${JSON.stringify(import.meta.resolve('@lingui/format-po'))};\nexport default {rootDir:${JSON.stringify(cwd)},sourceLocale:'ko',locales:['ko'],catalogs:${JSON.stringify(catalogs)},format:formatter({lineNumbers:false}),compileNamespace:'es'};\n`);
+  for (const command of ['extract', 'compile']) {
+    const result = spawnSync(process.execPath, [cli, command, '--config', configPath, ...(command === 'compile' ? ['--typescript', '--strict'] : [])], { cwd, encoding: 'utf8' });
+    assert.equal(result.status, 0, result.stdout + result.stderr);
+    if (command === 'extract') {
+      const ids = parsePoFile(await readFile(path.join(cwd, 'locales/ko/messages.po'), 'utf8')).items.filter(item => !item.obsolete).map(item => item.msgid);
+      for (const id of ['ui.transactions.dateAndStatus', 'ui.transactions.accessibleRow', 'web.ui.coverage']) assert.ok(ids.includes(id), `Project extraction omitted ${id}`);
+    }
+  }
+  const result = spawnSync(process.execPath, ['--import', 'tsx', '--input-type=module', '-e', `
+    import assert from 'node:assert/strict';
+    import {setupI18n} from ${JSON.stringify(import.meta.resolve('@lingui/core'))};
+    import {messages} from ${JSON.stringify(path.join(cwd, 'locales/ko/messages.ts'))};
+    const i18n = setupI18n({locale:'ko',messages:{ko:messages}});
+    assert.equal(i18n._('ui.transactions.dateAndStatus',{date:'2026-10-25',status:'확인됨'}),'2026-10-25 · 확인됨');
+    assert.equal(i18n._('ui.transactions.accessibleRow',{date:'2026-10-25',description:'QA',status:'확인됨',amount:'1 KRW'}),'2026-10-25, QA, 확인됨, 1 KRW, 거래 상세 보기');
+  `], { cwd: repository, encoding: 'utf8', env: { ...process.env, NODE_ENV: 'production' } });
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+});

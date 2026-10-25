@@ -1,4 +1,4 @@
-import { normalizeBookCoverUrl as safeBookCoverUrl } from './seoji.ts';
+import { normalizeBookCoverUrl as safeBookCoverUrl } from '../../packages/domain/src/book-cover-url.ts';
 import { createHash } from 'node:crypto';
 import { normalizeIsbn, createBookCommodity } from '../../packages/domain/src/books.ts';
 import { parseDate, parseDecimal, validateCreateTransactionInput } from '../../packages/api-contract/validation.ts';
@@ -23,9 +23,9 @@ function normalizeAuthors(value: unknown): string[] {
 /** Provider results may omit an unsafe image; explicitly supplied purchase metadata must reject it. */
 function normalizeBookCoverUrl(value: unknown): string | null {
   if (value == null || value === '') return null;
-  if (typeof value !== 'string' || /[\p{Cc}\p{Cs}]/u.test(value)) return invalid('Cover URL must be a safe National Library HTTPS URL.');
+  if (typeof value !== 'string' || /[\p{Cc}\p{Cs}]/u.test(value)) return invalid('Cover URL must be a safe supported HTTPS URL.');
   const normalized = safeBookCoverUrl(value);
-  if (!normalized) return invalid('Cover URL must be a safe National Library HTTPS URL.');
+  if (!normalized) return invalid('Cover URL must be a safe supported HTTPS URL.');
   return normalized;
 }
 function decodeMetadata(value: string): string {
@@ -103,7 +103,7 @@ export function booksFromTransactions(transactions: LedgerTransaction[]): BookRe
   for (const tx of transactions) if (tx.source === 'APP' && ['SELL', 'DISCARD'].includes(tags(tx)['book.action']!) && !purchases.has(tags(tx)['book.copy']!)) throw new LedgerError('BOOK_METADATA_INVALID', 'A book disposal has no purchase record.');
   return result.sort((a,b) => b.purchaseDate.localeCompare(a.purchaseDate) || a.id.localeCompare(b.id));
 }
-export async function purchaseBook(adapter: LedgerAdapter, input: PurchaseBookInput) {
+function purchaseWrite(input: PurchaseBookInput): { id: string; write: CreateTransactionInput } {
   checkKey(input.idempotencyKey); parseDate(input.date);
   let isbn: string; try { isbn=normalizeIsbn(input.isbn); } catch(error) { return invalid((error as Error).message); }
   if (!input.title.trim() || input.title.length > 200) invalid('Title must contain 1–200 characters.');
@@ -113,13 +113,23 @@ export async function purchaseBook(adapter: LedgerAdapter, input: PurchaseBookIn
   if (input.purchasePrice.commodity.startsWith('asset:book:')) invalid('A book purchase price must use a settlement currency.');
   const id=hash(`book:${input.idempotencyKey}`).slice(0,20), commodity=createBookCommodity(id);
   const write:CreateTransactionInput={ idempotencyKey:`book-buy:${hash(input.idempotencyKey)}`, date:input.date, description:'Book purchase', tags:Object.entries({ 'book.action':'PURCHASE','book.copy':id,'book.isbn':isbn,'book.title':Buffer.from(input.title.trim()).toString('base64url'), ...(authors.length ? {'book.authors':Buffer.from(JSON.stringify(authors)).toString('base64url')} : {}), ...(coverUrl ? {'book.cover':Buffer.from(coverUrl).toString('base64url')} : {}) }).map(([key,value])=>({key,value})), postings:[{accountName:input.assetAccount,amount:{commodity,value:'1'},cost:{type:'UNIT',amount:input.purchasePrice}},{accountName:input.cashAccount,amount:{commodity:input.purchasePrice.commodity,value:neg(input.purchasePrice.value)}}] };
-  validateInput(write); const result=await adapter.create(write);
+  validateInput(write); return { id, write };
+}
+export async function purchaseBook(adapter: LedgerAdapter, input: PurchaseBookInput) {
+  const {id, write} = purchaseWrite(input);
+  const result=await adapter.create(write);
   return {book:booksFromTransactions(result.replayed ? (await adapter.read()).transactions : [result.transaction]).find(b=>b.id===id)!,idempotency:{key:input.idempotencyKey,replayed:result.replayed},errors:[]};
 }
 export async function disposeBook(adapter:LedgerAdapter,input:DisposeBookInput) {
   checkKey(input.idempotencyKey); parseDate(input.date);
   const snapshot=await adapter.read(); const book=booksFromTransactions(snapshot.transactions).find(b=>b.id===input.copyId);
   if (!book) throw new LedgerError('NOT_FOUND','Book copy was not found.');
+  const write = disposalWrite(input, book);
+  const result=await adapter.create(write);
+  return {book:booksFromTransactions([...snapshot.transactions.filter(t=>tags(t)['book.action']==='PURCHASE'),result.transaction]).find(b=>b.id===book.id)!,idempotency:{key:input.idempotencyKey,replayed:result.replayed},errors:[]};
+}
+function disposalWrite(input: DisposeBookInput, book: BookRecord): CreateTransactionInput {
+  checkKey(input.idempotencyKey); parseDate(input.date);
   if (input.date < book.purchaseDate) invalid('Disposal date cannot precede purchase date.');
   if (!['SELL','DISCARD'].includes(input.kind)) invalid('Choose sell or discard.');
   const currency=book.purchasePrice.commodity;
@@ -139,6 +149,34 @@ export async function disposeBook(adapter:LedgerAdapter,input:DisposeBookInput) 
   // Every writer competes for one durable adapter key per copy; retries still fingerprint the caller key.
   const write:CreateTransactionInput={idempotencyKey:`book-dispose:${book.id}`,date:input.date,description:input.kind==='SELL'?'Book sale':'Book discard',tags:Object.entries({'book.action':input.kind,'book.copy':book.id,'book.request':hash(input.idempotencyKey),'book.fingerprint':hash(JSON.stringify({key:input.idempotencyKey,date:input.date,copyId:input.copyId,kind:input.kind,cashAccount:input.cashAccount ?? null,saleProceeds:proceeds,fee,gainAccount:input.gainAccount ?? null,lossAccount:input.lossAccount ?? null,feeAccount:input.feeAccount ?? null})),'book.proceeds':proceeds.value,'book.gain':gain}).map(([key,value])=>({key,value})),postings};
   validateInput(write);
-  const result=await adapter.create(write);
-  return {book:booksFromTransactions([...snapshot.transactions.filter(t=>tags(t)['book.action']==='PURCHASE'),result.transaction]).find(b=>b.id===book.id)!,idempotency:{key:input.idempotencyKey,replayed:result.replayed},errors:[]};
+  return write;
+}
+
+
+export type BookRequest = { kind: 'purchase'; input: PurchaseBookInput } | { kind: 'dispose'; input: DisposeBookInput };
+export type BookRequestProof = { status: 'CONFIRMED' | 'UNKNOWN'; book: BookRecord | null; idempotency: { key: string; replayed: true } | null };
+/** Absence of evidence never means the original request was not saved. */
+export async function proveBookRequest(adapter: LedgerAdapter, request: BookRequest): Promise<BookRequestProof> {
+  const unknown: BookRequestProof = { status: 'UNKNOWN', book: null, idempotency: null };
+  if (!adapter.inspectReadOnly) return unknown;
+  try {
+    const snapshot = await adapter.inspectReadOnly();
+    const books = booksFromTransactions(snapshot.transactions);
+    const prepared = request.kind === 'purchase' ? purchaseWrite(request.input) : null;
+    const book = books.find(book => book.id === (prepared?.id ?? (request.input as DisposeBookInput).copyId));
+    if (!book) return unknown;
+    const write = prepared?.write ?? disposalWrite((request as Extract<BookRequest, {kind: 'dispose'}>).input, book);
+    const matches = snapshot.transactions.filter(transaction => transaction.source === 'APP' && transaction.id === `app_${hash(write.idempotencyKey)}`);
+    if (matches.length !== 1) return unknown;
+    const transaction = matches[0]!;
+    // Compare the entire expected durable transaction, including the caller-key
+    // fingerprint on disposals and every optional piece of purchase metadata.
+    const postingEvidence = (postings: CreateTransactionInput['postings'] | LedgerTransaction['postings']) => postings.map(posting => ({
+      accountName: posting.accountName, amount: posting.amount, memo: posting.memo ?? null, cost: posting.cost ?? null,
+    }));
+    if (transaction.date !== write.date || transaction.description !== write.description || transaction.code !== (write.code ?? null) || transaction.status !== 'UNMARKED' ||
+      JSON.stringify(transaction.tags) !== JSON.stringify(write.tags ?? []) ||
+      JSON.stringify(postingEvidence(transaction.postings)) !== JSON.stringify(postingEvidence(write.postings))) return unknown;
+    return { status: 'CONFIRMED', book, idempotency: { key: request.input.idempotencyKey, replayed: true } };
+  } catch { return unknown; }
 }

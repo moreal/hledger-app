@@ -11,15 +11,16 @@ let recentRequests: number[] = [];
 function safeRedirect(value: string, base: string): URL | null {
  try {
   const url=new URL(value,base);
-  const imagePath=url.hostname==='covers.openlibrary.org' && /^\/b\/id\/\d+-L\.jpg$/.test(url.pathname) && !url.search;
+  const imageId=/^\/b\/id\/([1-9]\d*)-L\.jpg$/.exec(url.pathname)?.[1];
+  const imagePath=url.hostname==='covers.openlibrary.org' && imageId && Number.isSafeInteger(Number(imageId)) && !url.search;
   const archiveDownload=url.hostname==='archive.org' && /^\/download\/(?:l_covers_\d+\/l_covers_\d+_\d+\.zip|olcovers\d+\/olcovers\d+-L\.zip)\/\d+-L\.jpg$/.test(url.pathname) && !url.search;
   const archivePath=/^ia\d+\.us\.archive\.org$/.test(url.hostname) && url.pathname==='/view_archive.php' && [...url.searchParams.keys()].sort().join(',')==='archive,file' && /^\/\d+\/items\/(?:[ml]_covers_\d+\/[ml]_covers_\d+_\d+\.zip|olcovers\d+\/olcovers\d+-L\.zip)$/.test(url.searchParams.get('archive')??'') && /^\d+-[SML]\.jpg$/.test(url.searchParams.get('file')??'');
   return url.protocol==='https:' && !url.username && !url.password && !url.port && !url.hash && (imagePath || archivePath || archiveDownload) ? url : null;
  } catch { return null; }
 }
-async function fetchCover(isbn:string, fetcher:typeof fetch, timeoutMs:number):Promise<BookCover|null> {
+async function fetchCover(isbn:string, coverId:string|undefined, fetcher:typeof fetch, timeoutMs:number):Promise<BookCover|null> {
  const controller=new AbortController(); const timer=setTimeout(()=>controller.abort(),timeoutMs);
- const coverUrl=`https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg?default=false`;
+ const coverUrl=`https://covers.openlibrary.org/b/${coverId ? `id/${coverId}` : `isbn/${isbn}`}-L.jpg?default=false`;
  try {
   let target=coverUrl; let response:Response | undefined;
   for(let redirects=0;redirects<=2;redirects++) {
@@ -44,19 +45,23 @@ async function fetchCover(isbn:string, fetcher:typeof fetch, timeoutMs:number):P
   return {coverUrl,coverSource:'OPEN_LIBRARY',coverSourceUrl:`https://openlibrary.org/isbn/${isbn}`};
  } catch { return null; } finally { clearTimeout(timer); }
 }
-/** Only the exact ISBN endpoint is queried. A missing cover never changes metadata status. */
-export async function lookupBookCover(rawIsbn:string,options:{fetch?:typeof fetch;timeoutMs?:number}={}):Promise<BookCover|null> {
+/** Caller must verify coverId belongs to the exact ISBN Edition; never derive it from a Work.
+ * Without that verified ID only the exact ISBN endpoint is queried. Missing covers do not change metadata status. */
+export async function lookupBookCover(rawIsbn:string,options:{coverId?:number|string;fetch?:typeof fetch;timeoutMs?:number}={}):Promise<BookCover|null> {
  const isbn=normalizeIsbn(rawIsbn);
+ const coverId=options.coverId===undefined ? undefined : String(options.coverId);
+ if(coverId!==undefined && (!/^[1-9]\d*$/.test(coverId) || !Number.isSafeInteger(Number(coverId)))) return null;
+ const key=`${isbn}:${coverId??'isbn'}`;
  // Injected transports bypass process caches so tests and callers stay isolated.
- if(options.fetch) return fetchCover(isbn,options.fetch,options.timeoutMs??3500);
- const now=Date.now(); const cached=cache.get(isbn); if(cached && cached.expires>now) return cached.value;
- const existing=pending.get(isbn); if(existing) return existing;
+ if(options.fetch) return fetchCover(isbn,coverId,options.fetch,options.timeoutMs??3500);
+ const now=Date.now(); const cached=cache.get(key); if(cached && cached.expires>now) return cached.value;
+ const existing=pending.get(key); if(existing) return existing;
  recentRequests=recentRequests.filter(time=>time>now-300_000);
  if(recentRequests.length>=40) return null;
  recentRequests.push(now);
- const request=fetchCover(isbn,fetch,options.timeoutMs??3500).then(value=>{
+ const request=fetchCover(isbn,coverId,fetch,options.timeoutMs??3500).then(value=>{
   if(cache.size>=500) cache.delete(cache.keys().next().value!);
-  cache.set(isbn,{value,expires:Date.now()+(value?86_400_000:300_000)}); return value;
- }).finally(()=>pending.delete(isbn));
- pending.set(isbn,request); return request;
+  cache.set(key,{value,expires:Date.now()+(value?86_400_000:300_000)}); return value;
+ }).finally(()=>pending.delete(key));
+ pending.set(key,request); return request;
 }

@@ -248,6 +248,11 @@ test('a SIGKILL during append completes only its durable pending bytes on same-k
   try {
     await killDuringAppend(f, 'torn', false);
     assert.equal((await readFile(f.journalPath)).length, 123);
+    const interruptedJournal = await readFile(f.journalPath);
+    const interruptedPending = await readFile(`${f.journalPath}.hledger-app.pending`);
+    await assert.rejects(f.adapter.inspectReadOnly!(), { code: 'WRITE_RECOVERY_REQUIRED' });
+    assert.deepEqual(await readFile(f.journalPath), interruptedJournal);
+    assert.deepEqual(await readFile(`${f.journalPath}.hledger-app.pending`), interruptedPending);
     const retry = await createHledgerAdapter({ journalPath: f.journalPath, hledgerPath }).create(input('torn'));
     assert.equal(retry.replayed, true);
     assert.equal((await f.adapter.read()).transactions.length, 1);
@@ -392,4 +397,20 @@ test('external lot cost basis annotations fail closed instead of disappearing fr
   try {
     await assert.rejects(f.adapter.read(), error => error instanceof Error && (error as { code?: string }).code === 'UPSTREAM_FORMAT' && /cost basis/.test(error.message));
   } finally { await rm(f.directory, { recursive: true, force: true }); }
+});
+
+
+test('read-only inspection preserves pending recovery and generic reads do not reconstruct managed books', async () => {
+ const f=await fixture('');
+ try {
+  const malformed={...input('malformed-book'),tags:[{key:'book.action',value:'PURCHASE'},{key:'book.copy',value:'bad'}]};
+  await f.adapter.create(malformed);
+  assert.equal((await f.adapter.inspectReadOnly!()).transactions.length,1);
+  assert.equal((await f.adapter.read()).transactions.length,1);
+  const journal=await readFile(f.journalPath);
+  const pendingPath=`${f.journalPath}.hledger-app.pending`; const pending=Buffer.from('incomplete pending metadata'); await writeFile(pendingPath,pending);
+  await assert.rejects(f.adapter.inspectReadOnly!(),{code:'WRITE_RECOVERY_REQUIRED'});
+  assert.deepEqual(await readFile(f.journalPath),journal);
+  assert.deepEqual(await readFile(pendingPath),pending);
+ } finally {await rm(f.directory,{recursive:true,force:true});}
 });

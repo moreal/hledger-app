@@ -98,3 +98,17 @@ mutation DisposeBook($input: DisposeBookInput!) {
 query BookMetadata($isbn: String!) {
   bookMetadata(isbn: $isbn) { status message book { isbn title authors coverUrl coverSource coverSourceUrl sourceUrl attribution } }
 }
+
+fragment BooksFeatureFields on BooksFeature {
+  moduleId version migrationVersion enabled migratedExistingData canRead canWrite canLookupMetadata canRecover
+}
+query LedgerFeatures { ledgerFeatures { ledgerId books { ...BooksFeatureFields } } }
+mutation SetBooksEnabled($enabled: Boolean!, $expectedVersion: Int!, $hasPending: Boolean = false) {
+  setBooksEnabled(enabled: $enabled, expectedVersion: $expectedVersion, hasPending: $hasPending) {
+    feature { ...BooksFeatureFields }
+    errors { path code message requestId timestamp details }
+  }
+}
+query BookRequestStatus($input: BookRequestStatusInput!) {
+  bookRequestStatus(input: $input) { status book { ...BookFields } idempotency { key replayed } }
+}

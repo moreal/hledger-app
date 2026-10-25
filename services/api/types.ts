@@ -37,6 +37,8 @@ export interface LedgerSnapshot {
 }
 export interface LedgerAdapter {
   read(): Promise<LedgerSnapshot>;
+  /** Inspect durable evidence without recovering pending writes or creating lock files. */
+  inspectReadOnly?(): Promise<LedgerSnapshot>;
   create(input: CreateTransactionInput): Promise<{ transaction: LedgerTransaction; replayed: boolean }>;
 }
 

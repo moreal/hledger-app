@@ -2,33 +2,10 @@ import { useLingui } from '../../../packages/i18n/src/react';
 import { translateError } from '../../../packages/i18n/src';
 import type { MessageDescriptor } from '@lingui/core';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { createLedgerClient, newIdempotencyKey, subtractDecimals, type BooksQuery, type PurchaseBookInput, type DisposeBookInput } from '../../../packages/client/index';
+import { blankDisposal, type BookController } from './book-module';
 import { normalizeBookCoverUrl } from '../../../packages/domain/src/book-cover-url';
 import { normalizeIsbn } from '../../../packages/domain/src/books';
 import { Badge, Button, Field, Money, Notice } from '../../../packages/ui-web/src/index';
-
-
-type BookNotice = string | MessageDescriptor;
-
-type Client = ReturnType<typeof createLedgerClient>;
-type Book = NonNullable<BooksQuery['books']>[number];
-type Request = { kind: 'purchase'; input: PurchaseBookInput } | { kind: 'dispose'; input: DisposeBookInput };
-const today = () => { const date = new Date(); return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`; };
-const blankPurchase = () => ({ date: today(), isbn: '', title: '', authors: '', coverUrl: '', price: '', currency: 'KRW', assetAccount: 'assets:books', cashAccount: '' });
-const blankDisposal = () => ({ date: today(), kind: 'SELL', proceeds: '', fee: '0', cashAccount: '', gainAccount: 'income:books', lossAccount: 'expenses:books', feeAccount: 'expenses:fees' });
-const amount = (value: string) => /^\d+(?:\.\d+)?$/.test(value) && value.length <= 100;
-function validRequest(value: unknown): value is Request {
-  if (!value || typeof value !== 'object') return false;
-  const request = value as { kind?: unknown; input?: Record<string, unknown> };
-  const input = request.input;
-  if (!input || typeof input !== 'object' || typeof input.idempotencyKey !== 'string' || !input.idempotencyKey || typeof input.date !== 'string') return false;
-  if (request.kind === 'purchase') return ['isbn', 'title', 'assetAccount', 'cashAccount'].every((key) => typeof input[key] === 'string') && Boolean(input.purchasePrice && typeof input.purchasePrice === 'object' && typeof (input.purchasePrice as Record<string, unknown>).value === 'string' && typeof (input.purchasePrice as Record<string, unknown>).commodity === 'string');
-  return request.kind === 'dispose' && typeof input.copyId === 'string' && ['SELL', 'DISCARD'].includes(String(input.kind));
-}
-function readPending(key: string): { request: Request | null; error: BookNotice } {
-  try { const saved = localStorage.getItem(key); if (!saved) return { request: null, error: '' }; const value: unknown = JSON.parse(saved); if (!validRequest(value)) throw new Error(); return { request: value, error: '' }; }
-  catch { return { request: null, error: /* i18n */ { id: 'web.books.1', message: "기존 책 요청의 확인 정보를 읽을 수 없습니다. 브라우저 저장소를 확인하기 전에는 새 요청을 보낼 수 없습니다." } }; }
-}
 
 
 function safeBookUrl(value?: string | null): string | undefined {
@@ -68,110 +45,9 @@ function BookCover({ url, title }: { url?: string | null; title: string }) {
   return <div className="book-cover">{source && !failed ? <img src={source} alt={_(/* i18n */ { id: 'books.coverAlt', message: '{title} 표지', values: { title: title || _(/* i18n */ { id: 'web.books.4', message: "책" }) } })} width={96} height={144} loading="lazy" referrerPolicy="no-referrer" onError={() => setFailed(true)} /> : <span>{_(/* i18n */ { id: 'web.books.5', message: "표지 없음" })}</span>}</div>;
 }
 
-export function Books({ client, revision, disabled, onPendingChange, onChanged }: { client: Client; revision: number; disabled: boolean; onPendingChange: (pending: boolean) => void; onChanged: () => void }) {
+export function Books({ controller }: { controller: BookController }) {
   const { _ } = useLingui();
-  function displayNotice(value: unknown): string {
-    if (typeof value === 'string') return value;
-    if (value && typeof value === 'object' && 'id' in value) return _(value as MessageDescriptor);
-    return translateError(value);
-  }
-  const storageKey = `hledger.book-request:${client.identity}`;
-  const [recovery] = useState(() => readPending(storageKey));
-  const [pending, setPending] = useState<Request | null>(recovery.request);
-  const [storageError, setStorageError] = useState<BookNotice>(recovery.error);
-  const [purchase, setPurchase] = useState(blankPurchase);
-  const automaticAuthors = useRef<string[] | null>(null);
-  const manualMetadata = useRef({ title: false, authors: false });
-  const lookupSerial = useRef(0);
-  const [lookupRetry, setLookupRetry] = useState(0);
-  const [lookup, setLookup] = useState<{ status: 'idle' | 'loading' | 'found' | 'missing' | 'unavailable'; isbn?: string; sourceUrl?: string | null; coverSource?: string | null; coverSourceUrl?: string | null; attribution?: string | null }>({ status: 'idle' });
-  const [disposal, setDisposal] = useState(blankDisposal);
-  const [selected, setSelected] = useState('');
-  const [books, setBooks] = useState<Book[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [loadError, setLoadError] = useState<BookNotice>('');
-  const [message, setMessage] = useState<BookNotice>('');
-  const [saving, setSaving] = useState(false);
-  const [status, setStatus] = useState('ALL');
-  const busy = useRef(false);
-  useEffect(() => { onPendingChange(Boolean(pending || saving || storageError)); }, [pending, saving, storageError, onPendingChange]);
-  useEffect(() => {
-    let active = true; setLoading(true); setLoadError('');
-    client.books().then((result) => { if (!active) return; if (result.data?.books) setBooks(result.data.books); setLoadError(result.errors?.map((error) => error.message).join(' · ') || (!result.data?.books ? /* i18n */ { id: 'web.books.6', message: "책 목록을 확인하지 못했습니다." } : '')); }).catch(() => { if (active) setLoadError(/* i18n */ { id: 'web.books.7', message: "책 목록을 읽지 못했습니다. 연결 상태를 확인해 주세요." }); }).finally(() => { if (active) setLoading(false); });
-    return () => { active = false; };
-  }, [client, revision]);
-  const book = books.find((item) => item.id === selected);
-  const locked = disabled || saving || Boolean(pending || storageError);
-  const lockedRef = useRef(locked);
-  lockedRef.current = locked;
-  let normalizedIsbn = '';
-  try { normalizedIsbn = normalizeIsbn(purchase.isbn); } catch { /* Incomplete ISBNs need no remote request. */ }
-  useEffect(() => {
-    const serial = ++lookupSerial.current;
-    if (!normalizedIsbn || locked) { setLookup({ status: 'idle' }); return; }
-    setLookup({ status: 'loading', isbn: normalizedIsbn });
-    const timer = window.setTimeout(() => {
-      void client.bookMetadata(normalizedIsbn).then((result) => {
-        if (serial !== lookupSerial.current || lockedRef.current || busy.current) return;
-        const metadata = result.data?.bookMetadata;
-        if (result.errors?.length || !metadata || metadata.status === 'UNAVAILABLE') { setLookup({ status: 'unavailable', isbn: normalizedIsbn }); return; }
-        if (metadata.status !== 'FOUND' || !metadata.book || metadata.book.isbn !== normalizedIsbn) { setLookup({ status: 'missing', isbn: normalizedIsbn }); return; }
-        const found = metadata.book;
-        automaticAuthors.current = found.authors;
-        setLookup({ status: 'found', isbn: normalizedIsbn, sourceUrl: found.sourceUrl, coverSource: found.coverSource, coverSourceUrl: found.coverSourceUrl, attribution: found.attribution });
-        setPurchase((current) => ({ ...current, title: manualMetadata.current.title ? current.title : found.title, authors: manualMetadata.current.authors ? current.authors : found.authors.join('; '), coverUrl: safeBookCoverUrl(found.coverUrl) ?? '' }));
-      }).catch(() => { if (serial === lookupSerial.current && !lockedRef.current && !busy.current) setLookup({ status: 'unavailable', isbn: normalizedIsbn }); });
-    }, 500);
-    return () => { window.clearTimeout(timer); lookupSerial.current++; };
-  }, [client, normalizedIsbn, lookupRetry, locked]);
-  function updatePurchase(key: keyof typeof purchase, value: string) {
-    if (locked) return;
-    if (key === 'title' || key === 'authors') manualMetadata.current[key] = true;
-    if (key === 'isbn') {
-      let nextIsbn = ''; try { nextIsbn = normalizeIsbn(value); } catch { /* Partial input clears stale metadata. */ }
-      if (nextIsbn !== normalizedIsbn) { automaticAuthors.current = null; lookupSerial.current++; setLookup({ status: 'idle' }); setPurchase((current) => ({ ...current, isbn: value, title: manualMetadata.current.title ? current.title : '', authors: manualMetadata.current.authors ? current.authors : '', coverUrl: '' })); return; }
-    }
-    setPurchase((current) => ({ ...current, [key]: value }));
-  }
-  let net: string | undefined; let gain: string | undefined;
-  if (book && amount(disposal.proceeds) && amount(disposal.fee)) { net = subtractDecimals(disposal.proceeds, disposal.fee); gain = subtractDecimals(net, book.purchasePrice.value); }
-  async function send(request: Request) {
-    if (busy.current || disabled || storageError) return;
-    // Persist the exact request and key before any network write, including retries.
-    try { localStorage.setItem(storageKey, JSON.stringify(request)); }
-    catch { setStorageError(/* i18n */ { id: 'web.books.8', message: "확인 정보를 브라우저에 보관하지 못해 요청을 보내지 않았습니다. 저장소 접근을 복구한 뒤 다시 열어 주세요." }); return; }
-    const wasPending = pending !== null;
-    busy.current = true; setSaving(true); setPending(request); onPendingChange(true); setMessage('');
-    try {
-      const result = request.kind === 'purchase' ? await client.purchaseBook(request.input) : await client.disposeBook(request.input);
-      const payload = result.data && ('purchaseBook' in result.data ? result.data.purchaseBook : result.data.disposeBook);
-      if (payload?.book && payload.idempotency?.key === request.input.idempotencyKey && typeof payload.idempotency.replayed === 'boolean' && !payload.errors.length) {
-        try { localStorage.removeItem(storageKey); } catch { setStorageError(/* i18n */ { id: 'web.books.9', message: "저장은 확인했지만 재시도 정보를 지우지 못했습니다. 브라우저 저장소를 복구해 주세요." }); }
-        setPending(null); automaticAuthors.current = null; manualMetadata.current = { title: false, authors: false }; setPurchase(blankPurchase()); setSelected(''); setDisposal(blankDisposal()); setMessage(/* i18n */ { id: 'web.books.10', message: "책 기록을 원장에 저장했습니다." }); onChanged();
-      } else if (!wasPending && payload?.errors.length && !payload.book) {
-        try { localStorage.removeItem(storageKey); setPending(null); } catch { setStorageError(/* i18n */ { id: 'web.books.11', message: "거부된 요청의 확인 정보를 지우지 못했습니다. 브라우저 저장소를 복구해 주세요." }); }
-        setMessage(payload.errors.map((error) => error.message).join(' · '));
-      } else {
-        // Even a rejected retry must not replace an earlier unknown write.
-        setMessage(/* i18n */ { id: 'web.books.unconfirmed', message: '저장 결과를 확인해야 합니다. 같은 요청으로 다시 확인해 주세요.{detail}', values: { detail: payload?.errors.length ? ` ${payload.errors.map((error) => error.message).join(' · ')}` : '' } });
-      }
-    } catch { setMessage(/* i18n */ { id: 'web.books.12', message: "저장 결과가 불명확합니다. 입력과 요청 키를 보관했습니다. 같은 요청으로 결과를 확인해 주세요." }); }
-    finally { busy.current = false; setSaving(false); }
-  }
-  function submitPurchase(event: FormEvent) {
-    event.preventDefault(); if (locked) return;
-    try { normalizeIsbn(purchase.isbn); } catch { setMessage(/* i18n */ { id: 'web.books.13', message: "유효한 ISBN-10 또는 ISBN-13을 입력해 주세요." }); return; }
-    if (!purchase.title.trim() || [...purchase.title.trim()].length > 200 || !purchase.date || !amount(purchase.price) || !/[1-9]/.test(purchase.price) || !purchase.currency.trim() || !purchase.assetAccount.trim() || !purchase.cashAccount.trim()) { setMessage(/* i18n */ { id: 'web.books.14', message: "제목, 날짜, 양수인 구입 금액, 통화와 계좌를 입력해 주세요." }); return; }
-    const authors = !manualMetadata.current.authors && automaticAuthors.current ? automaticAuthors.current : purchase.authors.split(';').map((name) => name.trim()).filter(Boolean);
-    if (authors.length > 20 || authors.some((name) => name.length > 200)) { setMessage(/* i18n */ { id: 'web.books.15', message: "저자는 20명까지, 각 이름은 200자까지 입력해 주세요." }); return; }
-    void send({ kind: 'purchase', input: { idempotencyKey: newIdempotencyKey(), date: purchase.date, isbn: purchase.isbn, title: purchase.title.trim(), authors, ...(purchase.coverUrl ? { coverUrl: purchase.coverUrl } : {}), purchasePrice: { value: purchase.price, commodity: purchase.currency.trim() }, assetAccount: purchase.assetAccount.trim(), cashAccount: purchase.cashAccount.trim() } });
-  }
-  function submitDisposal(event: FormEvent) {
-    event.preventDefault(); if (locked || !book) return;
-    const sell = disposal.kind === 'SELL';
-    if (!disposal.date || !disposal.lossAccount.trim() || (sell && (!amount(disposal.proceeds) || !amount(disposal.fee) || !disposal.cashAccount.trim() || !disposal.gainAccount.trim() || (/[1-9]/.test(disposal.fee) && !disposal.feeAccount.trim())))) { setMessage(/* i18n */ { id: 'web.books.16', message: "처분 날짜와 손실 비용 항목, 판매 금액과 필요한 계좌를 확인해 주세요." }); return; }
-    void send({ kind: 'dispose', input: { idempotencyKey: newIdempotencyKey(), copyId: book.id, date: disposal.date, kind: sell ? 'SELL' : 'DISCARD', lossAccount: disposal.lossAccount.trim(), ...(sell ? { cashAccount: disposal.cashAccount.trim(), saleProceeds: { value: disposal.proceeds, commodity: book.purchasePrice.commodity }, fee: disposal.fee, feeAccount: disposal.feeAccount.trim(), gainAccount: disposal.gainAccount.trim() } : {}) } });
-  }
+  const { displayNotice, storageError, message, pending, saving, send, purchase, updatePurchase, disposal, setDisposal, selected, setSelected, books, loading, loadError, locked, normalizedIsbn, lookup, startLookup, net, gain, book, status, setStatus, submitPurchase, submitDisposal, setMessage, disabled } = controller;
   const purchaseField = (key: keyof typeof purchase, label: string, extra = {}) => <Field label={label} value={purchase[key]} onChange={(event) => updatePurchase(key, event.target.value)} required {...extra} />;
   const disposalField = (key: keyof typeof disposal, label: string, extra = {}) => <Field label={label} value={disposal[key]} onChange={(event) => setDisposal({ ...disposal, [key]: event.target.value })} required {...extra} />;
   return <section className="books-view" aria-label={_(/* i18n */ { id: 'web.books.17', message: "책 관리" })}>
@@ -186,8 +62,8 @@ export function Books({ client, revision, disabled, onPendingChange, onChanged }
       <CoverCredit url={purchase.coverUrl} isbn={purchase.isbn} source={lookup.coverSource} sourceUrl={lookup.coverSourceUrl} />
       {lookup.status === 'missing' && <p className="form-help">{_(/* i18n */ { id: 'web.books.40', message: "이 ISBN의 책 정보를 찾지 못했습니다. 제목과 저자를 직접 입력해 주세요." })}</p>}
       {lookup.status === 'unavailable' && <p className="form-help">{_(/* i18n */ { id: 'web.books.41', message: "책 정보 조회가 잠시 어렵습니다. 제목과 저자를 직접 입력해 기록할 수 있습니다." })}</p>}
-      {!normalizedIsbn && purchase.isbn && <p className="form-help">{_(/* i18n */ { id: 'web.books.42', message: "유효한 ISBN을 입력하면 책 정보를 자동으로 찾습니다." })}</p>}
-      {normalizedIsbn && lookup.status !== 'loading' && <Button variant="quiet" onClick={() => setLookupRetry((value) => value + 1)}>{_(/* i18n */ { id: 'web.books.43', message: "책 정보 다시 찾기" })}</Button>}
+      {!normalizedIsbn && purchase.isbn && <p className="form-help">{_(/* i18n */ { id: 'web.books.42', message: "유효한 ISBN을 입력한 뒤 책 정보 찾기를 눌러 주세요." })}</p>}
+      {normalizedIsbn && lookup.status !== 'loading' && <Button variant="quiet" onClick={startLookup}>{_(/* i18n */ { id: 'web.books.43', message: "책 정보 다시 찾기" })}</Button>}
     </div></div><div className="form-footer"><p>{_(/* i18n */ { id: 'web.books.44', message: "책 자산 증가 / 결제 계좌 출금" })}</p><Button type="submit">{_(/* i18n */ { id: 'web.books.45', message: "한 권 구입 기록" })}</Button></div></fieldset></form>
     <div className="form-divider"><h4>{_(/* i18n */ { id: 'web.books.count', message: '책 목록 · {count}권', values: { count: books.length } })}</h4><label className="field">{_(/* i18n */ { id: 'web.books.48', message: "보유 상태" })}<select value={status} onChange={(event) => setStatus(event.target.value)}><option value="ALL">{_(/* i18n */ { id: 'web.books.49', message: "전체" })}</option><option value="HELD">{_(/* i18n */ { id: 'web.books.50', message: "보유" })}</option><option value="SOLD">{_(/* i18n */ { id: 'web.books.51', message: "판매" })}</option><option value="DISCARDED">{_(/* i18n */ { id: 'web.books.52', message: "폐기" })}</option></select></label></div>
     {loading && <p role="status">{_(/* i18n */ { id: 'web.books.53', message: "책을 읽고 있습니다…" })}</p>}{Boolean(loadError) && <Notice tone="danger" title={_(/* i18n */ { id: 'web.books.54', message: "책 목록을 읽지 못했습니다" })}>{displayNotice(loadError)}</Notice>}
