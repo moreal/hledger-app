@@ -19,6 +19,7 @@ import { arePostingsBalanced } from '../../packages/domain/src/trade';
 import { TradeFields } from './TradeFields';
 import { AssetUnitField } from './AssetUnitField';
 import { Books } from './Books';
+import { failedConnectionMessage } from './connection-feedback';
 
 type TabScreen = 'accounts' | 'transactions' | 'entry' | 'prices' | 'books' | 'sync';
 type Screen = TabScreen | 'settings';
@@ -299,7 +300,7 @@ export default function LedgerApp({ onOpenGallery }: { onOpenGallery?: () => voi
   }
   async function applyConnection() {
     if (busy || !settingsReady) return;
-    setBusy(true); setError('');
+    setBusy(true); setError(''); setNotice('');
     try {
       const validated = validateEndpoint(endpoint);
       const handshake = await createLedgerClient({ endpoint: validated, token }).health();
@@ -310,7 +311,7 @@ export default function LedgerApp({ onOpenGallery }: { onOpenGallery?: () => voi
       setSelectedAccount(null); setAccountDetail(null); setSelectedTransaction(null); setAccounts(null); setTransactions(null); setPrices(null); setRecent([]);
       setConnection({ endpoint: validated, token, ledgerId, verified: true });
       setNotice('연결 설정을 적용했습니다. 인증 토큰은 이 앱 실행 중에만 보관합니다.');
-    } catch (cause) { setError(explain(cause)); }
+    } catch (cause) { setError(failedConnectionMessage(cause, connection.verified)); }
     finally { setBusy(false); }
   }
   async function read<T>(work: () => Promise<{ data?: T | null; errors?: { message: string; extensions?: Record<string, unknown> }[] }>, apply: (data: T) => void) {
@@ -596,6 +597,7 @@ export default function LedgerApp({ onOpenGallery }: { onOpenGallery?: () => voi
             <Button disabled={busy} onPress={() => { setToken(''); setConnection({ ...connection, token: '', verified: false }); setHealth(null); setNotice('이 실행의 인증 토큰을 지웠습니다.'); }}>인증 토큰 지우기</Button>
           </Panel>
           <Panel><Heading>연결 상태</Heading><Button disabled={busy} onPress={() => void loadHealth()}>상태 새로고침</Button>
+            <Text selectable style={textStyles.strong}>현재 사용 중인 주소: {connection.endpoint}</Text>
             {healthError && <Notice title="연결 상태를 확인하지 못했어요" tone="danger">{healthError}</Notice>}
             <Text selectable style={textStyles.caption}>원장 식별자 {connection.ledgerId ?? '연결 확인 전'} · {connection.verified ? '이 실행에서 인증 확인' : '새 인증 확인 필요'}</Text>
             <Text style={textStyles.strong}>서버 상태 {health?.status ?? '확인 전'} · 원장 연결 {health?.connectionStatus ?? 'UNKNOWN'}</Text>

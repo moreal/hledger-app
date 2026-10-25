@@ -58,3 +58,7 @@ Each job uploads its output directory and console log with a commit-specific art
 Android produces an unsigned release APK. iOS CI produces an unsigned simulator `.app`. These builds verify native production compilation and bundling; they do not publish, sign, upload to stores, or prove launch behavior on devices. No signing credentials are required. The workflow uses read-only repository access and does not expose repository credentials to build commands.
 
 The workflow must be run in GitHub Actions to establish remote success. Local preparation or workflow syntax checks alone do not establish that native CI passed. On failure, inspect `mobile-ci.log` and the manifest before changing toolchain versions; an unavailable pinned Xcode installation should fail visibly rather than select another Xcode automatically.
+
+## Android local API security
+
+Release builds permit cleartext HTTP only for exact `localhost` and `127.0.0.1`, without subdomains. Use `adb reverse tcp:4101 tcp:4101` and `http://127.0.0.1:4101/graphql` for an isolated local QA API. Other hosts, including emulator alias `10.0.2.2` and LAN addresses, require HTTPS. The base policy blocks cleartext and inherits system certificate verification; it does not add custom trust anchors or disable TLS verification. API authentication is still required. Expo prebuild generates this policy from the checked-in plugin, and the release script tests it before compiling.

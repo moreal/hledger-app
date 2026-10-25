@@ -82,6 +82,7 @@ export function main(options) {
   // Validate the staged source with its installed dependencies before native generation.
   run(process.execPath, ['--test', 'apps/mobile/plugins/with-loopback-network-security.test.cjs'], stage, env);
   run(process.execPath, ['--import', 'tsx', '--test', 'apps/mobile/book-validation.test.ts'], stage, env);
+  run(process.execPath, ['--import', 'tsx', '--test', 'apps/mobile/connection-feedback.test.ts'], stage, env);
   run(process.execPath, [path.join(stage, 'node_modules/@graphql-codegen/cli/cjs/bin.js'), '--config', 'packages/api-contract/codegen.ts'], stage, env);
   // Native identifiers are explicit so Expo prebuild never prompts in CI.
   const configPath = path.join(mobile, 'app.json');
