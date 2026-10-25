@@ -114,7 +114,18 @@ export function createLedgerClient(options: { endpoint: string; token?: string; 
     assets: (variables: AssetsQueryVariables) => execute(AssetsDocument, variables),
     assetBindings: (commodities?: string[]) => execute(AssetBindingsDocument, { commodities }),
     setAssetBinding: (variables: { commodity: string; assetId: string | null }) => execute(SetAssetBindingDocument, variables),
-    accounts: (variables: AccountsQueryVariables = {}) => execute(AccountsDocument, variables),
+    accounts: (variables: AccountsQueryVariables = {}) => {
+      const asOf = variables.asOf !== undefined ? variables.asOf : variables.filter?.asOf;
+      const includeSubaccounts = variables.includeSubaccounts !== undefined
+        ? variables.includeSubaccounts
+        : variables.filter?.includeSubaccounts !== undefined ? variables.filter.includeSubaccounts : false;
+      return execute(AccountsDocument, {
+        ...variables,
+        asOf,
+        includeSubaccounts,
+        filter: { ...variables.filter, asOf, includeSubaccounts },
+      });
+    },
     accountTransactions: (variables: AccountTransactionsQueryVariables) => execute(AccountTransactionsDocument, variables),
     transactions: (variables: TransactionsQueryVariables = {}) => execute(TransactionsDocument, variables),
     prices: (variables: PricesQueryVariables = {}) => execute(PricesDocument, variables),

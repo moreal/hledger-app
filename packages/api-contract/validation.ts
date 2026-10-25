@@ -131,6 +131,7 @@ export function validateAccountFilter(value: unknown): ValidationIssue[] {
   const filter = filterRecord(value, issues);
   if (!filter) return issues;
   if (filter.includeEmpty != null && typeof filter.includeEmpty !== 'boolean') issue(issues, 'includeEmpty', 'Expected a Boolean');
+  if (filter.includeSubaccounts != null && typeof filter.includeSubaccounts !== 'boolean') issue(issues, 'includeSubaccounts', 'Expected a Boolean');
   if (filter.depth != null) checkScalar(issues, 'depth', filter.depth, validateDepth);
   if (filter.asOf != null) checkScalar(issues, 'asOf', filter.asOf, parseDate);
   checkString(issues, 'query', filter.query, 1, 200, true);

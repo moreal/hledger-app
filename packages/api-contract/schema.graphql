@@ -149,7 +149,10 @@ type PriceQuote {
 }
 
 input AccountFilter {
+  """Include accounts whose balance is zero in every commodity at asOf, using includeSubaccounts scope."""
   includeEmpty: Boolean = false
+  """Include descendant postings when testing whether an account balance is zero."""
+  includeSubaccounts: Boolean = false
   """Requested hierarchy depth 1–10, not the output depth bound of 20."""
   depth: Int
   asOf: Date

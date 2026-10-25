@@ -6,6 +6,7 @@ on:
     paths:
       - 'apps/mobile/**'
       - 'packages/**'
+      - 'services/**'
       - 'scripts/mobile-release*'
       - 'package.json'
       - 'yarn.lock'
@@ -25,7 +26,32 @@ env:
   EXPO_NO_TELEMETRY: '1'
 
 jobs:
+  account-filter-regression:
+    name: API and client account filter regression
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '26.12.0'
+      - name: Install Yarn
+        run: |
+          npm install --global corepack@0.34.0
+          corepack enable
+          corepack prepare yarn@4.12.0 --activate
+          test "$(yarn --version)" = '4.12.0'
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Generate API types
+        run: yarn api:codegen
+      - name: Test zero balance account filtering
+        run: node --import tsx --test services/api/account-zero-balance.test.ts packages/client/account-filter.test.ts
+
   android:
+    needs: account-filter-regression
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
@@ -70,6 +96,7 @@ jobs:
           retention-days: 7
 
   ios:
+    needs: account-filter-regression
     runs-on: xcode-27
     timeout-minutes: 90
     env:

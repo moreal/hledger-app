@@ -17,7 +17,7 @@ test('typed operations preserve partial data, extensions and decimal strings ove
   assert.equal(result.errors?.[0]?.extensions?.code,'UPSTREAM_UNAVAILABLE');
   assert.equal(authorization,'Bearer secret');
   assert.match(sent!.query,/query Accounts/);
-  assert.deepEqual(sent!.variables,{asOf:'2026-10-19',filter:{includeEmpty:true}});
+  assert.deepEqual(sent!.variables,{asOf:'2026-10-19',includeSubaccounts:false,filter:{includeEmpty:true,asOf:'2026-10-19',includeSubaccounts:false}});
   const write = createLedgerClient({endpoint:'http://localhost:8080/graphql',fetch:async (_url,init)=>{
     const body=JSON.parse(String(init?.body));
     assert.equal(body.variables.input.postings[0].amount.value,amount);
