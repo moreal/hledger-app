@@ -67,3 +67,24 @@ test('option results can be changed by callers without corrupting later suggesti
   options.splice(0, options.length);
   assert.equal(getAssetUnitOptions()[0]?.value, 'KRW');
 });
+
+
+test('locale switches currency names while preserving ordered values and exact custom units', () => {
+  const custom = ['btc', 'Fund Class A', '  exact  ', '005930'];
+  const korean = getAssetUnitOptions(custom, '', 'ko');
+  const english = getAssetUnitOptions(custom, '', 'en');
+  assert.deepEqual(english.map(option => option.value), korean.map(option => option.value));
+  assert.deepEqual(english.filter(option => option.kind === 'custom'), korean.filter(option => option.kind === 'custom'));
+  assert.match(english.find(option => option.value === 'USD')!.label, /Dollar/i);
+  assert.deepEqual(getAssetUnitOptions(custom, '', 'ko'), korean);
+  assert.deepEqual(getAssetUnitOptions(custom, '', 'en-US'), english);
+  assert.deepEqual(getAssetUnitOptions(custom, '', 'unsupported'), korean);
+  const koreanWon = korean.find(option => option.value === 'KRW')!;
+  if (koreanWon.label.includes('원')) {
+    assert.ok(getAssetUnitOptions([], '원', 'en').some(option => option.value === 'KRW'));
+  }
+  assert.ok(getAssetUnitOptions([], 'US Dollar', 'ko').some(option => option.value === 'USD'));
+  // Returned options remain detached from both locale caches.
+  english[0] = { value: 'changed', label: 'changed', kind: 'custom' };
+  assert.equal(getAssetUnitOptions([], '', 'en')[0]?.value, 'KRW');
+});

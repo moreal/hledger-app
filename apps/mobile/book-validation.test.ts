@@ -1,6 +1,7 @@
+import { setupI18n } from '@lingui/core';
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { bookDate, bookDecimal, bookIsbn } from './book-validation';
+import { BookValidationError, bookDate, bookDecimal, bookIsbn } from './book-validation';
 
 test('book date and ISBN errors use Korean guidance while retaining strict guards', () => {
   for (const value of ['', '2026-02-30', '2026-13-01', '2026-1-01']) assert.throws(() => bookDate(value), /날짜.*YYYY-MM-DD/);
@@ -31,4 +32,22 @@ test('valid book amounts retain every decimal digit without number coercion', ()
     assert.equal(bookDecimal(value, true), value);
     assert.equal(bookDecimal(value), value);
   }
+});
+
+
+test('validation errors retain semantic descriptors that render in the active locale', () => {
+  let captured: BookValidationError | undefined;
+  try { bookDecimal('0', true); } catch (error) {
+    assert.ok(error instanceof BookValidationError);
+    captured = error;
+  }
+  assert.ok(captured);
+  const i18n = setupI18n({ locale: 'ko', messages: {
+    ko: { 'books.validation.positive': '금액은 정확한 양수로 입력해 주세요.' },
+    en: { 'books.validation.positive': 'Enter an exact positive amount.' },
+  } });
+  assert.equal(i18n._(captured.descriptor), '금액은 정확한 양수로 입력해 주세요.');
+  i18n.activate('en');
+  assert.equal(i18n._(captured.descriptor), 'Enter an exact positive amount.');
+  assert.equal(captured.descriptor.id, 'books.validation.positive');
 });

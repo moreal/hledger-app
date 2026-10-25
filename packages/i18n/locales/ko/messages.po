@@ -8,14 +8,49 @@ msgstr ""
 "Language: ko\n"
 
 #. js-lingui-explicit-id
-#: apps/mobile/LedgerApp.tsx
-msgid "native.settings.36"
-msgstr " · 원장 연결 "
+#: apps/web/src/App.tsx
+msgid "web.forms.App.57"
+msgstr " · 개인 원장"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.160"
+msgstr " · 금액은 날짜·항목 범위 기준"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.21"
+msgstr " · 기준 {v0}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.93"
+msgstr " · 생성: {v0}"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
-msgid "native.settings.37"
-msgstr " · 인덱서 지연 "
+msgid "native.ledgerapp.transactions.allAccounts"
+msgstr " · 전체 항목"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.32"
+msgstr " · 직접 입력 제안"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.92"
+msgstr " · 참고 번호: {v0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.accountSelected"
+msgstr " · 항목 선택"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.6"
+msgstr " 자산은 직접 입력할 수 있습니다."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -23,9 +58,60 @@ msgid "web.remote.3"
 msgstr " 현재까지 읽은 결과는 아래에 남아 있습니다."
 
 #. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.59"
+msgstr "· 개별 책"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.67"
+msgstr "· 처분 기록"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.86"
+msgstr "· 현금 이동 없음"
+
+#. js-lingui-explicit-id
 #: apps/web/src/I18n.stories.tsx
 msgid "story.transactionCount"
 msgstr "{count, plural, one {거래 #개} other {거래 #개}}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "books.retryPreserved"
+msgstr "{detail}\n"
+"입력을 보관했습니다. 같은 요청 키로만 재시도합니다."
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "outbox.message.retryUncertain"
+msgstr "{detail} 이전 저장 결과는 여전히 알 수 없습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.binding.useAndLink"
+msgstr "{name} 사용 + 이름 연결"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.search.enterChoice"
+msgstr "{name} 입력"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.14"
+msgstr "{pending, select, yes {이번 재시도는 거부되었지만 원래 저장 결과는 아직 불명확합니다. 연결 설정에서 같은 원장의 토큰을 갱신한 뒤 같은 요청으로 확인해 주세요.} other {요청이 거부되어 저장하지 못했습니다. 연결 설정이나 입력을 확인해 주세요.}} {v1}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.16"
+msgstr "{pending, select, yes {이번 재시도는 거부되었지만 원래 저장 결과는 아직 불명확합니다. 원래 원장에 연결하고 같은 요청으로 확인해 주세요.} other {요청이 거부되어 저장하지 못했습니다. 연결 대상과 접근 토큰을 다시 확인해 주세요.}}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.11"
+msgstr "{replayed, select, yes {기존 저장 결과를 확인했습니다} other {거래를 원장에 저장했습니다}} · {v1}{v2}"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -33,9 +119,120 @@ msgid "settings.lagSeconds"
 msgstr "{seconds}초"
 
 #. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.asset.bound"
+msgstr "{target}에 {name} 표시 정보를 연결했습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+#: apps/web/src/Books.tsx
+msgid "books.coverAlt"
+msgstr "{title} 표지"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.state.2"
+msgstr "{v0} 이름을 연결했습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.7"
+msgstr "{v0} 종목·통화 검색"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.recent.postingLabel.sentence"
+msgstr "{value0} · 내역 {value1}개"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.postingLabel.sentence"
+msgstr "{value0} · 내역 {value1}개"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.inclusivePeriod"
+msgstr "{value0} ~ {value1} · 양 끝 날짜 포함"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.search.label"
+msgstr "{value0} 검색"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.search.toggle"
+msgstr "{value0} 검색 {value1}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.asOf.sentence"
+msgstr "{value0} 기준 ·{value1}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.result.select"
+msgstr "{value0} 선택"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.result.selectLabel.sentence"
+msgstr "{value0} 선택"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.asset.bindingKept.sentence"
+msgstr "{value0} 입력한 자산은 유지됩니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.manualHint.sentence"
+msgstr "{value0} 직접 입력은 계속 사용할 수 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.local.select"
+msgstr "{value0}, {value1}, 선택"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.local.count"
+msgstr "{value0}개 중 {value1}개 · 선택하면 자산에 적용"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.140"
+msgstr "⌘ / Ctrl + Enter로 저장"
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.settings.37"
 msgstr "1건 · 새 거래 화면에서 같은 요청으로 확인"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.152"
+msgstr "1단위당 시세입니다. 잔액을 자동 환산하거나 서로 다른 자산을 합산하지 않습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.8"
+msgstr "1주당 가격"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.10"
+msgstr "1주당 가격"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.unitPrice"
+msgstr "1주당 가격"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.unitPriceLabel"
+msgstr "1주당 가격"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -54,6 +251,11 @@ msgstr "hledger — 디자인 갤러리"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
+msgid "web.forms.App.153"
+msgstr "hledger · 내 기록을 차분하게"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
 msgid "web.settings.1"
 msgstr "hledger 개인 원장"
 
@@ -63,9 +265,119 @@ msgid "web.connection.error.1"
 msgstr "http 또는 https로 시작하는 서버 주소를 입력해 주세요."
 
 #. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.43"
+msgstr "ISBN 정보 다시 조회"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.37"
+msgstr "ISBN으로 책 정보를 찾고 있습니다… 직접 입력해도 됩니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/book-validation.ts
+msgid "books.validation.2"
+msgstr "ISBN을 올바른 ISBN-10 또는 ISBN-13 번호로 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.149"
+msgstr "KRW·USD 등 기본 통화를 검색하거나 BTC·AAPL·005930 같은 자산을 직접 입력할 수 있습니다. 1 자산의 시세를 기준 자산으로 표시합니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.113"
+msgstr "KRW·USD 등 기본 통화를 검색하거나 BTC·AAPL·005930 같은 자산을 직접 입력할 수 있습니다. 검색에서 선택한 종목은 종목 ID로 저장하며, 직접 입력한 값은 그대로 저장합니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.inputHint"
+msgstr "KRW·USD 또는 BTC·AAPL·005930 등 직접 입력"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.125"
+msgstr "가격"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.priceTypeLabel.sentence"
+msgstr "가격 기준: {value0} · 누르면 변경"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.122"
+msgstr "가격 방식"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.7"
+msgstr "가격 입력 방식"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.priceType"
+msgstr "가격 입력 방식을 선택해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.126"
+msgstr "가격 통화"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.10"
+msgstr "가격을 반영한 자산별 금액의 합계가 0이 되어야 합니다."
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "description.books"
 msgstr "같은 ISBN의 책도 한 권씩 구입 금액과 보유 상태를 관리합니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.uncertainTitle"
+msgstr "같은 요청 키로 결과를 확인해 주세요"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.retry"
+msgstr "같은 요청 키로 확인·재시도"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.142"
+msgstr "같은 요청으로 결과 확인"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.26"
+msgstr "같은 요청으로 결과 확인"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.23"
+msgstr "같은 요청으로 확인·재시도"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.9"
+msgstr "같은 태그 키는 한 번만 사용할 수 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.89"
+msgstr "개"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.111"
+msgstr "개"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.76"
+msgstr "개 "
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -83,6 +395,11 @@ msgid "nav.gallery"
 msgstr "갤러리"
 
 #. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.18"
+msgstr "갱신 지연"
+
+#. js-lingui-explicit-id
 #: apps/mobile/App.tsx
 #: apps/mobile/LedgerApp.tsx
 #: apps/web/src/App.tsx
@@ -91,9 +408,29 @@ msgid "nav.transactions"
 msgstr "거래"
 
 #. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.78"
+msgstr "거래 검색"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.search"
+msgstr "거래 검색"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.19"
+msgstr "거래 금액 (수수료 제외): "
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "title.transactions"
 msgstr "거래 기록"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.4"
+msgstr "거래 날짜를 입력해 주세요."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -106,6 +443,311 @@ msgid "story.description"
 msgstr "거래 내용"
 
 #. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.5"
+msgstr "거래 내용을 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.more"
+msgstr "거래 더 보기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.directionLabel.sentence"
+msgstr "거래 방향: {value0} · 누르면 변경"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.90"
+msgstr "거래 복사 "
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.58"
+msgstr "거래 입력"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.title"
+msgstr "거래 입력"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.143"
+msgstr "거래 저장"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.107"
+msgstr "거래 종류"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.filters.sentence"
+msgstr "거래 필터{value0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.postingsHint"
+msgstr "거래로 돈이 늘거나 줄어든 항목과 금액입니다. 예: 현금 -12,500원, 식비 12,500원."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.save.queued"
+msgstr "거래를 기기에 보관했습니다. 동기화 화면에서 상태를 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.40"
+msgstr "거래일"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.date"
+msgstr "거래일"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.date"
+msgstr "거래일: 실제 날짜를 YYYY-MM-DD 형식으로 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.11"
+msgstr "거부된 요청의 확인 정보를 지우지 못했습니다. 브라우저 저장소를 복구해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.15"
+msgstr "검색 결과 {v0}개"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.empty"
+msgstr "검색 결과가 없습니다. 제공처 상태를 확인하거나 다른 이름으로 검색해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.search.unreadable"
+msgstr "검색 결과를 읽지 못했습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.34"
+msgstr "검색 닫기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.search.collapse"
+msgstr "검색 접기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.10"
+msgstr "검색과 직접 입력만으로는 이름이 연결되지 않습니다. “사용 + 이름 연결”은 현재 입력 중인 자산을 선택한 종목의 고유 자산으로 바꿉니다. “현재 자산에 연결”은 입력을 그대로 둡니다. 두 이름 연결 모두 현재 원장 전체의 같은 단위 표시에 적용되며, 원장에 기록된 금액과 단위는 바뀌지 않습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.13"
+msgstr "검색을 완료하지 못했습니다: {v0} 직접 입력은 계속 사용할 수 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.copy.uncertain"
+msgstr "결과 확인 전에는 이 요청을 복사하거나 템플릿으로 새 요청을 만들 수 없습니다. 동기화 화면에서 같은 요청 키로 확인·재시도해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.2"
+msgstr "결과 확인이 필요한 거래를 먼저 재시도해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.uncertainCopyBlocked"
+msgstr "결과가 불명확한 거래의 복사와 템플릿 사용·저장을 중단했습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.36"
+msgstr "결제 계좌"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.14"
+msgstr "결제 계좌"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.22"
+msgstr "결제 계좌로 순 입금"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.cashAccount"
+msgstr "결제 계좌를 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.21"
+msgstr "결제 계좌에서 출금"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.12"
+msgstr "결제 자산"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.settlement"
+msgstr "결제 자산"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.settlementAsset"
+msgstr "결제 자산을 1~32자로 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "accounts.group.accounts"
+msgstr "계좌"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.depth"
+msgstr "계층 깊이 (1~10, 빈칸은 전체)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.depth"
+msgstr "계층 깊이는 1~10 또는 빈칸입니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.44"
+msgstr "구매 금액"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.57"
+msgstr "구매 입력으로 돌아가기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.60"
+msgstr "구입"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.34"
+msgstr "구입 결제 자산"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.33"
+msgstr "구입 금액 (장부가액)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.28"
+msgstr "구입 금액을 책 자산으로 보관합니다. 같은 ISBN도 구입할 때마다 별개의 한 권으로 등록합니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.29"
+msgstr "구입 날짜"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.61"
+msgstr "구입 장부가액:"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.2"
+msgstr "국립중앙도서관"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.61"
+msgstr "국립중앙도서관"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.119"
+msgstr "금액 / 수량"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.decimal"
+msgstr "금액·수량은 정확한 소수, 원가는 양수로 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.invalidAmount"
+msgstr "금액과 가격은 쉼표 없는 숫자여야 하며 가격은 양수여야 합니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/book-validation.ts
+msgid "books.validation.nonnegative"
+msgstr "금액은 0 이상으로 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/book-validation.ts
+msgid "books.validation.positive"
+msgstr "금액은 정확한 양수로 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/book-validation.ts
+msgid "books.validation.3"
+msgstr "금액을 숫자와 소수점으로 정확하게 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.from"
+msgstr "기간 시작일"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.162"
+msgstr "기간 증감"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.movement"
+msgstr "기간 증감"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.filters.sentence"
+msgstr "기간·항목 필터{value0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.period"
+msgstr "기간을 실제 날짜로 입력하고 시작일을 종료일 이전으로 지정해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.1"
+msgstr "기간이나 검색 조건을 바꾸어 다시 확인해 보세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.clearRecord"
+msgstr "기기 기록 지우기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.restoring"
+msgstr "기기 저장 자료를 복구하고 있습니다."
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "native.storage.damagedSnapshots"
+msgstr "기기 저장 자료를 읽지 못했습니다. 원본은 보존되어 있으며 새 저장을 중단했습니다."
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "common.storageNotice"
 msgstr "기기 저장소 알림"
@@ -116,14 +758,149 @@ msgid "common.storageUnavailable"
 msgstr "기기 저장소를 사용할 수 없어요"
 
 #. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "native.storage.saveUnconfirmed"
+msgstr "기기 저장을 확인하지 못했습니다. 입력을 유지하고 다시 시도해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.retryHint"
+msgstr "기기에 보관된 요청은 같은 중복 방지 키로만 재시도합니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.save"
+msgstr "기기에 보관하고 원장에 저장"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.queue.queued"
+msgstr "기기에 저장 · 전송 대기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.title"
+msgstr "기기에 저장한 거래"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.empty"
+msgstr "기기에 저장한 거래가 없습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.prices.noSource"
+msgstr "기록 없음"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.151"
+msgstr "기록된 시세가 없습니다"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.163"
+msgstr "기말"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.ending"
+msgstr "기말"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.30"
+msgstr "기본 ISO 통화"
+
+#. js-lingui-explicit-id
 #: apps/mobile/App.tsx
 msgid "gallery.components"
 msgstr "기본 요소"
 
 #. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.provider.currency"
+msgstr "기본 통화"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.local.title"
+msgstr "기본 통화 · 내 원장의 자산"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetHistory.loadFailed"
+msgstr "기억한 자산 제안을 읽지 못했습니다. 저장된 사본을 보존하고 기본 목록과 원장 제안을 사용합니다."
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.connection.error.6"
 msgstr "기존 요청의 원장과 다릅니다. 원래 원장에 다시 연결해야 저장 결과를 확인할 수 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.1"
+msgstr "기존 책 요청의 확인 정보를 읽을 수 없습니다. 브라우저 저장소를 확인하기 전에는 새 요청을 보낼 수 없습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.25"
+msgstr "기준 "
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.146"
+msgstr "기준 자산"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.prices.quoteCommodity"
+msgstr "기준 자산 (선택)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.prices.asOf.sentence"
+msgstr "기준일{value0} · 출처{value1}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.to"
+msgstr "기준일·기간 종료일"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.161"
+msgstr "기초"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.opening"
+msgstr "기초"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.provider.nasdaq"
+msgstr "나스닥"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.100"
+msgstr "날짜"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.61"
+msgstr "날짜 범위를 수정해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.recent.copyHint"
+msgstr "날짜, 항목별 내역, 태그를 함께 복사합니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/book-validation.ts
+msgid "books.validation.1"
+msgstr "날짜를 YYYY-MM-DD 형식의 올바른 날짜로 입력해 주세요."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -142,15 +919,155 @@ msgid "title.books"
 msgstr "내 책"
 
 #. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.25"
+msgstr "내 책"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 #: apps/web/src/App.tsx
 msgid "title.accounts"
 msgstr "내 항목"
 
 #. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.115"
+msgstr "내역 "
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.114"
+msgstr "내역 {v0}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.116"
+msgstr "내역 {v0} 삭제"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.label.sentence"
+msgstr "내역 {value0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.amount"
+msgstr "내역 {value0} 금액/수량 (부호 포함)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.memo"
+msgstr "내역 {value0} 메모 (선택)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.deleteLabel.sentence"
+msgstr "내역 {value0} 삭제"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.commodity"
+msgstr "내역 {value0} 자산"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.account"
+msgstr "내역 {value0} 항목 경로"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.memo"
+msgstr "내역 {value0}: 메모는 1000자 이하입니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.costCommodity"
+msgstr "내역 {value0}: 원가 자산을 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.commodity"
+msgstr "내역 {value0}: 자산을 1~32자로 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.accountRequired"
+msgstr "내역 {value0}: 항목 경로가 필요합니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.127"
+msgstr "내역 메모 (선택)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.128"
+msgstr "내역 추가"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.add"
+msgstr "내역 추가"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.101"
+msgstr "내용"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.description"
+msgstr "내용"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.searchHint"
+msgstr "내용, 항목 또는 태그"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.description"
+msgstr "내용: 1~512자로 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.79"
+msgstr "내용·항목·태그 검색"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.copy"
+msgstr "내용을 새 거래로 복사"
+
+#. js-lingui-explicit-id
 #: packages/i18n/src/index.ts
 msgid "error.network"
 msgstr "네트워크 요청을 완료하지 못했습니다. 저장 결과가 불명확할 수 있습니다. 같은 요청으로 결과를 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.106"
+msgstr "다른 서비스와 연결할 때 사용하는 별도 식별자입니다. 직접 입력하는 거래에서는 비워 두어도 됩니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.clientReferenceHint"
+msgstr "다른 앱과 연동할 때 쓰는 식별자입니다. 참고 번호와 별개이며 비워 두어도 됩니다."
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "outbox.message.endpointMismatch"
+msgstr "다른 원장 서버의 요청입니다. 재시도하려면 원래 서버에 다시 연결해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.otherLedger"
+msgstr "다른 원장에서 시작한 입력입니다"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.71"
+msgstr "다른 자산은 합산하지 않습니다."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -164,6 +1081,41 @@ msgstr "다시 읽기 "
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
+msgid "web.forms.App.123"
+msgstr "단가"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.unitCost"
+msgstr "단가"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.queue.pendingCount"
+msgstr "대기 {value0}건"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.clearQueued"
+msgstr "대기 요청 지우기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.11"
+msgstr "더 불러오기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.16"
+msgstr "데이터 출처·상태"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.provider.details"
+msgstr "데이터 출처·상태"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
 msgid "web.settings.2"
 msgstr "도구"
 
@@ -171,6 +1123,11 @@ msgstr "도구"
 #: apps/web/src/App.tsx
 msgid "description.entry"
 msgstr "돈이 오간 항목과 금액을 적어 거래를 기록합니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.112"
+msgstr "돈이 오간 항목과 금액을 한 줄씩 입력하세요. 빠져나간 금액은 음수, 들어온 금액은 양수로 적습니다. 가격을 반영한 자산별 합계가 0이 되어야 합니다."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -189,9 +1146,19 @@ msgid "title.sync"
 msgstr "동기화"
 
 #. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.24"
+msgstr "동일한 ISBN도 실물 한 권씩 구분합니다."
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "nav.back"
 msgstr "뒤로"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.34"
+msgstr "등록한 책이 없습니다."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -215,8 +1182,128 @@ msgstr "마지막 성공 동기화"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
-msgid "native.settings.34"
-msgstr "마지막 성공 동기화 "
+msgid "native.settings.34.sentence"
+msgstr "마지막 성공 동기화 {value0}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.4"
+msgstr "매도"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.sell"
+msgstr "매도"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.2"
+msgstr "매매 구분"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.apply"
+msgstr "매매 내용을 아래 내역에 적용"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.validationTitle"
+msgstr "매매 입력을 확인해 주세요"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.3"
+msgstr "매수"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.buy"
+msgstr "매수"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.side"
+msgstr "매수 또는 매도를 선택해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.unbind.all.sentence"
+msgstr "모든 {value0} 표시 정보 연결 해제"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.94"
+msgstr "목록 금액은 첫 번째 항목의 금액입니다. 거래를 선택하면 항목별 내역을 볼 수 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.26"
+msgstr "목록 새로고침"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.1"
+msgstr "목록에서 선택하거나 직접 입력"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.provider.sec"
+msgstr "미국 SEC"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.23"
+msgstr "미리보기를 위한 정보를 입력하세요"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.20"
+msgstr "미설정"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.unmarked"
+msgstr "미확인"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.7"
+msgstr "보관된 책 요청을 확인하지 못했습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.pending"
+msgstr "보류"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.50"
+msgstr "보유"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.56"
+msgstr "보유"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.48"
+msgstr "보유 상태"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.27"
+msgstr "보유 중"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.preservedCost.sentence"
+msgstr "보존된 원가:{value0} {value1} {value2} · 원가를 바꾸려면 주식 매매 입력을 사용해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.recent.empty"
+msgstr "복사할 최근 거래가 없습니다."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -224,9 +1311,59 @@ msgid "web.settings.6"
 msgstr "본문으로 이동"
 
 #. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "accounts.group.categories"
+msgstr "분류"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "common.loading"
 msgstr "불러오는 중"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.retainUncertain"
+msgstr "불명확한 요청 기록을 유지합니다. 원장 거래 목록에서 결과를 확인한 뒤 같은 키로 재시도하세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.template.uncertain"
+msgstr "불명확한 저장 결과를 같은 요청 키로 확인한 후 템플릿을 저장해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.new"
+msgstr "빈 새 거래"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.17"
+msgstr "사용 가능"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.provider.ready"
+msgstr "사용 가능"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.connection.invalidUrl"
+msgstr "사용자 정보, 쿼리, # 없이 HTTP 또는 HTTPS 주소를 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.117"
+msgstr "삭제"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.137"
+msgstr "삭제"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.close"
+msgstr "상세 닫기"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -255,9 +1392,14 @@ msgid "native.settings.24"
 msgstr "새 인증 확인 필요"
 
 #. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.59"
+msgstr "새로 읽기"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
-msgid "native.settings.35"
-msgstr "서버 버전 "
+msgid "native.settings.35.sentence"
+msgstr "서버 버전 {value0} · 인덱서 지연 {value1}"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -266,8 +1408,8 @@ msgstr "서버 버전 / 상태"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
-msgid "native.settings.33"
-msgstr "서버 상태 "
+msgid "native.settings.33.sentence"
+msgstr "서버 상태 {value0} · 원장 연결 {value1}"
 
 #. js-lingui-explicit-id
 #: packages/i18n/src/index.ts
@@ -290,9 +1432,49 @@ msgid "error.http"
 msgstr "서버가 HTTP {status} 응답을 반환했습니다. 저장 결과가 불명확할 수 있습니다. 같은 요청으로 결과를 확인해 주세요."
 
 #. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "outbox.message.unconfirmed"
+msgstr "서버가 저장을 확인하지 않았습니다. 원장을 확인하거나 같은 키로 직접 재시도해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.query.missingData"
+msgstr "서버가 조회 자료를 반환하지 않았습니다."
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.connection.error.2"
 msgstr "서버에 설정한 접근 토큰을 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.39"
+msgstr "서지 정보 출처"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.subaccounts"
+msgstr "선택 항목의 하위 항목 포함"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.35"
+msgstr "선택한 책 판매·폐기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.87"
+msgstr "선택한 한 권만 원장에 기록합니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.62"
+msgstr "선택한 항목"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "accounts.selectedMissing"
+msgstr "선택한 항목을 찾을 수 없습니다. 항목을 다시 선택해 주세요."
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -316,9 +1498,24 @@ msgid "connection.verify"
 msgstr "설정 화면에서 주소와 인증 토큰을 적용해 원장을 확인해 주세요."
 
 #. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.provider.unconfigured"
+msgstr "설정되지 않음"
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.settings.25"
 msgstr "설정에서 서버 주소와 접근 토큰을 입력하면 항목과 거래를 볼 수 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.connection.verify"
+msgstr "설정에서 원장 연결을 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.connectHint"
+msgstr "설정에서 원장을 연결하면 종목을 검색할 수 있습니다. 기본 통화와 원장의 자산은 오프라인에서도 사용할 수 있습니다."
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -336,6 +1533,111 @@ msgid "native.settings.26"
 msgstr "성공 이력 없음·확인되지 않음"
 
 #. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.48"
+msgstr "손실 항목"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.16"
+msgstr "손익과 수수료 항목을 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.6"
+msgstr "수량"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.quantity"
+msgstr "수량 (양수)"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.amounts"
+msgstr "수량과 가격은 양수, 수수료는 0 이상으로 쉼표 없이 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.validationHint"
+msgstr "수량과 가격은 양수, 수수료는 0 이상인 정확한 소수로 입력하고 서로 다른 항목 경로와 자산을 선택해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.17"
+msgstr "수량과 가격은 양수로 입력하세요. 매도는 해당 가격으로 결제한 거래를 기록하며 취득 원가나 실현 손익을 계산하지 않습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.15"
+msgstr "수수료"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.50"
+msgstr "수수료"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.fee"
+msgstr "수수료 (결제 자산, 0 이상)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.74"
+msgstr "수수료 비용 항목"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.16"
+msgstr "수수료 비용 항목"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.feeAccount"
+msgstr "수수료 비용 항목 경로"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.distinctFeeAccount"
+msgstr "수수료 비용 항목은 주식·결제 계좌와 달라야 합니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.52"
+msgstr "수수료 항목"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.82"
+msgstr "수수료:"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.20"
+msgstr "수수료: "
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.feeAccount"
+msgstr "수수료가 있으면 비용 항목을 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.fee"
+msgstr "수수료는 0 이상이어야 합니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.95"
+msgstr "수정이 필요한 항목이 있습니다"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.7"
+msgstr "쉼표 없이 정확한 숫자를 입력해 주세요."
+
+#. js-lingui-explicit-id
 #: apps/mobile/App.tsx
 #: apps/mobile/LedgerApp.tsx
 #: apps/web/src/App.tsx
@@ -351,8 +1653,58 @@ msgstr "시세"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.prices.more"
+msgstr "시세 더 보기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.prices.from"
+msgstr "시세 시작일 (선택)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.prices.load"
+msgstr "시세 조회"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.prices.to"
+msgstr "시세 종료일 (선택)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.8"
+msgstr "시작일"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.from"
+msgstr "시작일 (선택)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.60"
+msgstr "시작일이 종료일보다 늦습니다"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.37"
+msgstr "실물 식별자"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
 msgid "native.settings.03"
 msgstr "실제 기기에서는 컴퓨터의 LAN 주소를 사용하세요. localhost는 기기 자신입니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.createdAt.sentence"
+msgstr "실제 생성 시각{value0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.connection.live"
+msgstr "실제 원장"
 
 #. js-lingui-explicit-id
 #: apps/mobile/App.tsx
@@ -365,9 +1717,39 @@ msgid "web.settings.13"
 msgstr "실행 중인 원장 서버 주소와 접근 토큰을 입력하세요."
 
 #. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.64"
+msgstr "실현 손익 (수수료 반영)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.32"
+msgstr "실현 손익 (수수료 반영)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.83"
+msgstr "실현 손익 (판매 금액 − 수수료 − 장부가액):"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.templates.hint"
+msgstr "아래 입력을 템플릿으로 저장할 수 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.55"
+msgstr "아직 등록한 책이 없습니다. ISBN과 제목을 입력해 첫 책을 기록하세요."
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.settings.34"
 msgstr "아직 성공한 원장 조회가 없습니다"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.65"
+msgstr "아직 없음"
 
 #. js-lingui-explicit-id
 #: packages/i18n/src/index.ts
@@ -395,6 +1777,21 @@ msgid "common.notice"
 msgstr "알림"
 
 #. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.provider.crypto"
+msgstr "암호자산"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.24"
+msgstr "암호자산"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.102"
+msgstr "어떤 거래였나요?"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 #: apps/web/src/App.tsx
 msgid "settings.language"
@@ -414,6 +1811,21 @@ msgstr "언어 설정을 저장하지 못했습니다. 다시 선택해 주세�
 #: apps/web/src/App.tsx
 msgid "web.settings.38"
 msgstr "없음"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.noReference"
+msgstr "없음"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.32"
+msgstr "여러 저자는 세미콜론(;)으로 구분해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.endpoint.sentence"
+msgstr "연결{value0}"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -457,12 +1869,22 @@ msgstr "연결 설정"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.connection.invalidStorage"
+msgstr "연결 설정 형식을 읽을 수 없습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
 msgid "connection.applied"
 msgstr "연결 설정을 적용했습니다. 인증 토큰은 이 앱 실행 중에만 보관합니다."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.connection.error.7"
+msgstr "연결 원장이 바뀌어 새 거래 입력을 비웠습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.1"
 msgstr "연결 원장이 바뀌어 새 거래 입력을 비웠습니다."
 
 #. js-lingui-explicit-id
@@ -486,9 +1908,144 @@ msgid "web.settings.33"
 msgstr "연결 확인 필요"
 
 #. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.139"
+msgstr "연결된 원장에 실제로 기록합니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.17"
+msgstr "연결이 필요해요"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.state.1"
+msgstr "연결할 자산을 1~32자로 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.clientReference"
+msgstr "연동 참조 (선택)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.clientReference"
+msgstr "연동 참조: 128자 이하로 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.common.expand"
+msgstr "열기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.filters.expand"
+msgstr "열기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.referenceHint"
+msgstr "영수증 번호나 주문 번호가 있으면 적어 주세요. 비워 두어도 됩니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.104"
+msgstr "영수증 번호나 주문 번호처럼 거래를 찾을 때 참고할 번호입니다. 없어도 됩니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.amountHint"
+msgstr "예: -12500.00"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.120"
+msgstr "예: -6500.00"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.147"
+msgstr "예: KRW"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.83"
+msgstr "예: project"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.145"
+msgstr "예: USD, BTC"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.9"
+msgstr "예: 삼성전자, AAPL, Apple"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.saveOffline"
+msgstr "오프라인 임시 저장 · 전송하지 않음"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.105"
+msgstr "외부 서비스 참조 (선택)"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "outbox.message.interrupted"
+msgstr "요청 도중 앱이 종료되었습니다. 원장을 확인하거나 같은 키로 직접 재시도해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.22"
+msgstr "요청 키"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.requestKey.sentence"
+msgstr "요청 키{value0}"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "common.requestFailed"
 msgstr "요청을 완료하지 못했어요"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.1"
+msgstr "요청을 확인하지 못했습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.balance"
+msgstr "원가를 반영한 자산별 합계를 0으로 맞춰 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.balanceHint"
+msgstr "원가를 반영한 자산별 합계를 0으로 맞춰 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.otherLedgerHint"
+msgstr "원래 연결로 돌아가거나 현재 원장에 새 입력으로 명시적으로 복사한 후 항목과 금액을 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.retry"
+msgstr "원래 요청 확인·재시도"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.138"
+msgstr "원래 요청의 저장 결과를 확인합니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.55"
+msgstr "원장"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -496,9 +2053,14 @@ msgid "web.settings.19"
 msgstr "원장 반영 지연"
 
 #. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.156"
+msgstr "원장 시작"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
-msgid "native.settings.32"
-msgstr "원장 식별자 "
+msgid "native.settings.32.sentence"
+msgstr "원장 식별자 {value0} · {value1}"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -521,9 +2083,44 @@ msgid "web.settings.32"
 msgstr "원장 연결됨"
 
 #. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetBinding.connectionChanged"
+msgstr "원장 연결이 변경되었습니다. 현재 원장에서 다시 선택해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.queue.succeeded"
+msgstr "원장 저장 확인"
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.connection.error.5"
 msgstr "원장 접근 권한을 확인하지 못했습니다. 서버 주소와 접근 토큰을 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.56"
+msgstr "원장 화면"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.141"
+msgstr "원장 확인 중…"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.25"
+msgstr "원장 확인 중…"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.31"
+msgstr "원장·이전에 입력한 단위"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.unknownCreation"
+msgstr "원장에 기록되지 않음"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -536,14 +2133,44 @@ msgid "description.prices"
 msgstr "원장에 기록된 자산별 기준 시세입니다."
 
 #. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.12"
+msgstr "원장에 연결하면 종목을 검색하고 이름을 연결할 수 있습니다."
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "common.requesting"
 msgstr "원장에 요청하고 있습니다."
 
 #. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.binding.saving"
+msgstr "원장에 표시 정보를 저장하고 있습니다…"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.save.confirmed"
+msgstr "원장에서 거래 저장을 확인했습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.confirmed"
+msgstr "원장에서 거래 저장을 확인했습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.69"
+msgstr "원장에서 읽은 항목이 여기에 표시됩니다."
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.remote.loading"
 msgstr "원장을 읽고 있습니다…"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetMetadata.unchanged"
+msgstr "원장의 자산와 금액은 그대로 표시합니다."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -556,6 +2183,56 @@ msgid "web.remote.1"
 msgstr "원장이 변경되어 목록을 다시 읽어야 합니다"
 
 #. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "outbox.message.rejected"
+msgstr "원장이 이 요청을 거부했습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.13"
+msgstr "유효한 ISBN-10 또는 ISBN-13을 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.42"
+msgstr "유효한 ISBN을 입력하면 책 정보를 자동으로 찾습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.transactionPeriod"
+msgstr "유효한 거래 기간을 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.pricePeriod"
+msgstr "유효한 시세 기간을 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.detailPeriod"
+msgstr "유효한 시작일과 종료일을 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.40"
+msgstr "이 ISBN의 책 정보를 찾지 못했습니다. 제목과 저자를 직접 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.recent.copy"
+msgstr "이 거래 복사"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.noTransactions"
+msgstr "이 기간의 거래가 없습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.56"
+msgstr "이 실물 책 구매 기록"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "native.settings.23"
 msgstr "이 실행에서 인증 확인"
@@ -564,6 +2241,81 @@ msgstr "이 실행에서 인증 확인"
 #: apps/mobile/LedgerApp.tsx
 msgid "native.settings.30"
 msgstr "이 실행의 인증 토큰을 지웠습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.lockedHint"
+msgstr "이 입력은 기기에 저장되어 잠겨 있습니다. 수정하려면 새 입력으로 복사하세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.copy"
+msgstr "이 입력을 새 거래로 복사"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.66"
+msgstr "이 책 판매·폐기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.33"
+msgstr "이 책 판매·폐기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.66"
+msgstr "이 항목의 거래 "
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.5"
+msgstr "이름 연결 조회: "
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.3"
+msgstr "이름 연결 해제"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.4"
+msgstr "이름 연결과 해제는 현재 원장 전체에 적용됩니다. 같은 단위 문자열의 잔액·거래 내역·시세에 함께 표시됩니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.state.4"
+msgstr "이름 연결을 저장하지 못했습니다. 입력은 그대로 유지합니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.state.3"
+msgstr "이름 연결을 해제했습니다. 자산은 그대로입니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.queryHint"
+msgstr "이름이나 티커를 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.12"
+msgstr "이번 재시도는 거부되었지만 원래 저장 결과는 아직 불명확합니다. 같은 요청을 유지합니다. {v0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.provider.unavailable"
+msgstr "이용 불가"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.51"
+msgstr "이익 항목"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.provider.stale"
+msgstr "이전 자료"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -586,6 +2338,46 @@ msgid "native.settings.01"
 msgstr "인증 토큰은 앱을 닫으면 지워집니다."
 
 #. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.connection.missingIdentity"
+msgstr "인증된 원장 식별자를 확인하지 못했습니다. 주소와 인증 토큰을 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.108"
+msgstr "일반 거래"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.general"
+msgstr "일반 거래"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.limited"
+msgstr "일부 자산 목록을 이용할 수 없어 검색 결과가 제한될 수 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.stale"
+msgstr "일부 자산 정보는 이전에 받은 자료입니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.local.empty"
+msgstr "일치하는 자산이 없습니다. 직접 입력한 자산을 사용할 수 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.14"
+msgstr "일치하는 종목이 없습니다. {unavailable, select, yes {일부 출처를 사용할 수 없습니다. } other {}}자산을 직접 입력할 수 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.10"
+msgstr "읽는 중…"
+
+#. js-lingui-explicit-id
 #: apps/mobile/App.tsx
 #: apps/mobile/LedgerApp.tsx
 #: apps/web/src/I18n.stories.tsx
@@ -593,9 +2385,79 @@ msgid "nav.entry"
 msgstr "입력"
 
 #. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.13"
+msgstr "입력 내용을 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.modeLabel.sentence"
+msgstr "입력 방식: {value0} · 누르면 변경"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.template.saved"
+msgstr "입력 템플릿을 기기에 저장했습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.99"
+msgstr "입력과 원장을 고정했습니다. 연결 설정에서 같은 원장의 토큰을 갱신할 수 있습니다. 아래 버튼은 같은 중복 방지 키로 원래 요청을 재시도합니다. 이 창을 닫으면 확인 정보가 사라집니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.24"
+msgstr "입력을 고정했습니다. 다른 화면으로 이동하거나 다시 연결해도 같은 요청으로 결과를 확인합니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.storage.stopped"
+msgstr "입력을 유지하며 전송을 중단했습니다. 앱을 다시 열어 저장 자료를 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.template.save"
+msgstr "입력을 템플릿으로 저장"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.validationTitle"
+msgstr "입력을 확인해 주세요"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.129"
+msgstr "입력한 금액의 합계가 0입니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.130"
+msgstr "입력한 금액의 합계를 확인해 주세요."
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "connection.notApplied"
 msgstr "입력한 설정을 적용하지 않았습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.hint"
+msgstr "자동 재전송하지 않습니다. 확인 필요 거래는 같은 키로 원장 결과를 조회·재시도합니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.asOf"
+msgstr "자료 {value0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.result.asOf"
+msgstr "자료 {value0}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.26"
+msgstr "자료 출처"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -604,13 +2466,288 @@ msgstr "자료를 모두 불러오지 못했습니다"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
+msgid "web.forms.App.121"
+msgstr "자산"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.144"
+msgstr "자산"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.prices.commodity"
+msgstr "자산 (선택)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.search.missingResult"
+msgstr "자산 검색 결과를 받지 못했습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.title"
+msgstr "자산 목록 검색"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.loading"
+msgstr "자산 목록을 검색하고 있습니다…"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.131"
+msgstr "자산 미입력"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetHistory.saveFailed"
+msgstr "자산 제안을 기기에 기억하지 못했습니다. 입력과 거래 저장은 계속 사용할 수 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetHistory.recovered"
+msgstr "자산 제안의 마지막 정상 저장 사본을 복구했습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetMetadata.missing"
+msgstr "자산 표시 정보를 받지 못했습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetMetadata.failed"
+msgstr "자산 표시 정보를 불러오지 못했어요"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.commodity"
+msgstr "자산 필터 (선택)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.67"
+msgstr "자산별 잔액"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.8"
+msgstr "자산을 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.includeSubaccounts"
+msgstr "잔액·기간에 하위 항목 포함"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.70"
+msgstr "잔액은 종료일까지의 누계입니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.includeEmpty"
+msgstr "잔액이 0인 항목 포함"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.30"
+msgstr "장부 가치"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "outbox.message.retryRejected"
+msgstr "재시도가 거부되었습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.42"
+msgstr "저자 (선택 · 한 줄에 한 명)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.31"
+msgstr "저자 (선택)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.15"
+msgstr "저자는 20명까지, 각 이름은 200자까지 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.13"
+msgstr "저자는 최대 20명, 한 명당 200자까지 입력할 수 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.97"
+msgstr "저장 결과 확인 필요"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.19"
+msgstr "저장 결과 확인 필요"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.save.uncertain"
+msgstr "저장 결과가 불명확한 요청입니다. 동기화 화면에서 같은 요청 키로 확인·재시도해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.17"
+msgstr "저장 결과가 불명확합니다. 같은 요청으로 결과를 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.10"
+msgstr "저장 결과가 불명확합니다. 같은 요청으로 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.uncertainHint"
+msgstr "저장 결과가 불명확합니다. 동기화 화면에서 원래 요청 키로 확인·재시도해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.12"
+msgstr "저장 결과가 불명확합니다. 입력과 요청 키를 보관했습니다. 같은 요청으로 결과를 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "outbox.message.unknown"
+msgstr "저장 결과를 알 수 없습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
 msgid "web.connection.error.4"
 msgstr "저장 결과를 확인하는 동안에는 기존 서버 주소를 유지해 주세요."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
+msgid "web.forms.App.state.15"
+msgstr "저장 결과를 확인하지 못했습니다. 입력을 고정해 두었습니다. 같은 요청으로 결과를 확인해 주세요.{v0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.21"
+msgstr "저장 결과를 확인할 때까지 다른 책 기록을 잠급니다. 원래 연결에서 같은 요청으로 재시도해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.unconfirmed"
+msgstr "저장 결과를 확인해야 합니다. 같은 요청으로 다시 확인해 주세요.{detail}"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "native.storage.recoveredSnapshot"
+msgstr "저장 사본 하나가 불완전하여 마지막 정상 사본을 복구했습니다. 대기 거래를 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.96"
+msgstr "저장 완료"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
 msgid "web.settings.21"
 msgstr "저장 확인 대기"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "native.storage.integrityFailed"
+msgstr "저장된 자료의 무결성을 확인할 수 없습니다."
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "error.outboxCorruption"
+msgstr "저장된 전송 대기함이 올바르지 않습니다. 초기화하기 전에 복구할 수 있도록 데이터를 보존해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.9"
+msgstr "저장은 확인했지만 재시도 정보를 지우지 못했습니다. 브라우저 저장소를 복구해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.98"
+msgstr "저장하지 못했습니다"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.templates.title"
+msgstr "저장한 입력 템플릿"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.18"
+msgstr "저장할 내역 미리보기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.hint"
+msgstr "적용하면 아래 항목별 내역을 교체합니다. 날짜·내용과 원가를 확인한 후 저장해 주세요. 매도는 이 거래의 가격으로 기록하며 실현 손익은 자동 계산하지 않습니다."
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "error.outboxPersistence"
+msgstr "전송 대기함을 저장하지 못했습니다. 마지막으로 저장된 상태를 유지합니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.queue.sending"
+msgstr "전송 중 · 결과 대기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.queue.blocked"
+msgstr "전송 중단 · 수정 또는 인증 필요"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.49"
+msgstr "전체"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.totalPrice"
+msgstr "전체 거래 금액"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.totalPriceLabel"
+msgstr "전체 거래 금액"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.63"
+msgstr "전체 기간"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.157"
+msgstr "전체 기간"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.allDates"
+msgstr "전체 기간"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.81"
+msgstr "전체 항목"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.allAccountsOption"
+msgstr "전체 항목"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.72"
+msgstr "전체 항목 "
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -619,8 +2756,153 @@ msgstr "접근 토큰"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.common.collapse"
+msgstr "접기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.filters.collapse"
+msgstr "접기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.85"
+msgstr "정확한 값"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.14"
+msgstr "제목, 날짜, 양수인 구입 금액, 통화와 계좌를 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.empty"
+msgstr "조건에 맞는 거래가 없습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.prices.empty"
+msgstr "조건에 맞는 시세가 없습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.empty"
+msgstr "조건에 맞는 항목이 없습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.19"
+msgstr "조회 불가"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.5"
+msgstr "조회된 ISBN이 다릅니다. 직접 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.9"
+msgstr "종료일"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.to"
+msgstr "종료일 (선택)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.5"
+msgstr "종목"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.8"
+msgstr "종목 이름·코드·거래소"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.2"
+msgstr "종목·통화 검색"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.distinctAssets"
+msgstr "종목과 결제 자산은 서로 달라야 합니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.11"
+msgstr "종목과 통화를 검색하고 있습니다…"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.asset"
+msgstr "종목을 1~32자로 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.selectionHint"
+msgstr "종목을 선택하면 이름과 아이콘이 표시됩니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
 msgid "connection.guidance"
 msgstr "주소와 인증 토큰을 적용하면 원장을 확인하고 조회·전송을 시작합니다. 이전 연결이 있다면 오프라인 임시 저장은 가능합니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.23"
+msgstr "주식"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.13"
+msgstr "주식 계좌"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.assetAccount"
+msgstr "주식 계좌를 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.distinctAccounts"
+msgstr "주식 계좌와 결제 계좌는 서로 달라야 합니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.109"
+msgstr "주식 매매"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.trade"
+msgstr "주식 매매"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.title"
+msgstr "주식 매매 내역 만들기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.1"
+msgstr "주식 매매 입력"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.securityAccount"
+msgstr "주식 보유 항목 경로"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.asset"
+msgstr "주식 자산"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetBinding.busy"
+msgstr "진행 중인 요청이 끝난 후 다시 선택해 주세요."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -628,11 +2910,266 @@ msgid "web.connection.error.3"
 msgstr "진행 중인 저장 요청이 끝난 뒤 다시 연결해 주세요."
 
 #. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.103"
+msgstr "참고 번호 (선택)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.reference"
+msgstr "참고 번호 (선택)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.reference.sentence"
+msgstr "참고 번호{value0} · 출처{value1}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.reference"
+msgstr "참고 번호: 64자 이하로 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.77"
+msgstr "찾는 항목이 없습니다"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 #: apps/web/src/App.tsx
 #: apps/web/src/I18n.stories.tsx
 msgid "nav.books"
 msgstr "책"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.4"
+msgstr "책"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.59"
+msgstr "책"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.17"
+msgstr "책 관리"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.18"
+msgstr "책 구매·판매·폐기는 원장 연결 후 저장할 수 있습니다. 오프라인에서는 전송을 기다립니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.pendingPurchase"
+msgstr "책 구입 · {title}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.27"
+msgstr "책 구입 기록"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.20"
+msgstr "책 기록 안내"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.19"
+msgstr "책 기록 안내"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.10"
+msgstr "책 기록을 원장에 저장했습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.count"
+msgstr "책 목록 · {count}권"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.8"
+msgstr "책 목록 응답이 없습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.9"
+msgstr "책 목록 응답이 없습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.54"
+msgstr "책 목록을 읽지 못했습니다"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.7"
+msgstr "책 목록을 읽지 못했습니다. 연결 상태를 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.6"
+msgstr "책 목록을 확인하지 못했습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.18"
+msgstr "책 요청 확인 정보 보관 필요"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.35"
+msgstr "책 자산 계좌"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.44"
+msgstr "책 자산 증가 / 결제 계좌 출금"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.79"
+msgstr "책 자산에서 제거할 장부가액:"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.43"
+msgstr "책 정보 다시 찾기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.41"
+msgstr "책 정보 조회가 잠시 어렵습니다. 제목과 저자를 직접 입력해 기록할 수 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.3"
+msgstr "책 정보를 가져오지 못했습니다. 직접 입력할 수 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.38"
+msgstr "책 정보를 불러왔습니다. 제목과 저자를 확인하고 수정해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.2"
+msgstr "책 정보를 찾고 있습니다…"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.4"
+msgstr "책 정보를 찾지 못했습니다. 제목과 저자를 직접 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.6"
+msgstr "책 정보를 채웠습니다. 내용을 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.30"
+msgstr "책 제목"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.41"
+msgstr "책 제목"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.14"
+msgstr "책 제목을 1~200자로 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.pendingSale"
+msgstr "책 판매 · {copyId}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.pendingDiscard"
+msgstr "책 폐기 · {copyId}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.36"
+msgstr "책 한 권 구매"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.45"
+msgstr "책 항목"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.12"
+msgstr "책 항목과 현금 항목을 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.11"
+msgstr "책과 원장 거래를 저장했습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.53"
+msgstr "책을 읽고 있습니다…"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.53"
+msgstr "처리 중…"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.processing"
+msgstr "처리 중…"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.65"
+msgstr "처분"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.68"
+msgstr "처분 구분"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.71"
+msgstr "처분 날짜"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.16"
+msgstr "처분 날짜와 손실 비용 항목, 판매 금액과 필요한 계좌를 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.78"
+msgstr "처분 미리보기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.76"
+msgstr "처분 손실 비용 항목"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.75"
+msgstr "처분 이익 수익 항목"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.80"
+msgstr "처분으로 추가 출금"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -645,9 +3182,399 @@ msgid "native.settings.38"
 msgstr "초"
 
 #. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.9"
+msgstr "총 거래 금액"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.11"
+msgstr "총 거래 금액 (수수료 제외)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.124"
+msgstr "총액"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.totalCost"
+msgstr "총액"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.64"
+msgstr "최근 거래"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.recent.refresh"
+msgstr "최근 거래 새로고침"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.recent.title"
+msgstr "최근 거래에서 시작"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.150"
+msgstr "출처 미기록"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.91"
+msgstr "출처: "
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.31"
+msgstr "취득 원가"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.common.cancel"
+msgstr "취소"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.132"
+msgstr "태그"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.tags"
+msgstr "태그"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.135"
+msgstr "태그 {v0} 값"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.136"
+msgstr "태그 {v0} 삭제"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.134"
+msgstr "태그 {v0} 키"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.tag.value"
+msgstr "태그 {value0} 값"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.tag.deleteLabel.sentence"
+msgstr "태그 {value0} 삭제"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.tag.key"
+msgstr "태그 {value0} 키"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.tags.sentence"
+msgstr "태그 {value0}: {value1}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.84"
+msgstr "태그 값"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.tagValue"
+msgstr "태그 값"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.133"
+msgstr "태그 추가"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.tag.add"
+msgstr "태그 추가"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.82"
+msgstr "태그 키"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.tag"
+msgstr "태그 키 (선택)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.duplicateTags"
+msgstr "태그 키가 중복되었습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.template.name"
+msgstr "템플릿 이름"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.templates.use"
+msgstr "템플릿으로 새 거래"
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.settings.14"
 msgstr "토큰은 현재 창을 닫거나 새로고침하면 사라집니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.22"
+msgstr "통화"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.46"
+msgstr "통화"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.search.placeholder"
+msgstr "통화 코드, 종목명, 티커 검색"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.search.open"
+msgstr "통화·종목 찾기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.15"
+msgstr "통화를 1~32자로 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.51"
+msgstr "판매"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.57"
+msgstr "판매"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.69"
+msgstr "판매"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.38"
+msgstr "판매"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.saleCurrency"
+msgstr "판매 금액 (수수료 전, {commodity})"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.62"
+msgstr "판매 금액 (수수료 전):"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.84"
+msgstr "판매 금액과 수수료를 입력하면 손익을 확인할 수 있습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.88"
+msgstr "판매 기록"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.49"
+msgstr "판매 대금 (수수료 차감 전)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.72"
+msgstr "판매 수수료"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.28"
+msgstr "판매 완료"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.81"
+msgstr "판매대금 순 입금"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.73"
+msgstr "판매대금 입금 계좌"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.54"
+msgstr "판매와 실현 손익 기록"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.52"
+msgstr "폐기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.58"
+msgstr "폐기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.70"
+msgstr "폐기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.39"
+msgstr "폐기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.89"
+msgstr "폐기 기록"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.63"
+msgstr "폐기 손실"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.77"
+msgstr "폐기 손실 비용 항목"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.85"
+msgstr "폐기 손실:"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.29"
+msgstr "폐기 완료"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.55"
+msgstr "폐기와 손실 기록"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetMetadata.reload"
+msgstr "표시 정보 다시 불러오기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.unbind.actionLabel.sentence"
+msgstr "표시 정보 연결 해제 · {value0} 유지"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.scopeHint"
+msgstr "표시 정보 연결·해제는 현재 원장에서 자산 코드가 정확히 같은 모든 항목·거래·시세의 이름과 아이콘에 함께 적용됩니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.asset.unbound"
+msgstr "표시 정보 연결을 해제했습니다. 자산는 유지됩니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetBinding.unconfirmed"
+msgstr "표시 정보 저장을 확인하지 못했습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.164"
+msgstr "표시할 기록이 없습니다"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.5"
+msgstr "표지 없음"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.58"
+msgstr "표지 없음"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.60"
+msgstr "표지 제공:"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.3"
+msgstr "표지 출처:"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.apply"
+msgstr "필터 적용·새로고침"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.87"
+msgstr "필터 지우기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.148"
+msgstr "필터 지우기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.86"
+msgstr "하위 항목 거래 포함"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.73"
+msgstr "하위 항목 포함"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.158"
+msgstr "하위 항목 포함"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.includeChildren"
+msgstr "하위 항목 포함"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.45"
+msgstr "한 권 구입 기록"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.provider.krx"
+msgstr "한국거래소"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.23"
+msgstr "한국어"
 
 #. js-lingui-explicit-id
 #: apps/mobile/App.tsx
@@ -659,13 +3586,148 @@ msgstr "항목"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
+msgid "accounts.group.items"
+msgstr "항목"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.80"
+msgstr "항목"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.118"
+msgstr "항목"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.moreTransactions"
+msgstr "항목 거래 더 보기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.74"
+msgstr "항목 검색"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.search"
+msgstr "항목 검색"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.6"
+msgstr "항목 경로를 입력해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.155"
+msgstr "항목 기간 잔액"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.more"
+msgstr "항목 더 보기"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.loadAccounts"
+msgstr "항목 선택 목록 불러오기"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.75"
+msgstr "항목 이름이나 경로 검색"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.159"
+msgstr "항목 자체"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.ownBalance"
+msgstr "항목 자체 잔액"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.account"
+msgstr "항목 필터"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.apply"
+msgstr "항목·기준일 적용"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.110"
+msgstr "항목별 내역"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.postings"
+msgstr "항목별 내역"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.88"
+msgstr "항목별 내역 · "
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.3"
+msgstr "항목별 내역 {v0}개와 메모·태그를 모두 복사했습니다. 날짜는 오늘로 설정했습니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.copy.completed"
+msgstr "항목별 내역과 태그를 새 입력으로 복사했습니다. 날짜와 금액을 확인해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.minimumPostings"
+msgstr "항목별 내역은 최소 두 개가 필요합니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.copy"
+msgstr "항목별 내역을 새 거래로 복사"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.68"
+msgstr "항목을 선택하세요"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.missing"
+msgstr "항목을 찾을 수 없습니다. 목록을 새로 불러와 주세요."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
 msgid "description.accounts"
 msgstr "항목의 흐름과 자산별 잔액을 살펴보세요."
 
 #. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.47"
+msgstr "현금 항목"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.cashAccount"
+msgstr "현금 항목 경로"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
-msgid "native.settings.31"
-msgstr "현재 사용 중인 주소: "
+msgid "native.ledgerapp.accounts.refreshDetail"
+msgstr "현재 기간으로 상세 새로고침"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.31.sentence"
+msgstr "현재 사용 중인 주소: {value0}"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -674,8 +3736,43 @@ msgstr "현재 언어를 유지합니다. 앱을 다시 열기 전에 언어를 
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.otherEndpoint"
+msgstr "현재 연결과 다릅니다. 원래 주소로 연결한 후 재시도해 주세요."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.copyToLedger"
+msgstr "현재 원장에 맞춰 새 입력으로 복사"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.unbind.currentLedger.sentence"
+msgstr "현재 원장에서 자산이 정확히 {value0}인 모든 항목·거래·시세의 {value1} 표시 정보 연결을 해제할까요? 자산과 금액/수량은 유지됩니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.binding.confirmRemove"
+msgstr "현재 원장의 모든 화면에서 정확히 “{commodity}”로 기록된 단위의 이름 연결을 해제할까요? 이 입력란뿐 아니라 잔액·거래 내역·시세 표시에도 적용됩니다. 원장에 기록된 자산과 금액은 그대로 유지됩니다."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
 msgid "connection.none"
 msgstr "현재 인증된 연결이 없습니다."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.binding.linkCurrent"
+msgstr "현재 자산 “{commodity}”에 연결"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.binding.currentAsset.sentence"
+msgstr "현재 자산 {value0}에 연결"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.20"
+msgstr "확인 대기 중"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -688,6 +3785,26 @@ msgid "native.settings.27"
 msgstr "확인 전"
 
 #. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.8"
+msgstr "확인 정보를 브라우저에 보관하지 못해 요청을 보내지 않았습니다. 저장소 접근을 복구한 뒤 다시 열어 주세요."
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.settings.31"
 msgstr "확인 중"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.21"
+msgstr "확인 중인 요청:"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.queue.needsReview"
+msgstr "확인 필요 · 저장 결과 불명확"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.cleared"
+msgstr "확인됨"

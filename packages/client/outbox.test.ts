@@ -257,3 +257,74 @@ test('malformed saved costs are rejected rather than silently discarded', async 
     await assert.rejects(createOutbox(db.storage, client).hydrate(), OutboxCorruptionError);
   }
 });
+
+test('semantic messages persist in version one and clear on same-key successful retry', async () => {
+  const db = memory(); let attempts = 0;
+  const client = createLedgerClient({ endpoint, fetch: async (_url, init) => {
+    assert.equal(JSON.parse(String(init?.body)).variables.input.idempotencyKey, 'key');
+    attempts++;
+    const durable = JSON.parse(db.read()!).records[0];
+    assert.equal(durable.message, undefined);
+    assert.equal(durable.messageInfo, undefined);
+    if (attempts === 1) throw Error('lost');
+    if (attempts === 2) return new Response('denied', { status: 401 });
+    return Response.json(success('key', true));
+  } });
+  const queue = createOutbox(db.storage, client);
+  assert.deepEqual((await queue.enqueue(input())).messageInfo, { code: 'transport', kind: 'network' });
+  const retried = await queue.retry('key');
+  assert.equal(retried.state, 'needsReview');
+  assert.deepEqual(retried.messageInfo, { code: 'retryUncertain', reason: { code: 'transport', kind: 'http', status: 401 } });
+  assert.equal(JSON.parse(db.read()!).version, 1);
+  const restored = createOutbox(db.storage, client);
+  assert.deepEqual((await restored.hydrate())[0]!.messageInfo, retried.messageInfo);
+  const confirmed = await restored.retry('key');
+  assert.equal(confirmed.messageInfo, undefined);
+  assert.equal(confirmed.message, undefined);
+});
+
+test('old snapshots retain raw messages and endpoint metadata only overlays returned copies', async () => {
+  const db = memory(); const client = createLedgerClient({ endpoint });
+  await createOutbox(db.storage, client).enqueue(input(), { send: false });
+  const old = JSON.parse(db.read()!); old.records[0].state = 'needsReview'; old.records[0].message = 'Legacy custom message';
+  db.write(JSON.stringify(old));
+  const restored = createOutbox(db.storage, client);
+  assert.equal((await restored.hydrate())[0]!.message, 'Legacy custom message');
+  assert.equal(restored.list()[0]!.messageInfo, undefined);
+  const foreign = createOutbox(db.storage, createLedgerClient({ endpoint: 'http://other/graphql' }));
+  assert.deepEqual((await foreign.hydrate())[0]!.messageInfo, { code: 'endpointMismatch' });
+  assert.deepEqual(JSON.parse(db.read()!), old);
+});
+
+test('invalid saved semantic message metadata is corruption', async () => {
+  for (const messageInfo of [null, {}, {code:'invented'}, {code:'transport',kind:'other'}, {code:'transport',kind:'http',status:'401'}, {code:'retryUncertain',detail:42}, {code:'retryUncertain',reason:{code:'retryUncertain'}}]) {
+    const db = memory(); const client = createLedgerClient({ endpoint });
+    await createOutbox(db.storage, client).enqueue(input(), { send: false });
+    const stored = JSON.parse(db.read()!); stored.records[0].messageInfo = messageInfo; db.write(JSON.stringify(stored));
+    await assert.rejects(createOutbox(db.storage, client).hydrate(), OutboxCorruptionError);
+  }
+});
+
+test('raw rejected retries retain server detail and uncertainty across restart', async () => {
+  const db = memory(); let attempts = 0;
+  const client = createLedgerClient({ endpoint, fetch: async () => {
+    if (++attempts === 1) throw Error('lost response');
+    return Response.json({ errors: [{ message: 'Custom ledger rejection', extensions: { code: 'UNAUTHENTICATED' } }] });
+  } });
+  const queue = createOutbox(db.storage, client);
+  await queue.enqueue(input());
+  const rejected = await queue.retry('key');
+  assert.deepEqual(rejected.messageInfo, { code: 'retryUncertain', detail: 'Custom ledger rejection' });
+  assert.equal(rejected.message, 'Custom ledger rejection The earlier write outcome is still unknown.');
+  assert.deepEqual((await createOutbox(db.storage, client).hydrate())[0]!.messageInfo, rejected.messageInfo);
+});
+
+test('interruption recovery stores semantic metadata without changing the legacy message', async () => {
+  const db = memory(); const client = createLedgerClient({ endpoint });
+  await createOutbox(db.storage, client).enqueue(input(), { send: false });
+  const stored = JSON.parse(db.read()!); stored.records[0].state = 'sending'; db.write(JSON.stringify(stored));
+  const recovered = (await createOutbox(db.storage, client).hydrate())[0]!;
+  assert.deepEqual(recovered.messageInfo, { code: 'interrupted' });
+  assert.equal(recovered.message, 'The app stopped during a request. Check the ledger or explicitly retry with the same key.');
+  assert.deepEqual(JSON.parse(db.read()!).records[0].messageInfo, recovered.messageInfo);
+});

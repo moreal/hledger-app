@@ -8,14 +8,49 @@ msgstr ""
 "Language: en\n"
 
 #. js-lingui-explicit-id
-#: apps/mobile/LedgerApp.tsx
-msgid "native.settings.36"
-msgstr " · Ledger connection "
+#: apps/web/src/App.tsx
+msgid "web.forms.App.57"
+msgstr " · Personal ledger"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.160"
+msgstr " · Amounts reflect the date and account scope"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.21"
+msgstr " · As of {v0}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.93"
+msgstr " · Created: {v0}"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
-msgid "native.settings.37"
-msgstr " · Indexer lag "
+msgid "native.ledgerapp.transactions.allAccounts"
+msgstr " · All accounts"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.32"
+msgstr " · Suggested custom entry"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.92"
+msgstr " · Reference number: {v0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.accountSelected"
+msgstr " · Account selected"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.6"
+msgstr " You can enter an asset manually."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -23,9 +58,60 @@ msgid "web.remote.3"
 msgstr " The results loaded so far are still shown below."
 
 #. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.59"
+msgstr "· Individual copy"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.67"
+msgstr "· Disposal record"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.86"
+msgstr "· No cash movement"
+
+#. js-lingui-explicit-id
 #: apps/web/src/I18n.stories.tsx
 msgid "story.transactionCount"
 msgstr "{count, plural, one {# transaction} other {# transactions}}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "books.retryPreserved"
+msgstr "{detail}\n"
+"Your input has been preserved. Retry only with the same request key."
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "outbox.message.retryUncertain"
+msgstr "{detail} The earlier write outcome is still unknown."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.binding.useAndLink"
+msgstr "Use {name} and link its name"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.search.enterChoice"
+msgstr "Enter {name}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.14"
+msgstr "{pending, select, yes {This retry was rejected, but the original save result is still unknown. Refresh the token for the same ledger in connection settings, then check using the same request.} other {The request was rejected and could not be saved. Check your connection settings or input.}} {v1}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.16"
+msgstr "{pending, select, yes {This retry was rejected, but the original save result is still unknown. Connect to the original ledger and check using the same request.} other {The request was rejected and could not be saved. Check the connection target and access token.}}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.11"
+msgstr "{replayed, select, yes {Confirmed the previous save result} other {Saved the transaction to the ledger}} · {v1}{v2}"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -33,9 +119,120 @@ msgid "settings.lagSeconds"
 msgstr "{seconds}s"
 
 #. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.asset.bound"
+msgstr "Linked {name} display information to {target}."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+#: apps/web/src/Books.tsx
+msgid "books.coverAlt"
+msgstr "Cover of {title}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.state.2"
+msgstr "Linked the name for {v0}."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.7"
+msgstr "Search securities and currencies for {v0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.recent.postingLabel.sentence"
+msgstr "{value0} · {value1} postings"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.postingLabel.sentence"
+msgstr "{value0} · {value1} postings"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.inclusivePeriod"
+msgstr "{value0} to {value1} · Both dates included"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.search.label"
+msgstr "Search {value0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.search.toggle"
+msgstr "{action, select, collapse {Collapse} other {Open}} {value0} search"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.asOf.sentence"
+msgstr "As of {value0} ·{value1}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.result.select"
+msgstr "Select {value0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.result.selectLabel.sentence"
+msgstr "Select {value0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.asset.bindingKept.sentence"
+msgstr "{value0} The asset you entered will be kept."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.manualHint.sentence"
+msgstr "{value0} You can still enter an asset manually."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.local.select"
+msgstr "{value0}, {kind, select, currency {standard currency} other {custom asset}}, select"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.local.count"
+msgstr "{value1} of {value0} · Select to apply to the asset"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.140"
+msgstr "Save with ⌘ / Ctrl + Enter"
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.settings.37"
 msgstr "1 request · Check with the same request on the New transaction screen"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.152"
+msgstr "Prices are per unit. Balances are not converted automatically, and different assets are not added together."
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.8"
+msgstr "Price per share"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.10"
+msgstr "Price per share"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.unitPrice"
+msgstr "Price per share"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.unitPriceLabel"
+msgstr "Price per share"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -54,6 +251,11 @@ msgstr "hledger — Design gallery"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
+msgid "web.forms.App.153"
+msgstr "hledger · A calm place for your records"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
 msgid "web.settings.1"
 msgstr "hledger personal ledger"
 
@@ -63,9 +265,119 @@ msgid "web.connection.error.1"
 msgstr "Enter a server URL starting with http or https."
 
 #. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.43"
+msgstr "Look up ISBN again"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.37"
+msgstr "Looking up book details by ISBN… You can also enter them manually."
+
+#. js-lingui-explicit-id
+#: apps/mobile/book-validation.ts
+msgid "books.validation.2"
+msgstr "Enter a valid ISBN-10 or ISBN-13."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.149"
+msgstr "Search common currencies such as KRW and USD, or enter an asset such as BTC, AAPL, or 005930 manually. Prices show the value of one unit of the asset in the quote asset."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.113"
+msgstr "Search common currencies such as KRW and USD, or enter an asset such as BTC, AAPL, or 005930 manually. Securities selected from search are saved using their security IDs. Manually entered values are saved as entered."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.inputHint"
+msgstr "Enter KRW, USD, BTC, AAPL, 005930, or another code"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.125"
+msgstr "Price"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.priceTypeLabel.sentence"
+msgstr "Price basis: {value0} · Tap to change"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.122"
+msgstr "Price type"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.7"
+msgstr "Price input method"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.priceType"
+msgstr "Choose how to enter the price."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.126"
+msgstr "Price currency"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.10"
+msgstr "Amounts must balance to zero for each asset after applying prices."
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "description.books"
 msgstr "Track the purchase price and ownership status of each copy, even when books share an ISBN."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.uncertainTitle"
+msgstr "Check the result using the same request key"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.retry"
+msgstr "Check and retry with the same request key"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.142"
+msgstr "Check result using the same request"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.26"
+msgstr "Check result with the same request"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.23"
+msgstr "Check or retry the same request"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.9"
+msgstr "Each tag key can only be used once."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.89"
+msgstr " postings"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.111"
+msgstr " postings"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.76"
+msgstr " accounts "
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -83,6 +395,11 @@ msgid "nav.gallery"
 msgstr "Gallery"
 
 #. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.18"
+msgstr "Update delayed"
+
+#. js-lingui-explicit-id
 #: apps/mobile/App.tsx
 #: apps/mobile/LedgerApp.tsx
 #: apps/web/src/App.tsx
@@ -91,9 +408,29 @@ msgid "nav.transactions"
 msgstr "Transactions"
 
 #. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.78"
+msgstr "Search transactions"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.search"
+msgstr "Search transactions"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.19"
+msgstr "Trade amount (excluding fees): "
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "title.transactions"
 msgstr "Transaction history"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.4"
+msgstr "Enter a transaction date."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -106,6 +443,311 @@ msgid "story.description"
 msgstr "Description"
 
 #. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.5"
+msgstr "Enter a transaction description."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.more"
+msgstr "Load more transactions"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.directionLabel.sentence"
+msgstr "Trade direction: {value0} · Tap to change"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.90"
+msgstr "Copy transaction "
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.58"
+msgstr "Enter transaction"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.title"
+msgstr "Enter transaction"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.143"
+msgstr "Save transaction"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.107"
+msgstr "Transaction type"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.filters.sentence"
+msgstr "Transaction filters{value0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.postingsHint"
+msgstr "The accounts and amounts that increase or decrease in this transaction. For example: Cash -12,500 KRW, Food 12,500 KRW."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.save.queued"
+msgstr "The transaction is stored on this device. Check its status on the Sync screen."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.40"
+msgstr "Transaction date"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.date"
+msgstr "Transaction date"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.date"
+msgstr "Transaction date: Enter a valid date in YYYY-MM-DD format."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.11"
+msgstr "Could not clear the confirmation details for the rejected request. Restore access to browser storage."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.15"
+msgstr "{v0} search results"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.empty"
+msgstr "No results found. Check the provider status or search for another name."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.search.unreadable"
+msgstr "Could not read the search results."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.34"
+msgstr "Close search"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.search.collapse"
+msgstr "Collapse search"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.10"
+msgstr "Searching or entering an asset manually does not link its name. “Use + link name” replaces the asset you are entering with the selected security’s unique asset identifier. “Link to current asset” keeps your input as is. Both name links apply to all displays of the same unit throughout the current ledger. Recorded amounts and units remain unchanged."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.13"
+msgstr "Search could not be completed: {v0} You can still enter an asset manually."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.copy.uncertain"
+msgstr "You cannot copy this request or create a new request from a template until its result is confirmed. Check and retry with the same request key on the Sync screen."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.2"
+msgstr "First retry the transaction whose save result needs to be checked."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.uncertainCopyBlocked"
+msgstr "Copying and using or saving templates are disabled for transactions with an unknown save result."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.36"
+msgstr "Payment account"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.14"
+msgstr "Settlement account"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.22"
+msgstr "Net deposit to settlement account"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.cashAccount"
+msgstr "Enter the settlement account."
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.21"
+msgstr "Withdrawal from settlement account"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.12"
+msgstr "Settlement asset"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.settlement"
+msgstr "Settlement asset"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.settlementAsset"
+msgstr "Enter a settlement asset of 1–32 characters."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "accounts.group.accounts"
+msgstr "Accounts"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.depth"
+msgstr "Account depth (1–10; leave blank for all)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.depth"
+msgstr "Account depth must be 1–10 or blank."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.44"
+msgstr "Purchase amount"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.57"
+msgstr "Back to purchase entry"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.60"
+msgstr "Purchase"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.34"
+msgstr "Payment asset"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.33"
+msgstr "Purchase amount (carrying value)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.28"
+msgstr "The purchase amount is recorded as a book asset. Each purchase is registered as a separate physical copy, even if the ISBN is the same."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.29"
+msgstr "Purchase date"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.61"
+msgstr "Purchase carrying value:"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.2"
+msgstr "National Library of Korea"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.61"
+msgstr "National Library of Korea"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.119"
+msgstr "Amount / quantity"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.decimal"
+msgstr "Enter amounts and quantities as exact decimals, and costs as positive values."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.invalidAmount"
+msgstr "Amounts and prices must be numbers without commas, and prices must be positive."
+
+#. js-lingui-explicit-id
+#: apps/mobile/book-validation.ts
+msgid "books.validation.nonnegative"
+msgstr "Enter an amount of zero or more."
+
+#. js-lingui-explicit-id
+#: apps/mobile/book-validation.ts
+msgid "books.validation.positive"
+msgstr "Enter a valid positive amount."
+
+#. js-lingui-explicit-id
+#: apps/mobile/book-validation.ts
+msgid "books.validation.3"
+msgstr "Enter a valid amount using digits and a decimal point."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.from"
+msgstr "Period start date"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.162"
+msgstr "Change during period"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.movement"
+msgstr "Change during period"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.filters.sentence"
+msgstr "Period and account filters{value0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.period"
+msgstr "Enter valid dates, with the start date before the end date."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.1"
+msgstr "Try changing the date range or search filters."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.clearRecord"
+msgstr "Delete device record"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.restoring"
+msgstr "Restoring data saved on this device."
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "native.storage.damagedSnapshots"
+msgstr "The data saved on this device could not be read. The original files are preserved, and new saves have been stopped."
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "common.storageNotice"
 msgstr "Device storage notice"
@@ -116,14 +758,149 @@ msgid "common.storageUnavailable"
 msgstr "Device storage is unavailable"
 
 #. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "native.storage.saveUnconfirmed"
+msgstr "The save on this device could not be verified. Keep your input and try again."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.retryHint"
+msgstr "Requests stored on this device are retried only with their original deduplication key."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.save"
+msgstr "Store on device and save to ledger"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.queue.queued"
+msgstr "Saved on device · Waiting to send"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.title"
+msgstr "Transactions saved on this device"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.empty"
+msgstr "No transactions are saved on this device."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.prices.noSource"
+msgstr "No record"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.151"
+msgstr "No recorded prices"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.163"
+msgstr "Closing balance"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.ending"
+msgstr "Closing"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.30"
+msgstr "Common ISO currencies"
+
+#. js-lingui-explicit-id
 #: apps/mobile/App.tsx
 msgid "gallery.components"
 msgstr "Basic components"
 
 #. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.provider.currency"
+msgstr "Built-in currencies"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.local.title"
+msgstr "Common currencies · Assets in my ledger"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetHistory.loadFailed"
+msgstr "Could not read remembered asset suggestions. The saved copy has been preserved; default and ledger suggestions will be used."
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.connection.error.6"
 msgstr "This ledger differs from the one used for the original request. Reconnect to the original ledger to check whether it was saved."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.1"
+msgstr "Could not read the confirmation details for an earlier book request. New requests are blocked until you check browser storage."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.25"
+msgstr "As of "
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.146"
+msgstr "Quote asset"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.prices.quoteCommodity"
+msgstr "Quote asset (optional)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.prices.asOf.sentence"
+msgstr "As of{value0} · Source{value1}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.to"
+msgstr "As-of date / period end date"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.161"
+msgstr "Opening balance"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.opening"
+msgstr "Opening"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.provider.nasdaq"
+msgstr "Nasdaq"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.100"
+msgstr "Date"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.61"
+msgstr "Adjust the date range."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.recent.copyHint"
+msgstr "Copies the date, postings, and tags together."
+
+#. js-lingui-explicit-id
+#: apps/mobile/book-validation.ts
+msgid "books.validation.1"
+msgstr "Enter a valid date in YYYY-MM-DD format."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -142,15 +919,155 @@ msgid "title.books"
 msgstr "My books"
 
 #. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.25"
+msgstr "My books"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 #: apps/web/src/App.tsx
 msgid "title.accounts"
 msgstr "My accounts"
 
 #. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.115"
+msgstr "Posting "
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.114"
+msgstr "Posting {v0}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.116"
+msgstr "Remove posting {v0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.label.sentence"
+msgstr "Posting {value0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.amount"
+msgstr "Posting {value0} amount/quantity (with sign)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.memo"
+msgstr "Posting {value0} memo (optional)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.deleteLabel.sentence"
+msgstr "Delete posting {value0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.commodity"
+msgstr "Posting {value0} asset"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.account"
+msgstr "Posting {value0} account path"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.memo"
+msgstr "Posting {value0}: Memo must be 1,000 characters or fewer."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.costCommodity"
+msgstr "Posting {value0}: Check the cost asset."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.commodity"
+msgstr "Posting {value0}: Enter an asset of 1–32 characters."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.accountRequired"
+msgstr "Posting {value0}: An account path is required."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.127"
+msgstr "Posting note (optional)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.128"
+msgstr "Add posting"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.add"
+msgstr "Add posting"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.101"
+msgstr "Description"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.description"
+msgstr "Description"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.searchHint"
+msgstr "Description, account, or tag"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.description"
+msgstr "Description: Enter 1–512 characters."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.79"
+msgstr "Search descriptions, accounts, and tags"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.copy"
+msgstr "Copy details to a new transaction"
+
+#. js-lingui-explicit-id
 #: packages/i18n/src/index.ts
 msgid "error.network"
 msgstr "The network request could not be completed. The save outcome may be unknown. Check the result using the same request."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.106"
+msgstr "A separate identifier used to connect with other services. You can leave it blank for manually entered transactions."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.clientReferenceHint"
+msgstr "An identifier for integration with other apps. It is separate from the reference number and can be left blank."
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "outbox.message.endpointMismatch"
+msgstr "This request belongs to another ledger endpoint. Reconnect to its original endpoint to retry."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.otherLedger"
+msgstr "This entry was started in another ledger"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.71"
+msgstr "Different assets are not added together."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -164,6 +1081,41 @@ msgstr "Reload "
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
+msgid "web.forms.App.123"
+msgstr "Unit price"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.unitCost"
+msgstr "Unit cost"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.queue.pendingCount"
+msgstr "{value0} pending"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.clearQueued"
+msgstr "Delete pending request"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.11"
+msgstr "Load more"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.16"
+msgstr "Data sources and status"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.provider.details"
+msgstr "Data sources and status"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
 msgid "web.settings.2"
 msgstr "Tools"
 
@@ -171,6 +1123,11 @@ msgstr "Tools"
 #: apps/web/src/App.tsx
 msgid "description.entry"
 msgstr "Record a transaction by entering the accounts involved and the amounts transferred."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.112"
+msgstr "Enter one account and amount per posting. Use negative amounts for money leaving an account and positive amounts for money entering it. Amounts must balance to zero for each asset after applying prices."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -189,9 +1146,19 @@ msgid "title.sync"
 msgstr "Sync"
 
 #. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.24"
+msgstr "Each physical copy is tracked separately, even when the ISBN is the same."
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "nav.back"
 msgstr "Back"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.34"
+msgstr "No books registered."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -215,8 +1182,128 @@ msgstr "Last successful sync"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
-msgid "native.settings.34"
-msgstr "Last successful sync "
+msgid "native.settings.34.sentence"
+msgstr "Last successful sync {value0}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.4"
+msgstr "Sell"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.sell"
+msgstr "Sell"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.2"
+msgstr "Trade side"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.apply"
+msgstr "Apply trade to the postings below"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.validationTitle"
+msgstr "Check the trade details"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.3"
+msgstr "Buy"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.buy"
+msgstr "Buy"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.side"
+msgstr "Choose buy or sell."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.unbind.all.sentence"
+msgstr "Unlink all {value0} display information"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.94"
+msgstr "The list shows the amount of the first posting. Select a transaction to see all its postings."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.26"
+msgstr "Refresh list"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.1"
+msgstr "Select from the list or enter manually"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.provider.sec"
+msgstr "US SEC"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.23"
+msgstr "Enter details to see a preview"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.20"
+msgstr "Not configured"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.unmarked"
+msgstr "Unmarked"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.7"
+msgstr "Could not verify the saved book request."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.pending"
+msgstr "Pending"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.50"
+msgstr "Owned"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.56"
+msgstr "Owned"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.48"
+msgstr "Ownership status"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.27"
+msgstr "Owned"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.preservedCost.sentence"
+msgstr "Preserved cost:{value0} {value1} {value2} · Use the stock trade form to change the cost."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.recent.empty"
+msgstr "No recent transactions to copy."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -224,9 +1311,59 @@ msgid "web.settings.6"
 msgstr "Skip to content"
 
 #. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "accounts.group.categories"
+msgstr "Categories"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "common.loading"
 msgstr "Loading"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.retainUncertain"
+msgstr "The request record with an unknown result will be kept. Check the result in the ledger transaction list, then retry with the same key."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.template.uncertain"
+msgstr "Confirm the unknown save result using the same request key before saving a template."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.new"
+msgstr "New blank transaction"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.17"
+msgstr "Available"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.provider.ready"
+msgstr "Available"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.connection.invalidUrl"
+msgstr "Enter an HTTP or HTTPS address without user information, a query, or #."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.117"
+msgstr "Remove"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.137"
+msgstr "Remove"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.close"
+msgstr "Close details"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -255,9 +1392,14 @@ msgid "native.settings.24"
 msgstr "Authentication must be verified again"
 
 #. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.59"
+msgstr "Refresh"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
-msgid "native.settings.35"
-msgstr "Server version "
+msgid "native.settings.35.sentence"
+msgstr "Server version {value0} · Indexer lag {value1}"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -266,8 +1408,8 @@ msgstr "Server version / status"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
-msgid "native.settings.33"
-msgstr "Server status "
+msgid "native.settings.33.sentence"
+msgstr "Server status {value0} · Ledger connection {value1}"
 
 #. js-lingui-explicit-id
 #: packages/i18n/src/index.ts
@@ -290,9 +1432,49 @@ msgid "error.http"
 msgstr "The server returned HTTP {status}. The save outcome may be unknown. Check the result using the same request."
 
 #. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "outbox.message.unconfirmed"
+msgstr "The server did not confirm this save. Check the ledger or explicitly retry with the same key."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.query.missingData"
+msgstr "The server did not return the requested data."
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.connection.error.2"
 msgstr "Enter the access token configured on the server."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.39"
+msgstr "Bibliographic source"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.subaccounts"
+msgstr "Include subaccounts of the selected account"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.35"
+msgstr "Sell or discard selected book"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.87"
+msgstr "Only the selected copy will be recorded in the ledger."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.62"
+msgstr "Selected account"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "accounts.selectedMissing"
+msgstr "The selected item could not be found. Select an item again."
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -316,9 +1498,24 @@ msgid "connection.verify"
 msgstr "Apply the URL and authentication token in Settings to verify your ledger."
 
 #. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.provider.unconfigured"
+msgstr "Not configured"
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.settings.25"
 msgstr "Enter the server URL and access token in Settings to view accounts and transactions."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.connection.verify"
+msgstr "Check the ledger connection in Settings."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.connectHint"
+msgstr "Connect a ledger in Settings to search securities. Common currencies and ledger assets are also available offline."
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -336,6 +1533,111 @@ msgid "native.settings.26"
 msgstr "No successful sync recorded · Unverified"
 
 #. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.48"
+msgstr "Loss account"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.16"
+msgstr "Enter the gain, loss, and fee accounts."
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.6"
+msgstr "Quantity"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.quantity"
+msgstr "Quantity (positive)"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.amounts"
+msgstr "Enter positive quantities and prices, and fees of zero or more, without commas."
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.validationHint"
+msgstr "Enter quantity and price as positive exact decimals and fees as a nonnegative exact decimal. Select distinct account paths and assets."
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.17"
+msgstr "Enter positive quantities and prices. A sale records the trade at the settlement price; it does not calculate cost basis or realized gains and losses."
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.15"
+msgstr "Fee"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.50"
+msgstr "Fee"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.fee"
+msgstr "Fee (settlement asset, 0 or more)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.74"
+msgstr "Fee expense account"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.16"
+msgstr "Fee expense account"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.feeAccount"
+msgstr "Fee expense account path"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.distinctFeeAccount"
+msgstr "The fee expense account must differ from the securities and settlement accounts."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.52"
+msgstr "Fee account"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.82"
+msgstr "Fee:"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.20"
+msgstr "Fee: "
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.feeAccount"
+msgstr "Enter an expense account when a fee applies."
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.fee"
+msgstr "The fee must be zero or more."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.95"
+msgstr "Some fields need attention"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.7"
+msgstr "Enter a valid number without commas."
+
+#. js-lingui-explicit-id
 #: apps/mobile/App.tsx
 #: apps/mobile/LedgerApp.tsx
 #: apps/web/src/App.tsx
@@ -351,8 +1653,58 @@ msgstr "Prices"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.prices.more"
+msgstr "Load more prices"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.prices.from"
+msgstr "Price start date (optional)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.prices.load"
+msgstr "Load prices"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.prices.to"
+msgstr "Price end date (optional)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.8"
+msgstr "Start date"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.from"
+msgstr "Start date (optional)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.60"
+msgstr "The start date is after the end date"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.37"
+msgstr "Copy ID"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
 msgid "native.settings.03"
 msgstr "On a physical device, use your computer’s LAN address. localhost refers to the device itself."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.createdAt.sentence"
+msgstr "Actual creation time{value0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.connection.live"
+msgstr "Live ledger"
 
 #. js-lingui-explicit-id
 #: apps/mobile/App.tsx
@@ -365,9 +1717,39 @@ msgid "web.settings.13"
 msgstr "Enter the URL and access token for your running ledger server."
 
 #. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.64"
+msgstr "Realized gain/loss (after fees)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.32"
+msgstr "Realized gain/loss (after fees)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.83"
+msgstr "Realized gain/loss (proceeds − fees − carrying value):"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.templates.hint"
+msgstr "You can save the entry below as a template."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.55"
+msgstr "No books registered yet. Enter an ISBN and title to record your first book."
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.settings.34"
 msgstr "No successful ledger query yet"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.65"
+msgstr "None yet"
 
 #. js-lingui-explicit-id
 #: packages/i18n/src/index.ts
@@ -395,6 +1777,21 @@ msgid "common.notice"
 msgstr "Notice"
 
 #. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.provider.crypto"
+msgstr "Cryptoassets"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.24"
+msgstr "Cryptoassets"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.102"
+msgstr "What was this transaction for?"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 #: apps/web/src/App.tsx
 msgid "settings.language"
@@ -414,6 +1811,21 @@ msgstr "The language preference could not be saved. Select it again."
 #: apps/web/src/App.tsx
 msgid "web.settings.38"
 msgstr "None"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.noReference"
+msgstr "None"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.32"
+msgstr "Separate multiple authors with semicolons (;)."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.endpoint.sentence"
+msgstr "Connection{value0}"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -457,12 +1869,22 @@ msgstr "Connection settings"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.connection.invalidStorage"
+msgstr "Could not read the connection settings format."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
 msgid "connection.applied"
 msgstr "Connection settings applied. The authentication token is kept only for this app session."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.connection.error.7"
+msgstr "The connected ledger changed, so the new transaction form was cleared."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.1"
 msgstr "The connected ledger changed, so the new transaction form was cleared."
 
 #. js-lingui-explicit-id
@@ -486,9 +1908,144 @@ msgid "web.settings.33"
 msgstr "Connection needs verification"
 
 #. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.139"
+msgstr "This writes to the connected ledger."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.17"
+msgstr "Connection required"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.state.1"
+msgstr "Enter an asset to link, using 1–32 characters."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.clientReference"
+msgstr "Integration reference (optional)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.clientReference"
+msgstr "Integration reference: Enter 128 characters or fewer."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.common.expand"
+msgstr "Expand"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.filters.expand"
+msgstr "Expand"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.referenceHint"
+msgstr "Enter a receipt or order number if you have one. You can leave this blank."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.104"
+msgstr "An optional reference number to help find the transaction, such as a receipt or order number."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.amountHint"
+msgstr "Example: -12500.00"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.120"
+msgstr "e.g. -6500.00"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.147"
+msgstr "e.g. KRW"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.83"
+msgstr "e.g. project"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.145"
+msgstr "e.g. USD, BTC"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.9"
+msgstr "e.g. Samsung Electronics, AAPL, Apple"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.saveOffline"
+msgstr "Save offline draft · Do not send"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.105"
+msgstr "External service reference (optional)"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "outbox.message.interrupted"
+msgstr "The app stopped during a request. Check the ledger or explicitly retry with the same key."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.22"
+msgstr "Request key"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.requestKey.sentence"
+msgstr "Request key{value0}"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "common.requestFailed"
 msgstr "Could not complete the request"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.1"
+msgstr "Could not verify the request."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.balance"
+msgstr "Make each asset's total zero after accounting for costs."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.balanceHint"
+msgstr "Make each asset's total zero after accounting for costs."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.otherLedgerHint"
+msgstr "Return to the original connection, or explicitly copy this as a new entry to the current ledger, then check the accounts and amounts."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.retry"
+msgstr "Check and retry original request"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.138"
+msgstr "Checks the save result of the original request."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.55"
+msgstr "Ledger"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -496,9 +2053,14 @@ msgid "web.settings.19"
 msgstr "Ledger update lag"
 
 #. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.156"
+msgstr "Beginning of ledger"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
-msgid "native.settings.32"
-msgstr "Ledger ID "
+msgid "native.settings.32.sentence"
+msgstr "Ledger ID {value0} · {value1}"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -521,9 +2083,44 @@ msgid "web.settings.32"
 msgstr "Ledger connected"
 
 #. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetBinding.connectionChanged"
+msgstr "The ledger connection has changed. Select again in the current ledger."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.queue.succeeded"
+msgstr "Saved to ledger"
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.connection.error.5"
 msgstr "Ledger access could not be verified. Check the server URL and access token."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.56"
+msgstr "Ledger view"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.141"
+msgstr "Checking ledger…"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.25"
+msgstr "Checking ledger…"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.31"
+msgstr "Units from the ledger and previous entries"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.unknownCreation"
+msgstr "Not recorded in the ledger"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -536,14 +2133,44 @@ msgid "description.prices"
 msgstr "Reference prices for assets recorded in the ledger."
 
 #. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.12"
+msgstr "Connect to a ledger to search securities and link names."
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "common.requesting"
 msgstr "Sending a request to the ledger."
 
 #. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.binding.saving"
+msgstr "Saving display information to the ledger…"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.save.confirmed"
+msgstr "The ledger confirmed that the transaction was saved."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.confirmed"
+msgstr "The ledger confirmed that the transaction was saved."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.69"
+msgstr "Accounts read from the ledger appear here."
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.remote.loading"
 msgstr "Loading your ledger…"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetMetadata.unchanged"
+msgstr "Ledger assets and amounts are displayed unchanged."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -556,6 +2183,56 @@ msgid "web.remote.1"
 msgstr "The ledger has changed. Reload the list."
 
 #. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "outbox.message.rejected"
+msgstr "The ledger rejected this request."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.13"
+msgstr "Enter a valid ISBN-10 or ISBN-13."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.42"
+msgstr "Enter a valid ISBN to look up book details automatically."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.transactionPeriod"
+msgstr "Enter a valid transaction date range."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.pricePeriod"
+msgstr "Enter a valid price date range."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.detailPeriod"
+msgstr "Enter valid start and end dates."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.40"
+msgstr "No book details found for this ISBN. Enter the title and authors manually."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.recent.copy"
+msgstr "Copy this transaction"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.noTransactions"
+msgstr "No transactions in this period."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.56"
+msgstr "Record purchase of this copy"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "native.settings.23"
 msgstr "Authentication verified for this session"
@@ -564,6 +2241,81 @@ msgstr "Authentication verified for this session"
 #: apps/mobile/LedgerApp.tsx
 msgid "native.settings.30"
 msgstr "The authentication token for this session was cleared."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.lockedHint"
+msgstr "This entry is saved on the device and locked. Copy it to a new entry to make changes."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.copy"
+msgstr "Copy this entry to a new transaction"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.66"
+msgstr "Sell or discard this book"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.33"
+msgstr "Sell or discard this book"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.66"
+msgstr "Transactions in this account "
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.5"
+msgstr "Name link lookup: "
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.3"
+msgstr "Unlink name"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.4"
+msgstr "Linking or unlinking a name applies throughout the current ledger. The name appears in balances, transaction details, and prices that use the same unit string."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.state.4"
+msgstr "Could not save the name link. Your input has been kept."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.state.3"
+msgstr "Name unlinked. The asset is unchanged."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.queryHint"
+msgstr "Enter a name or ticker."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.12"
+msgstr "This retry was rejected, but the original save result is still unknown. The same request has been kept. {v0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.provider.unavailable"
+msgstr "Unavailable"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.51"
+msgstr "Gain account"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.provider.stale"
+msgstr "Outdated data"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -586,6 +2338,46 @@ msgid "native.settings.01"
 msgstr "The authentication token is cleared when you close the app."
 
 #. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.connection.missingIdentity"
+msgstr "Could not verify the authenticated ledger ID. Check the address and authentication token."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.108"
+msgstr "General transaction"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.general"
+msgstr "General transaction"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.limited"
+msgstr "Some asset catalogs are unavailable, so search results may be limited."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.stale"
+msgstr "Some asset information comes from previously received data."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.local.empty"
+msgstr "No matching assets. You can use the asset you entered manually."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.14"
+msgstr "No matching securities. {unavailable, select, yes {Some sources are unavailable. } other {}}You can enter an asset manually."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.10"
+msgstr "Loading…"
+
+#. js-lingui-explicit-id
 #: apps/mobile/App.tsx
 #: apps/mobile/LedgerApp.tsx
 #: apps/web/src/I18n.stories.tsx
@@ -593,9 +2385,79 @@ msgid "nav.entry"
 msgstr "Entry"
 
 #. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.13"
+msgstr "Check your input."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.modeLabel.sentence"
+msgstr "Entry mode: {value0} · Tap to change"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.template.saved"
+msgstr "The entry template was saved on this device."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.99"
+msgstr "Your input and ledger are locked. You can refresh the token for the same ledger in connection settings. The button below retries the original request with the same idempotency key. Closing this window will discard the information needed to check the result."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.24"
+msgstr "Your input is locked. The same request will be used to check the result, even if you leave this screen or reconnect."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.storage.stopped"
+msgstr "Sending has stopped and your entry has been kept. Reopen the app to check the saved data."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.template.save"
+msgstr "Save entry as template"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.validationTitle"
+msgstr "Check your entry"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.129"
+msgstr "The entered amounts balance to zero."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.130"
+msgstr "Check the sum of the entered amounts."
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 msgid "connection.notApplied"
 msgstr "The settings you entered were not applied."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.hint"
+msgstr "Requests are not resent automatically. For transactions needing review, check the ledger result and retry using the same key."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.asOf"
+msgstr "Data {value0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.result.asOf"
+msgstr "Data {value0}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.26"
+msgstr "Data source"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -604,13 +2466,288 @@ msgstr "Could not load all data"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
+msgid "web.forms.App.121"
+msgstr "Asset"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.144"
+msgstr "Asset"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.prices.commodity"
+msgstr "Asset (optional)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.search.missingResult"
+msgstr "No asset search results were received."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.title"
+msgstr "Search asset catalog"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.loading"
+msgstr "Searching asset catalog…"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.131"
+msgstr "Asset missing"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetHistory.saveFailed"
+msgstr "Could not remember asset suggestions on this device. You can still enter and save transactions."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetHistory.recovered"
+msgstr "Restored the last successfully saved copy of asset suggestions."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetMetadata.missing"
+msgstr "No asset display information was received."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetMetadata.failed"
+msgstr "Could not load asset display information"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.commodity"
+msgstr "Asset filter (optional)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.67"
+msgstr "Balances by asset"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.8"
+msgstr "Enter an asset."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.includeSubaccounts"
+msgstr "Include subaccounts in balances and period totals"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.70"
+msgstr "Balances are cumulative through the end date."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.includeEmpty"
+msgstr "Include accounts with zero balances"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.30"
+msgstr "Carrying value"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "outbox.message.retryRejected"
+msgstr "The retry was rejected."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.42"
+msgstr "Authors (optional · one per line)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.31"
+msgstr "Authors (optional)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.15"
+msgstr "Enter up to 20 authors, with up to 200 characters per name."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.13"
+msgstr "You can enter up to 20 authors, with up to 200 characters per name."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.97"
+msgstr "Save result needs checking"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.19"
+msgstr "Save result needs confirmation"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.save.uncertain"
+msgstr "The save result for this request is unknown. Check and retry with the same request key on the Sync screen."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.17"
+msgstr "The save result is unknown. Check the result using the same request."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.10"
+msgstr "The save result is uncertain. Check using the same request."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.uncertainHint"
+msgstr "The save result is unknown. Check and retry with the original request key on the Sync screen."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.12"
+msgstr "The save result is uncertain. Your input and request key have been preserved. Check the result using the same request."
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "outbox.message.unknown"
+msgstr "The save outcome is unknown."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
 msgid "web.connection.error.4"
 msgstr "Keep the existing server URL while checking whether the request was saved."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
+msgid "web.forms.App.state.15"
+msgstr "Could not confirm the save result. Your input has been locked. Check the result using the same request.{v0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.21"
+msgstr "Other book entries are locked until the save result is confirmed. Retry the same request using the original connection."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.unconfirmed"
+msgstr "The save result needs confirmation. Check again using the same request.{detail}"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "native.storage.recoveredSnapshot"
+msgstr "One saved copy was incomplete, so the last valid copy was recovered. Check pending transactions."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.96"
+msgstr "Saved"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
 msgid "web.settings.21"
 msgstr "Awaiting save confirmation"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "native.storage.integrityFailed"
+msgstr "The integrity of the saved data could not be verified."
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "error.outboxCorruption"
+msgstr "The saved outbox is invalid. Preserve its data for recovery before clearing it."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.9"
+msgstr "The save was confirmed, but retry details could not be cleared. Restore access to browser storage."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.98"
+msgstr "Could not save"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.templates.title"
+msgstr "Saved entry templates"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.18"
+msgstr "Preview postings to save"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.hint"
+msgstr "Applying replaces the postings below. Check the date, description, and cost before saving. Sales are recorded at this transaction's price; realized gains and losses are not calculated automatically."
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "error.outboxPersistence"
+msgstr "Could not save the outbox. The last saved state has been retained."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.queue.sending"
+msgstr "Sending · Waiting for result"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.queue.blocked"
+msgstr "Sending stopped · Changes or authentication required"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.49"
+msgstr "All"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.totalPrice"
+msgstr "Total trade amount"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.totalPriceLabel"
+msgstr "Total trade amount"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.63"
+msgstr "All time"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.157"
+msgstr "All time"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.allDates"
+msgstr "All dates"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.81"
+msgstr "All accounts"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.allAccountsOption"
+msgstr "All accounts"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.72"
+msgstr "All accounts "
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -619,8 +2756,153 @@ msgstr "Access token"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.common.collapse"
+msgstr "Collapse"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.filters.collapse"
+msgstr "Collapse"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.85"
+msgstr "Exact value"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.14"
+msgstr "Enter the title, date, a positive purchase amount, currency, and accounts."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.empty"
+msgstr "No matching transactions."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.prices.empty"
+msgstr "No matching prices."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.empty"
+msgstr "No matching accounts."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.19"
+msgstr "Unavailable"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.5"
+msgstr "The returned ISBN does not match. Enter the details manually."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.9"
+msgstr "End date"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.to"
+msgstr "End date (optional)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.5"
+msgstr "Security"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.8"
+msgstr "Security name, symbol, or exchange"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.2"
+msgstr "Search securities and currencies"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.distinctAssets"
+msgstr "The security and settlement asset must differ."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.11"
+msgstr "Searching securities and currencies…"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.asset"
+msgstr "Enter a security of 1–32 characters."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.selectionHint"
+msgstr "Select a security to display its name and icon."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
 msgid "connection.guidance"
 msgstr "Apply the URL and authentication token to verify the ledger and start querying and sending data. If you have a previous connection, you can save drafts offline."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.23"
+msgstr "Stocks"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.13"
+msgstr "Stock account"
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.assetAccount"
+msgstr "Enter the securities account."
+
+#. js-lingui-explicit-id
+#: packages/i18n/src/index.ts
+msgid "trade.validation.distinctAccounts"
+msgstr "The securities and settlement accounts must differ."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.109"
+msgstr "Stock trade"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.trade"
+msgstr "Stock trade"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.title"
+msgstr "Create stock trade postings"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.1"
+msgstr "Enter stock trade"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.securityAccount"
+msgstr "Stock holdings account path"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.asset"
+msgstr "Stock asset"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetBinding.busy"
+msgstr "Wait for the current request to finish, then select again."
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -628,11 +2910,266 @@ msgid "web.connection.error.3"
 msgstr "Wait for the current save request to finish before reconnecting."
 
 #. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.103"
+msgstr "Reference number (optional)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.reference"
+msgstr "Reference number (optional)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.reference.sentence"
+msgstr "Reference number{value0} · Source{value1}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.reference"
+msgstr "Reference number: Enter 64 characters or fewer."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.77"
+msgstr "No matching accounts"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
 #: apps/web/src/App.tsx
 #: apps/web/src/I18n.stories.tsx
 msgid "nav.books"
 msgstr "Books"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.4"
+msgstr "Books"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.59"
+msgstr "Books"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.17"
+msgstr "Book management"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.18"
+msgstr "Book purchases, sales, and discards can be saved once connected to the ledger. They wait to be sent while offline."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.pendingPurchase"
+msgstr "Book purchase · {title}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.27"
+msgstr "Record book purchase"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.20"
+msgstr "About book records"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.19"
+msgstr "About book records"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.10"
+msgstr "Book entry saved to the ledger."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.count"
+msgstr "Book list · {count, plural, one {# copy} other {# copies}}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.8"
+msgstr "No response received for the book list."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.9"
+msgstr "No response received for the book list."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.54"
+msgstr "Could not load book list"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.7"
+msgstr "Could not load the book list. Check your connection."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.6"
+msgstr "Could not check the book list."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.18"
+msgstr "Book request confirmation details must be preserved"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.35"
+msgstr "Book asset account"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.44"
+msgstr "Increase book assets / withdraw from payment account"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.79"
+msgstr "Carrying value to remove from book assets:"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.43"
+msgstr "Look up book details again"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.41"
+msgstr "Book lookup is temporarily unavailable. You can enter the title and authors manually to record the book."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.3"
+msgstr "Could not retrieve book details. You can enter them manually."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.38"
+msgstr "Book details loaded. Review and edit the title and authors."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.2"
+msgstr "Looking up book details…"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.4"
+msgstr "No book details found. Enter the title and authors manually."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.6"
+msgstr "Book details filled in. Review them before continuing."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.30"
+msgstr "Book title"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.41"
+msgstr "Book title"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.14"
+msgstr "Enter a book title of 1–200 characters."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.pendingSale"
+msgstr "Book sale · {copyId}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.pendingDiscard"
+msgstr "Book discard · {copyId}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.36"
+msgstr "Buy a copy"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.45"
+msgstr "Book account"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.12"
+msgstr "Enter the book and cash accounts."
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.11"
+msgstr "Book and ledger transaction saved."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.53"
+msgstr "Loading books…"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.53"
+msgstr "Processing…"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.processing"
+msgstr "Processing…"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.65"
+msgstr "Disposed"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.68"
+msgstr "Disposal type"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.71"
+msgstr "Disposal date"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.16"
+msgstr "Check the disposal date, loss expense account, sale proceeds, and required accounts."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.78"
+msgstr "Disposal preview"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.76"
+msgstr "Disposal loss expense account"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.75"
+msgstr "Disposal gain income account"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.80"
+msgstr "Additional withdrawal on disposal"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
@@ -645,9 +3182,399 @@ msgid "native.settings.38"
 msgstr "s"
 
 #. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.9"
+msgstr "Total trade amount"
+
+#. js-lingui-explicit-id
+#: apps/web/src/TradeFields.tsx
+msgid "web.forms.TradeFields.11"
+msgstr "Total trade amount (excluding fees)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.124"
+msgstr "Total price"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.posting.totalCost"
+msgstr "Total cost"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.64"
+msgstr "Recent transactions"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.recent.refresh"
+msgstr "Refresh recent transactions"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.recent.title"
+msgstr "Start from a recent transaction"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.150"
+msgstr "Source not recorded"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.91"
+msgstr "Source: "
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.31"
+msgstr "Acquisition cost"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.common.cancel"
+msgstr "Cancel"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.132"
+msgstr "Tags"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.tags"
+msgstr "Tags"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.135"
+msgstr "Tag {v0} value"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.136"
+msgstr "Remove tag {v0}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.134"
+msgstr "Tag {v0} key"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.tag.value"
+msgstr "Tag {value0} value"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.tag.deleteLabel.sentence"
+msgstr "Delete tag {value0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.tag.key"
+msgstr "Tag {value0} key"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.tags.sentence"
+msgstr "Tag {value0}: {value1}"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.84"
+msgstr "Tag value"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.tagValue"
+msgstr "Tag value"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.133"
+msgstr "Add tag"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.tag.add"
+msgstr "Add tag"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.82"
+msgstr "Tag key"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.tag"
+msgstr "Tag key (optional)"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.duplicateTags"
+msgstr "Tag keys must be unique."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.template.name"
+msgstr "Template name"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.templates.use"
+msgstr "New transaction from template"
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.settings.14"
 msgstr "The token is cleared when you close or refresh this window."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "web.forms.AssetUnitField.22"
+msgstr "Currencies"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.46"
+msgstr "Currency"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.search.placeholder"
+msgstr "Search currency codes, security names, or tickers"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.search.open"
+msgstr "Find currencies and securities"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.15"
+msgstr "Enter a currency of 1–32 characters."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.51"
+msgstr "Sold"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.57"
+msgstr "Sold"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.69"
+msgstr "Sale"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.38"
+msgstr "Sale"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.saleCurrency"
+msgstr "Sale proceeds (before fees, {commodity})"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.62"
+msgstr "Sale proceeds (before fees):"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.84"
+msgstr "Enter the sale proceeds and fees to see the gain or loss."
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.88"
+msgstr "Record sale"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.49"
+msgstr "Sale proceeds (before fees)"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.72"
+msgstr "Selling fee"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.28"
+msgstr "Sold"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.81"
+msgstr "Net sale proceeds received"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.73"
+msgstr "Account receiving sale proceeds"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.54"
+msgstr "Record sale and realized gain/loss"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.52"
+msgstr "Discarded"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.58"
+msgstr "Discarded"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.70"
+msgstr "Discard"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.39"
+msgstr "Discard"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.89"
+msgstr "Record discard"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.63"
+msgstr "Loss on discard"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.77"
+msgstr "Discard loss expense account"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.85"
+msgstr "Loss on discard:"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.29"
+msgstr "Discarded"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.55"
+msgstr "Record discard and loss"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetMetadata.reload"
+msgstr "Reload display information"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.unbind.actionLabel.sentence"
+msgstr "Unlink display information · Keep {value0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.catalog.scopeHint"
+msgstr "Linking or unlinking display information updates names and icons across all accounts, transactions, and prices with the exact same asset code in the current ledger."
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.asset.unbound"
+msgstr "Display information unlinked. The asset has been kept."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.assetBinding.unconfirmed"
+msgstr "Could not confirm that display information was saved."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.164"
+msgstr "No records to display"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.5"
+msgstr "No cover"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.58"
+msgstr "No cover"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.60"
+msgstr "Cover provided by:"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.3"
+msgstr "Cover source:"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.apply"
+msgstr "Apply filters and refresh"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.87"
+msgstr "Clear filters"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.148"
+msgstr "Clear filters"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.86"
+msgstr "Include transactions in subaccounts"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.73"
+msgstr "Include subaccounts"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.158"
+msgstr "Include subaccounts"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.includeChildren"
+msgstr "Include subaccounts"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.45"
+msgstr "Record purchase of one copy"
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.provider.krx"
+msgstr "Korea Exchange"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.23"
+msgstr "한국어"
 
 #. js-lingui-explicit-id
 #: apps/mobile/App.tsx
@@ -659,13 +3586,148 @@ msgstr "Accounts"
 
 #. js-lingui-explicit-id
 #: apps/web/src/App.tsx
+msgid "accounts.group.items"
+msgstr "Items"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.80"
+msgstr "Account"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.118"
+msgstr "Account"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.moreTransactions"
+msgstr "Load more account transactions"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.74"
+msgstr "Search accounts"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.search"
+msgstr "Search accounts"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.6"
+msgstr "Enter an account path."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.155"
+msgstr "Account balances for period"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.more"
+msgstr "Load more accounts"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.loadAccounts"
+msgstr "Load account choices"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.75"
+msgstr "Search account names or paths"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.159"
+msgstr "This account only"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.ownBalance"
+msgstr "Account's own balance"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transactions.account"
+msgstr "Account filter"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.apply"
+msgstr "Apply account and as-of date"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.110"
+msgstr "Postings"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.postings"
+msgstr "Postings"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.88"
+msgstr "Postings · "
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.state.3"
+msgstr "Copied all {v0} postings, notes, and tags. The date has been set to today."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.copy.completed"
+msgstr "Copied postings and tags to a new entry. Check the date and amounts."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.validation.minimumPostings"
+msgstr "At least two postings are required."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.copy"
+msgstr "Copy postings to a new transaction"
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
+msgid "web.forms.App.68"
+msgstr "Select an account"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.accounts.missing"
+msgstr "Account not found. Reload the list."
+
+#. js-lingui-explicit-id
+#: apps/web/src/App.tsx
 msgid "description.accounts"
 msgstr "Explore account activity and balances by asset."
 
 #. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.47"
+msgstr "Cash account"
+
+#. js-lingui-explicit-id
+#: apps/mobile/TradeFields.tsx
+msgid "native.tradefields.cashAccount"
+msgstr "Cash account path"
+
+#. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
-msgid "native.settings.31"
-msgstr "Active URL: "
+msgid "native.ledgerapp.accounts.refreshDetail"
+msgstr "Refresh details for the current period"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.settings.31.sentence"
+msgstr "Current address: {value0}"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -674,8 +3736,43 @@ msgstr "The current language will remain active. Select your language again befo
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.sync.otherEndpoint"
+msgstr "This differs from the current connection. Connect to the original address, then retry."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.entry.copyToLedger"
+msgstr "Copy to a new entry for the current ledger"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.unbind.currentLedger.sentence"
+msgstr "Unlink {value1} display information from all accounts, transactions, and prices whose asset is exactly {value0} in the current ledger? Assets and amounts/quantities will be kept."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.binding.confirmRemove"
+msgstr "Remove the name link for the unit recorded exactly as “{commodity}” across all screens for the current ledger? This applies to balances, transaction history, and prices as well as this field. The assets and amounts recorded in the ledger will stay the same."
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
 msgid "connection.none"
 msgstr "There is no authenticated connection."
+
+#. js-lingui-explicit-id
+#: apps/web/src/AssetUnitField.tsx
+msgid "asset.binding.linkCurrent"
+msgstr "Link to the current asset “{commodity}”"
+
+#. js-lingui-explicit-id
+#: apps/mobile/AssetUnitField.tsx
+msgid "native.assetunitfield.binding.currentAsset.sentence"
+msgstr "Link to current asset {value0}"
+
+#. js-lingui-explicit-id
+#: apps/mobile/Books.tsx
+msgid "native.books.20"
+msgstr "Awaiting confirmation"
 
 #. js-lingui-explicit-id
 #: apps/mobile/LedgerApp.tsx
@@ -688,6 +3785,26 @@ msgid "native.settings.27"
 msgstr "Not yet verified"
 
 #. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.8"
+msgstr "The request was not sent because its confirmation details could not be saved in the browser. Restore access to storage, then reopen this screen."
+
+#. js-lingui-explicit-id
 #: apps/web/src/App.tsx
 msgid "web.settings.31"
 msgstr "Checking"
+
+#. js-lingui-explicit-id
+#: apps/web/src/Books.tsx
+msgid "web.books.21"
+msgstr "Request being checked:"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.queue.needsReview"
+msgstr "Review needed · Save result unknown"
+
+#. js-lingui-explicit-id
+#: apps/mobile/LedgerApp.tsx
+msgid "native.ledgerapp.transaction.cleared"
+msgstr "Cleared"

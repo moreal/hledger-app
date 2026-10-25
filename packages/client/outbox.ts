@@ -2,12 +2,15 @@ import { isValidCreateConfirmation, LedgerTransportError, type CreateTransaction
 
 export interface OutboxStorage { load(): Promise<string | null>; save(serialized: string): Promise<void> }
 export type OutboxState = 'queued' | 'sending' | 'succeeded' | 'blocked' | 'needsReview';
+type OutboxReason = { code: 'interrupted' | 'rejected' | 'unconfirmed' | 'unknown' | 'endpointMismatch' } | { code: 'transport'; kind: 'network' | 'http' | 'protocol'; status?: number };
+export type OutboxMessage = OutboxReason | { code: 'retryUncertain'; detail?: string; reason?: OutboxReason };
 export interface OutboxRecord {
   id: string;
   endpoint: string;
   input: CreateTransactionInput;
   state: OutboxState;
   message?: string;
+  messageInfo?: OutboxMessage;
   result?: GraphQLResult<CreateTransactionMutation>;
 }
 export interface OutboxTemplate { id: string; name: string; input: Omit<CreateTransactionInput, 'idempotencyKey'> }
@@ -24,6 +27,12 @@ export class OutboxEndpointError extends Error {
 function clone<T>(value: T): T { return JSON.parse(JSON.stringify(value)) as T; }
 function object(value: unknown): value is Record<string, unknown> { return value !== null && typeof value === 'object' && !Array.isArray(value); }
 function optionalString(value: unknown) { return value == null || typeof value === 'string'; }
+function validMessageInfo(value: unknown, allowRetry = true): boolean {
+  if (!object(value) || typeof value.code !== 'string') return false;
+  if (['interrupted', 'rejected', 'unconfirmed', 'unknown', 'endpointMismatch'].includes(value.code)) return true;
+  if (value.code === 'transport') return typeof value.kind === 'string' && ['network', 'http', 'protocol'].includes(value.kind) && (value.status === undefined || (typeof value.status === 'number' && Number.isInteger(value.status) && value.status >= 100 && value.status <= 599));
+  return allowRetry && value.code === 'retryUncertain' && (value.detail === undefined || typeof value.detail === 'string') && (value.reason === undefined || validMessageInfo(value.reason, false));
+}
 function validCost(value: unknown): boolean {
   return value == null || (object(value) && ['UNIT', 'TOTAL'].includes(String(value.type)) && object(value.amount) && typeof value.amount.value === 'string' && typeof value.amount.commodity === 'string');
 }
@@ -44,7 +53,7 @@ function parseStored(serialized: string): StoredOutbox {
     if (!object(data) || data.version !== 1 || !Array.isArray(data.records) || !Array.isArray(data.templates)) throw new Error('Unsupported outbox format.');
     const ids = new Set<string>();
     for (const record of data.records) {
-      if (!object(record) || typeof record.id !== 'string' || ids.has(record.id) || !validEndpoint(record.endpoint) || !validInput(record.input, true) || !object(record.input) || record.input.idempotencyKey !== record.id || !['queued', 'sending', 'succeeded', 'blocked', 'needsReview'].includes(String(record.state)) || (record.message !== undefined && typeof record.message !== 'string') || (record.result !== undefined && !object(record.result))) throw new Error('Invalid saved request.');
+      if (!object(record) || typeof record.id !== 'string' || ids.has(record.id) || !validEndpoint(record.endpoint) || !validInput(record.input, true) || !object(record.input) || record.input.idempotencyKey !== record.id || !['queued', 'sending', 'succeeded', 'blocked', 'needsReview'].includes(String(record.state)) || (record.message !== undefined && typeof record.message !== 'string') || (record.messageInfo !== undefined && !validMessageInfo(record.messageInfo)) || (record.result !== undefined && !object(record.result))) throw new Error('Invalid saved request.');
       ids.add(record.id);
     }
     const templateIds = new Set<string>();
@@ -83,7 +92,7 @@ export function createOutbox(storage: OutboxStorage, client: Pick<LedgerClient, 
     const next = saved === null ? { version: 1 as const, records: [], templates: [] } : parseStored(saved);
     let recovered = false;
     for (const record of next.records) {
-      if (record.state === 'sending') { record.state = 'needsReview'; record.message = 'The app stopped during a request. Check the ledger or explicitly retry with the same key.'; recovered = true; }
+      if (record.state === 'sending') { record.state = 'needsReview'; record.messageInfo = { code: 'interrupted' }; record.message = 'The app stopped during a request. Check the ledger or explicitly retry with the same key.'; recovered = true; }
     }
     if (recovered) await commit(next); else current = next;
     hydrated = true;
@@ -101,7 +110,7 @@ export function createOutbox(storage: OutboxStorage, client: Pick<LedgerClient, 
     if (record.endpoint !== client.identity) throw new OutboxEndpointError();
     if (record.state === 'succeeded') return clone(record);
     const wasUncertain = record.state === 'needsReview' || record.state === 'sending';
-    const sending: OutboxRecord = { ...record, state: 'sending', message: undefined, result: undefined };
+    const sending: OutboxRecord = { ...record, state: 'sending', message: undefined, messageInfo: undefined, result: undefined };
     await replace(sending);
     let completed: OutboxRecord;
     try {
@@ -110,22 +119,24 @@ export function createOutbox(storage: OutboxStorage, client: Pick<LedgerClient, 
       const payload = result.data?.createTransaction;
       const expectedErrors = payload?.errors ?? [];
       const authenticationFailure = result.errors?.some(error => ['UNAUTHENTICATED', 'UNAUTHORIZED', 'FORBIDDEN', 'BAD_USER_INPUT', 'GRAPHQL_VALIDATION_FAILED', 'LEDGER_MISMATCH'].includes(String(error.extensions?.code)));
-      if (expectedErrors.length || authenticationFailure) completed = { ...sending, state: 'blocked', result, message: expectedErrors.map(error => error.message).join('; ') || result.errors?.map(error => error.message).join('; ') || 'The ledger rejected this request.' };
+      const rejectionMessage = expectedErrors.map(error => error.message).join('; ') || result.errors?.map(error => error.message).join('; ');
+      const unconfirmedMessage = result.errors?.map(error => error.message).join('; ');
+      if (expectedErrors.length || authenticationFailure) completed = { ...sending, state: 'blocked', result, messageInfo: rejectionMessage ? undefined : { code: 'rejected' }, message: expectedErrors.map(error => error.message).join('; ') || result.errors?.map(error => error.message).join('; ') || 'The ledger rejected this request.' };
       else if (!result.errors?.length && isValidCreateConfirmation(payload, sending.input.idempotencyKey)) completed = { ...sending, state: 'succeeded', result };
-      else completed = { ...sending, state: 'needsReview', result, message: result.errors?.map(error => error.message).join('; ') || 'The server did not confirm this save. Check the ledger or explicitly retry with the same key.' };
+      else completed = { ...sending, state: 'needsReview', result, messageInfo: unconfirmedMessage ? undefined : { code: 'unconfirmed' }, message: result.errors?.map(error => error.message).join('; ') || 'The server did not confirm this save. Check the ledger or explicitly retry with the same key.' };
     } catch (error) {
       const blocked = error instanceof LedgerTransportError && error.kind === 'http' && [400, 401, 403, 409, 422].includes(error.status ?? 0);
-      completed = { ...sending, state: blocked ? 'blocked' : 'needsReview', message: error instanceof Error ? error.message : 'The write outcome is unknown.' };
+      completed = { ...sending, state: blocked ? 'blocked' : 'needsReview', messageInfo: error instanceof LedgerTransportError ? { code: 'transport', kind: error.kind, ...(error.status === undefined ? {} : { status: error.status }) } : error instanceof Error ? undefined : { code: 'unknown' }, message: error instanceof Error ? error.message : 'The write outcome is unknown.' };
     }
     if (wasUncertain && completed.state === 'blocked') {
-      completed = { ...completed, state: 'needsReview', message: `${completed.message ?? 'The retry was rejected.'} The earlier write outcome is still unknown.` };
+      completed = { ...completed, state: 'needsReview', messageInfo: { code: 'retryUncertain', ...(completed.messageInfo && completed.messageInfo.code !== 'retryUncertain' ? { reason: completed.messageInfo } : { detail: completed.message ?? 'The retry was rejected.' }) }, message: `${completed.message ?? 'The retry was rejected.'} The earlier write outcome is still unknown.` };
     }
     // If this save fails, durable and visible state remain sending; the caller must surface the error.
     await replace(completed);
     return clone(completed);
   }
   function visibleRecords(): OutboxRecord[] {
-    return clone(current.records).map(record => record.endpoint !== client.identity && record.state !== 'succeeded' ? { ...record, state: record.state === 'needsReview' || record.state === 'sending' ? record.state : 'blocked', message: new OutboxEndpointError().message } : record);
+    return clone(current.records).map(record => record.endpoint !== client.identity && record.state !== 'succeeded' ? { ...record, state: record.state === 'needsReview' || record.state === 'sending' ? record.state : 'blocked', message: new OutboxEndpointError().message, messageInfo: { code: 'endpointMismatch' } } : record);
   }
   return {
     hydrate: () => serialized(async () => { await initialize(); return visibleRecords(); }),

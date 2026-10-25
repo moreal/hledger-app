@@ -173,3 +173,5 @@ export function newIdempotencyKey(factory?: () => string): string {
   if (typeof key !== 'string' || !key.length || key.length > 128) throw new TypeError('Expected an idempotency key of 1–128 characters.');
   return key;
 }
+
+export type { OutboxMessage } from './outbox.ts';

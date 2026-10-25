@@ -19,29 +19,30 @@ export interface AssetUnitOption {
   readonly kind: 'currency' | 'custom';
 }
 
-function koreanCurrencyNames(): Intl.DisplayNames | undefined {
+function currencyDisplayNames(locale: string): Intl.DisplayNames | undefined {
   try {
     if (typeof Intl !== 'undefined' && typeof Intl.DisplayNames === 'function') {
-      return new Intl.DisplayNames(['ko'], { type: 'currency', fallback: 'none' });
+      return new Intl.DisplayNames([locale], { type: 'currency', fallback: 'none' });
     }
   } catch {
-    // Some native runtimes omit Intl currency names or Korean locale data.
+    // Some native runtimes omit Intl currency names or the requested locale data.
   }
   return undefined;
 }
 
-const currencyNames = koreanCurrencyNames();
+type UnitLocale = 'ko' | 'en';
+const currencyNames = { ko: currencyDisplayNames('ko'), en: currencyDisplayNames('en') };
 const commonCodes = ['KRW', 'USD', 'EUR', 'JPY'];
 
-function displayName(unit: Iso4217Unit): string {
+function displayName(unit: Iso4217Unit, locale: UnitLocale): string {
   try {
-    return currencyNames?.of(unit.code) || unit.name;
+    return currencyNames[locale]?.of(unit.code) || unit.name;
   } catch {
     return unit.name;
   }
 }
 
-const fiatOptions = iso4217Units
+const sortedFiatUnits = iso4217Units
   .filter(unit => unit.kind === 'currency')
   .sort((left, right) => {
     const leftIndex = commonCodes.indexOf(left.code);
@@ -51,13 +52,22 @@ const fiatOptions = iso4217Units
         - (rightIndex < 0 ? commonCodes.length : rightIndex);
     }
     return left.code < right.code ? -1 : left.code > right.code ? 1 : 0;
-  })
-  .map(unit => ({
-    value: unit.code,
-    label: `${unit.code} · ${displayName(unit)}`,
-    kind: 'currency' as const,
-    englishName: unit.name,
-  }));
+  });
+
+const fiatOptionsByLocale = new Map<UnitLocale, readonly (AssetUnitOption & { searchText: string })[]>();
+function fiatOptionsForLocale(locale: UnitLocale) {
+  let options = fiatOptionsByLocale.get(locale);
+  if (!options) {
+    options = sortedFiatUnits.map(unit => ({
+      value: unit.code,
+      label: `${unit.code} · ${displayName(unit, locale)}`,
+      kind: 'currency' as const,
+      searchText: `${unit.code} ${unit.name} ${displayName(unit, 'ko')} ${displayName(unit, 'en')}`,
+    }));
+    fiatOptionsByLocale.set(locale, options);
+  }
+  return options;
+}
 
 /**
  * Suggestions, never an allowlist. Custom commodities retain their exact value,
@@ -67,12 +77,14 @@ const fiatOptions = iso4217Units
 export function getAssetUnitOptions(
   customValues: readonly string[] = [],
   query: string = '',
+  locale: string = 'ko',
 ): AssetUnitOption[] {
+  const fiatOptions = fiatOptionsForLocale(/^en(?:-|$)/i.test(locale) ? 'en' : 'ko');
   const search = query.trim().toLowerCase();
   const matches = (value: string) => value.toLowerCase().includes(search);
   const seen = new Set(fiatOptions.map(option => option.value));
   const options: AssetUnitOption[] = fiatOptions
-    .filter(option => !search || matches(`${option.value} ${option.label} ${option.englishName}`))
+    .filter(option => !search || matches(option.searchText))
     .map(({ value, label, kind }) => ({ value, label, kind }));
 
   for (const value of customValues) {

@@ -1,3 +1,4 @@
+import { useLingui } from '../../i18n/src/react';
 import { formatAssetQuantity } from '../../domain/src/asset-quantity';
 export { CurrencyIcon } from './CurrencyIcon';
 import { useId, useState, type ReactNode } from 'react';
@@ -59,20 +60,21 @@ export function Notice({ title, children, tone = 'neutral', action }: {
 }
 
 export function Field({ label, error, hint, ...props }: TextInputProps & { label: string; error?: string; hint?: string }) {
+  const { _ } = useLingui();
   const [focused, setFocused] = useState(false);
   const labelId = useId();
   const readOnly = props.editable === false || props.readOnly;
   return <View style={styles.field}>
     <Text nativeID={labelId} style={styles.label}>{label}</Text>
-    <TextInput {...props} accessibilityLabel={`${props.accessibilityLabel ?? label}${error ? ', 오류' : ''}`}
+    <TextInput {...props} accessibilityLabel={error ? _(/* i18n */ { id: 'ui.field.accessibleErrorLabel', message: '{label}, 오류', values: { label: props.accessibilityLabel ?? label } }) : props.accessibilityLabel ?? label}
       accessibilityLabelledBy={labelId}
-      accessibilityHint={[props.accessibilityHint, readOnly ? '읽기 전용' : undefined, error ?? hint].filter(Boolean).join('. ') || undefined}
+      accessibilityHint={[props.accessibilityHint, readOnly ? _(/* i18n */ { id: 'ui.field.readOnly', message: '읽기 전용' }) : undefined, error ?? hint].filter(Boolean).join('. ') || undefined}
       placeholderTextColor={tokens.colors.muted}
       onFocus={event => { setFocused(true); props.onFocus?.(event); }}
       onBlur={event => { setFocused(false); props.onBlur?.(event); }}
       style={[styles.input, props.multiline && styles.multiline, readOnly && styles.readOnlyInput,
         focused && styles.focusedInput, error ? styles.invalidInput : null, props.style]} />
-    {error ? <Text accessibilityRole="alert" accessibilityLiveRegion="polite" style={styles.errorText}>오류 · {error}</Text>
+    {error ? <Text accessibilityRole="alert" accessibilityLiveRegion="polite" style={styles.errorText}>{_(/* i18n */ { id: 'ui.field.errorMessage', message: '오류 · {error}', values: { error } })}</Text>
       : hint ? <Text style={styles.caption}>{hint}</Text> : null}
   </View>;
 }
@@ -96,9 +98,10 @@ function useStackedRow(amounts: string[]) {
 export function AccountRow({ account, selected, onPress }: {
   account: GalleryAccount; selected: boolean; onPress: () => void;
 }) {
+  const { _ } = useLingui();
   const stacked = useStackedRow(account.balances.map(balance => formatMoney(balance.value, balance.commodity)));
   return <Pressable onPress={onPress} accessibilityRole="button"
-    accessibilityLabel={`${account.path}, 잔액 ${account.balances.map(balance => formatMoney(balance.value, balance.commodity)).join(', ')}, 거래 ${account.transactionCount}건, 항목 상세 보기`}
+    accessibilityLabel={_(/* i18n */ { id: 'ui.accounts.accessibleRow', message: '{path}, 잔액 {balances}, 거래 {count}건, 항목 상세 보기', values: { path: account.path, balances: account.balances.map(balance => formatMoney(balance.value, balance.commodity)).join(', '), count: account.transactionCount } })}
     accessibilityState={{ selected }} style={({ pressed }) => [styles.row, !stacked && styles.horizontalRow,
       selected && styles.selectedRow, pressed && styles.pressedRow]}>
     <View style={[styles.accountIdentity, !stacked && styles.horizontalCopy]}>
@@ -108,7 +111,7 @@ export function AccountRow({ account, selected, onPress }: {
       <View style={[styles.rowCopy, styles.horizontalCopy]}>
         <Text style={styles.strong}>{account.name || account.path}</Text>
         <Text selectable style={styles.caption}>{account.path}</Text>
-        <Text style={styles.caption}>{account.transactionCount}건 · {account.lastTransactionDate ?? '거래 이력 없음'}</Text>
+        <Text style={styles.caption}>{_(/* i18n */ { id: 'ui.accounts.transactionSummary', message: '{count}건 · {date}', values: { count: account.transactionCount, date: account.lastTransactionDate ?? _(/* i18n */ { id: 'ui.accounts.noTransactions', message: '거래 이력 없음' }) } })}</Text>
       </View>
     </View>
     <View style={[styles.balances, stacked ? styles.fullWidthAmount : styles.trailingAmount]}>{account.balances.map((balance, index) =>
@@ -116,20 +119,27 @@ export function AccountRow({ account, selected, onPress }: {
   </Pressable>;
 }
 
-const transactionLabels = { unmarked: '미확인', pending: '보류', cleared: '확인됨' } as const;
+const transactionLabels = {
+  unmarked: /* i18n */ { id: 'ui.native.transactions.status.unmarked', message: '미확인' },
+  pending: /* i18n */ { id: 'ui.native.transactions.status.pending', message: '보류' },
+  cleared: /* i18n */ { id: 'ui.native.transactions.status.cleared', message: '확인됨' },
+} as const;
 export function TransactionRow({ transaction, selected, onPress }: {
   transaction: GalleryTransaction; selected: boolean; onPress: () => void;
 }) {
+  const { _ } = useLingui();
   const amount = transaction.postings[0]?.amount;
+  const statusLabel = _(transactionLabels[transaction.status]);
+  const noPostings = _(/* i18n */ { id: 'ui.transactions.noPostings', message: '내역 없음' });
   const stacked = useStackedRow(amount ? [formatMoney(amount.value, amount.commodity)] : []);
   return <Pressable onPress={onPress} accessibilityRole="button"
-    accessibilityLabel={`${transaction.date}, ${transaction.description}, ${transactionLabels[transaction.status]}, ${amount ? formatMoney(amount.value, amount.commodity) : '내역 없음'}, 거래 상세 보기`}
+    accessibilityLabel={_(/* i18n */ { id: 'ui.transactions.accessibleRow', message: '{date}, {description}, {status}, {amount}, 거래 상세 보기', values: { date: transaction.date, description: transaction.description, status: statusLabel, amount: amount ? formatMoney(amount.value, amount.commodity) : noPostings } })}
     accessibilityState={{ selected }} style={({ pressed }) => [styles.row, !stacked && styles.horizontalRow,
       selected && styles.selectedRow, pressed && styles.pressedRow]}>
     <View style={[styles.rowCopy, !stacked && styles.horizontalCopy]}>
-      <Text style={styles.caption}>{transaction.date} · {transactionLabels[transaction.status]}</Text>
+      <Text style={styles.caption}>{_(/* i18n */ { id: 'ui.transactions.dateAndStatus', message: '{date} · {status}', values: { date: transaction.date, status: statusLabel } })}</Text>
       <Text style={styles.strong}>{transaction.description}</Text>
-      <Text style={styles.caption}>{transaction.postings[0]?.accountName ?? '내역 없음'}</Text>
+      <Text style={styles.caption}>{transaction.postings[0]?.accountName ?? noPostings}</Text>
     </View>
     {amount ? <View style={stacked ? styles.fullWidthAmount : styles.trailingAmount}><Money {...amount} /></View> : null}
   </Pressable>;
